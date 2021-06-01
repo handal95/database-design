@@ -27,5 +27,5 @@ app.use((req, res) => {
 });
 
 app.listen(app.get("port"), () => {
-    console.log(`express listening : Connected port on ${app.get('port')}! `)
+    console.log(`express listening : http://127.0.0.1:3000 ! `)
 })
