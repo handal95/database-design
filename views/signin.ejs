@@ -5,24 +5,24 @@
     <a href="/">메인 화면</a>
     로그인 페이지
     ID
-    <input type="id" name="login_id" id="input_id">
+    <input type="id" name="signin_id" id="input_id">
     비밀번호
-    <input type="password" name="login_pw" id="input_pw">
-    <button id="btn_login">로그인</button>
+    <input type="password" name="signin_pw" id="input_pw">
+    <button id="btn_signin">로그인</button>
     <br>
     <a href="/signup">회원가입</a>
     
     <script>
-        const btn_login = document.getElementById('btn_login');
+        const btn_signin = document.getElementById('btn_signin');
         const input_id = document.getElementById('input_id');
         const input_pw = document.getElementById('input_pw');
 
-        btn_login.addEventListener('click', function(){
+        btn_signin.addEventListener('click', function(){
             const data = {
                 id: input_id.value,
                 pw: input_pw.value,
             };
-            requestPostAPI('/login', data)
+            requestPostAPI('/signin', data)
             .then(function (response) {
                 if (response.data.result)
                 {
