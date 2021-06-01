@@ -1,4 +1,4 @@
-import { doRelease, query_schema } from "../queries/connect.js"
+import { doRelease, query_schema } from "../utils/queries.js"
 
 import db_config from "../configs/db_config.js";
 import express from "express";
