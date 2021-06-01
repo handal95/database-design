@@ -1,6 +1,6 @@
 import { doRelease, query_schema } from "../queries/connect.js"
 
-import db_config from "../configs/db.js";
+import db_config from "../configs/db_config.js";
 import express from "express";
 import oracle from "oracledb";
 
