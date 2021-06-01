@@ -1,18 +1,30 @@
-import { db_router } from "./routes/db.js";
 import express from "express";
 import morgan from "morgan";
+import path from 'path';
 import { router } from "./routes/index.js";
+import session from 'express-session'
 
 const app = express()
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(path.resolve(), '/views'));
 app.set("port", process.env.PORT || 3000)
 
 app.use(morgan("dev"))
 app.use(express.json())
+app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }))
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+}));
 
-app.use("/db", db_router)
+// Routes
 app.use("/", router)
+app.use((req, res) => {
+    res.status(404).send('404 NOT FOUND : Sorry cant find that!');
+});
 
 app.listen(app.get("port"), () => {
     console.log(`express listening : Connected port on ${app.get('port')}! `)
