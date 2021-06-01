@@ -4,38 +4,40 @@ import express from "express";
 
 const router = express.Router()
 
-// Sign-in
-router.get('/signin', (req, res) => {
-    if (hasSession(req) == true) {
-        res.redirect('/')
-    } else {
-        res.render('signin')
-    }
-})
+// link page
+const HOME = ""
+const SIGNIN = "signin"
+const SIGNUP = "signup"
+const MYPAGE = "mypage"
 
-router.post("/signin", (req, res) => {
+// url
+const URL_HOME = "/" + HOME
+const URL_SIGNIN = "/" + SIGNIN
+const URL_SIGNUP = "/" + SIGNUP
+const URL_MYPAGE = "/" + MYPAGE
+
+// Sign-in
+router.post(URL_SIGNIN, (req, res) => {
     const id = req.body.id;
     const pw = req.body.pw;
+    console.log(`request body : ${id} ${pw}`)
 
     // check(id, pw);
-    initSession(req, id);
-    res.json({
-        result: true,
-    });
+    initSession(req, id, 'nickname', 'email');
+    res.json({ result: true });
     console.log(`id : ${id}, pw : ${pw}`);
 })
 
-// Sign-up
-router.get('/signup', (req, res) => {
+router.get(URL_SIGNIN, (req, res) => {
     if (hasSession(req) == true) {
-        res.redirect('/');
+        res.redirect(URL_HOME)
+    } else {
+        res.render(SIGNIN)
     }
-    else {
-        res.render('signup');
-    }
-});
+})
 
-router.post('/signup', function(req, res){
+// Sign-up
+router.post(URL_SIGNUP, (req, res) => {
     const id = req.body.id;
     const pw = req.body.pw;
     const nickname = req.body.nickname;
@@ -47,19 +49,19 @@ router.post('/signup', function(req, res){
     console.log(`id : ${id}, pw : ${pw}, nickname : ${nickname}, email : ${email}`);
 });
 
-// MYPAGE
-router.get('/mypage', (req, res) => {
+router.get(URL_SIGNUP, (req, res) => {
     if (hasSession(req) == true) {
-        res.render('mypage', {account_id: 'abcd'});
+        res.redirect(URL_HOME);
     }
     else {
-        res.redirect('/signin');
+        res.render(SIGNUP);
     }
 });
 
-router.post('/mypage', (req, res) => {
+// MYPAGE
+router.post(URL_MYPAGE, (req, res) => {
     if (hasSession(req) == false){
-        res.redirect('/signin');
+        res.redirect(URL_SIGNIN);
         return;
     }
 
@@ -72,6 +74,16 @@ router.post('/mypage', (req, res) => {
     });
     console.log(`pw : ${pw}, nickname : ${nickname}, email : ${email}`);
 });
+
+router.get(URL_MYPAGE, (req, res) => {
+    if (hasSession(req) == true) {
+        res.render(MYPAGE, {account_id: 'abcd'});
+    }
+    else {
+        res.redirect(URL_SIGNIN);
+    }
+});
+
 
 const user_router = router
 export { user_router };
