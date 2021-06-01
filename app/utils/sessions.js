@@ -3,9 +3,9 @@ export function hasSession(req) {
     return !!req.session.views;
 }
 
-export function initSession(req, id, nickname, email) {
+export function initSession(req, login_id, nickname, email) {
     req.session.views = 1;
-    req.session.id = id;
+    req.session.login_id = login_id;
     req.session.nickname = nickname;
     req.session.email = email;
 }
