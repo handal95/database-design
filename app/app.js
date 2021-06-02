@@ -2,15 +2,15 @@ import express from "express";
 import morgan from "morgan";
 import path from 'path';
 import { router } from "./routes/index.js";
-import session from 'express-session'
+import session from 'express-session';
 
-const app = express()
+const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(path.resolve(), '/views'));
-app.set("port", process.env.PORT || 3000)
+app.set('port', process.env.PORT || 3000)
 
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 app.use(express.json())
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }))
