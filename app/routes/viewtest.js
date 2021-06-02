@@ -17,7 +17,7 @@ router.post('/', function(req, res) {
 });
 
 // 로그인 페이지
-router.get('/login', function(req, res)
+router.get('/signin', function(req, res)
 {
     if (hasSession(req) == true)
     {
@@ -25,11 +25,11 @@ router.get('/login', function(req, res)
     }
     else
     {
-        res.render('login')
+        res.render('signin')
     }
 });
 
-router.post('/login', function(req, res) {
+router.post('/signin', function(req, res) {
     const id = req.body.id;
     const pw = req.body.pw;
     // 로그인 확인
@@ -94,12 +94,12 @@ router.get('/mypage', function(req, res)
     if (hasSession(req) == true)
     {
         // ???
-        const id = req.session.login_id;
+        const id = req.session.signin_id;
         res.render('mypage', {account_id: id});
     }
     else
     {
-        res.redirect('/login');
+        res.redirect('/signin');
     }
 });
 
@@ -107,7 +107,7 @@ router.post('/mypage', function(req, res)
 {
     if (hasSession(req) == false)
     {
-        res.redirect('/login');
+        res.redirect('/signin');
         return;
     }
     const pw = req.body.pw;
