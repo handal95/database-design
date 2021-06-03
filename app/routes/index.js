@@ -9,7 +9,6 @@ router.use("/", user_router)
 
 router.get("/", (req, res) => {
     res.render('index')
-    console.log("Connected: Hello, world! ")
 })
 
 // TODO : CHECK
