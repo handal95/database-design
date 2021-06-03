@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<%- include('../_component/head.ejs', {titleName: '메인'})%>
 <body>
-    <a href="/index">메인화면</a>
+    <a href="/">메인화면</a>
+    <input type="text" name="keyword", id="keyword">
+    <button id="btn_search">검색</button>
+
     <title>영화 제목</title>
     <h1>영화제목</h1>
         <h2>영화 설명</h2>
