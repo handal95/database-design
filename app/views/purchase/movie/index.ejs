@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../_component/head.ejs', {titleName: '영화 예약'})%>
+<body>
+    <a href="/">메인 화면</a>
+    티켓 예약 페이지
+    <title>영화티켓 예약</title>
+        <p>영화목록</p>
+        <select name="movie_title" id="movie_title"></select>
+            <% for(let idx = 0; idx < <%= movie_amount %>; idx++) { %>
+                <option value=""></option>
+        <p>영화관목록</p>
+        <ul>
+            <!--????-->
+            <select name="movie_title" id="movie_title">
+                <% for(let idx = 0; idx < <%= movie_amount %>; idx++) { %>
+            </select>
+        </ul>
+        <p>상영관목록</p>
+        <ul>
+            <li>일정1</li>
+            <li>일정2</li>
+        </ul>
+        <p>날짜</p>
+        <input type="date" name="session_date" id="session_date"><br>
+
+        <!--영화 상영 목록 쫘라락-->
+        
+    <a href="/purchase/movie/seat">좌석선택</a>
+</body>
+</html>

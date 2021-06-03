@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../_component/head.ejs', {titleName: '구매 확인'})%>
+<body>
+    <a href="/">메인 화면</a><br>
+
+    영화관 : <%= theater_name %><br>
+    상점 : <%= store_name %><br>
+    상품 : <%= item_name %><br>
+    주문갯수 : <%= order_quantity %><br>
+    가격 : <%= payment_price %><br>
+
+    결제방법 선택 : 
+    <select name="payment_method" id="payment_method">
+ㄴ
+    </select>
+    <button id="btn_pay">결제</button><br>
+    <script>
+        const payment_method = findId('payment_method')
+        btn_pay.addEventListener('click', function(){
+            const data = {
+                payment_price: payment_price,
+                payment_method: payment_method.value,
+            };
+            requestPostAPI('/purchase/check', data)
+            .then(function (response) {
+                if (response.data.result)
+                {
+                    alert('결제 완료');
+                    window.location.href = '/purchase/complete';
+                }
+                else
+                {
+                    alert('결제 실패');
+                }
+            });
+        });
+    </script>
+
+    <a href="/">메인 화면</a><br>
+</body>
+</html>

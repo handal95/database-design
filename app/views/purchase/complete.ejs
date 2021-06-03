@@ -2,7 +2,24 @@
 <html lang="en">
 <%- include('../_component/head.ejs', {titleName: '결제 완료'})%>
 <body>
-    <a href="/">메인 화면</a>
-    결제 완료
+    <a href="/">메인 화면</a><br>
+    결제 완료<br>
+    <% if(purchase_type == 'movie') { %>
+        <!--영화 결제-->
+        영화관 : <%= theater_name %><br>
+        상영관 : <%= screen_number %><br>
+        좌석 : <%= seat_row %><%= seat_col %><br>
+        영화 : <%= movie_name %><br>
+    <% } else { %>
+        <!--상품 결제-->
+        영화관 : <%= theater_name %><br>
+        상점 : <%= store_name %><br>
+        상품 : <%= item_name %><br>
+        주문갯수 : <%= order_quantity %><br>
+    <% } %>
+    가격 : <%= payment_price %><br>
+    결제방법 : <%= payment_method %><br>
+
+    <a href="/">메인 화면</a><br>
 </body>
 </html>

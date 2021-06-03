@@ -1,3 +1,5 @@
+/* 메인화면, 회원 로그인, 회원가입, 마이페이지 */
+
 import { hasSession, initSession } from "../utils/sessions.js"
 
 import express from "express";
@@ -40,13 +42,29 @@ router.get(URL_SIGNIN, (req, res) => {
 router.post(URL_SIGNUP, (req, res) => {
     const id = req.body.id;
     const pw = req.body.pw;
+    const name = req.body.name;
+    const birth = req.body.birth;
+    const phone = req.body.phone;
     const nickname = req.body.nickname;
     const email = req.body.email;
-    // check(id, pw);
-    res.json({
-        result: true,
-    });
-    console.log(`id : ${id}, pw : ${pw}, nickname : ${nickname}, email : ${email}`);
+    
+    var verified_data = true;
+    /* 중복 아이디 검사 코드 */
+
+    if (verified_data)
+    {
+        res.json({
+            result: true,
+        });
+        console.log(`id : ${id}, pw : ${pw}, name : ${name}, birth : ${birth}, phone : ${phone}, nickname : ${nickname}, email : ${email}`);
+    }
+    else
+    {
+        res.json({
+            result: false,
+        });
+        console.log('Sign up Failed');
+    }
 });
 
 router.get(URL_SIGNUP, (req, res) => {
@@ -64,11 +82,12 @@ router.post(URL_MYPAGE, (req, res) => {
         res.redirect(URL_SIGNIN);
         return;
     }
-
     const pw = req.body.pw;
     const nickname = req.body.nickname;
     const email = req.body.email;
-    // check(id, pw);
+
+    // 변경된 데이터 DB 입력 코드
+
     res.json({
         message:'success'
     });
@@ -77,7 +96,8 @@ router.post(URL_MYPAGE, (req, res) => {
 
 router.get(URL_MYPAGE, (req, res) => {
     if (hasSession(req) == true) {
-        res.render(MYPAGE, {account_id: 'abcd'});
+        const session_account_id = req.session.signin_id;
+        res.render(MYPAGE, {account_id: session_account_id});
     }
     else {
         res.redirect(URL_SIGNIN);

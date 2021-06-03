@@ -1,20 +1,31 @@
-import { db_router } from "./db.js";
-import express from "express";
-import { user_router } from "./user.js";
-import { router as movie_router } from "./movie.js"
+import { db_router } from "./db.js"
+import express from "express"
+import { user_router } from "./user.js"
+import { router as movie_router } from "./movieinfo.js"
+import { router as purchase_router } from "./purchase.js"
 
 const router = express.Router()
 
 router.use("/db", db_router)
 router.use("/", user_router)
-router.use("/movieinfo", movie_router)
+// ????
+router.use("/movieinfo/", movie_router)
+router.use("/purchase/", purchase_router)
 
-router.get("/", (req, res) => {
-    res.render('index')
+// link page
+const HOME = ""
+const INDEX = "index"
+
+// url
+const URL_HOME = "/" + HOME
+
+// 메인 화면
+router.get(URL_HOME, (req, res) => {
+    res.render(INDEX)
 })
 
 // TODO : CHECK
-router.post('/', function(req, res) {
+router.post(URL_HOME, function(req, res) {
     const search_keyword = req.body.search_keyword;
     // query(search)
     res.json({

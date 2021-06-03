@@ -4,7 +4,7 @@
   "description": "The Project of Database design class in University of Seoul",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app --exec babel-node",
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
