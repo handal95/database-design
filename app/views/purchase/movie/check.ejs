@@ -1,44 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../_component/head.ejs', {titleName: '구매 확인'})%>
+<%- include('../../_component/head.ejs', {titleName: '구매 확인'})%>
 <body>
-    <a href="/">메인 화면</a><br>
+    <!--메인 화면-->
+    <%- include('../../_component/goto_main.ejs')%>
+    <h1>영화 예약 확인</h1>
+    <%
+        const data = {
+            theater_name: "theater1",
+            screen_name: "3관",
+            seat_row: 3,
+            seat_col: 2,
+            movie_title: "인디펜던스 데이",
+            payment_price: 12000,
+            purchase_category: "movie"
+        }
+    %>
+    <p>영화관 : <%= data.theater_name %></p>
+    <p>상영관 : <%= data.screen_name %></p>
+    <p>좌석 : <%= data.seat_row %> <%= data.seat_col %></p>
+    <p>영화 : <%= data.movie_title %></p>
+    <p>가격 : <%= data.payment_price %></p>
 
-    영화관 : <%= theater_name %><br>
-    상영관 : <%= screen_number %><br>
-    좌석 : <%= seat_row %><%= seat_col %><br>
-    영화 : <%= movie_name %><br>
-    가격 : <%= payment_price %><br>
-
-    결제방법 선택 : 
-    <select name="payment_method" id="payment_method">
-        <option value="신용카드">신용카드</option>
-        <option value="무통장입금">무통장입금</option>
-        <option value="포인트">포인트</option>
-    </select>
-    <button id="btn_pay">결제</button><br>
-    <script>
-        const payment_method = findId('payment_method')
-        btn_pay.addEventListener('click', function(){
-            const data = {
-                payment_price: payment_price,
-                payment_method: payment_method.value,
-            };
-            requestPostAPI('/purchase/check', data)
-            .then(function (response) {
-                if (response.data.result)
-                {
-                    alert('결제 완료');
-                    window.location.href = '/purchase/complete';
-                }
-                else
-                {
-                    alert('결제 실패');
-                }
-            });
-        });
-    </script>
-
-    <a href="/">메인 화면</a><br>
+    <!--결제 방법 선택-->
+    <%- include('../../_component/payment_method.ejs')%>
 </body>
 </html>

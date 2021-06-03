@@ -2,29 +2,70 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '영화 예약'})%>
 <body>
-    <a href="/">메인 화면</a>
-    티켓 예약 페이지
-    <title>영화티켓 예약</title>
-        <p>영화목록</p>
-        <select name="movie_title" id="movie_title"></select>
-            <% for(let idx = 0; idx < <%= movie_amount %>; idx++) { %>
-                <option value=""></option>
-        <p>영화관목록</p>
-        <ul>
-            <!--????-->
-            <select name="movie_title" id="movie_title">
-                <% for(let idx = 0; idx < <%= movie_amount %>; idx++) { %>
-            </select>
-        </ul>
-        <p>상영관목록</p>
-        <ul>
-            <li>일정1</li>
-            <li>일정2</li>
-        </ul>
-        <p>날짜</p>
-        <input type="date" name="session_date" id="session_date"><br>
+    <!--메인 화면-->
+    <%- include('../../_component/goto_main.ejs')%>
+    <h1>티켓 예약 페이지</h1>
+    <h2>영화티켓 예약</h2>
+    <%
+        let movie_list = ["movie1", "movie2"]
+        let theater_list = ["theater1", "theater2"]
+        let session_list = [
+            {
+                session_uid: "session1",
+                screen_code: 300,
+                session_round: 2,
+                session_datetime: "12:35",
+                subtitle_category: null
+            },
+            {
+                session_uid: "session2",
+                screen_code: 300,
+                session_round: 3,
+                session_datetime: "14:50",
+                subtitle_category: "eng"
+            }
+        ]
+    %>
+    <h3>영화목록</h3>
+    <select name="movie_title" id="movie_title">
+        <% for(let idx = 0; idx < movie_list.length; idx++) { %>
+            <option value="<%= movie_list[idx] %>"><%= movie_list[idx] %></option>
+        <% } %>
+    </select>
+    <br>
 
-        <!--영화 상영 목록 쫘라락-->
+    <h3>영화관목록</h3>
+    <select name="theater" id="theater">
+        <% for(let idx = 0; idx < theater_list.length; idx++) { %>
+            <option value="<%= theater_list[idx] %>"><%= theater_list[idx] %></option>
+        <% } %>
+    </select>
+    <br>
+
+    <h3>날짜</h3>
+    <input type="date" name="session_date" id="session_date"><br>
+    
+    <button id="search_session">검색</button>
+
+    <h3>상영목록</h3>
+    <table>
+        <thead>
+            <th>상영관</th>
+            <th>상영회차</th>
+            <th>상영시각</th>
+            <th>자막유형</th>
+        </thead>
+        <tbody>
+        <% for (const element of session_list) { %>
+            <tr data-session-uid="<%= element.session_uid %>">
+                <td><%= element.screen_code %></td>
+                <td><%= element.session_round %></td>
+                <td><%= element.session_datetime %></td>
+                <td><%= element.subtitle_category %></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
         
     <a href="/purchase/movie/seat">좌석선택</a>
 </body>

@@ -4,32 +4,13 @@ import express from "express";
 
 const router = express.Router()
 
-// link page
-const INDEX = ""
-const PURCHASE = "purchase"
-const MOVIE = "movie"
-const SEAT = "seat"
-const ITEM = "item"
-const CHECK = "check"
-const COMPLETE = "complete"
-
-// url
-const URL_SELECT_MOVIE = "/" + PURCHASE + "/" + MOVIE + "/" + INDEX
-const URL_SELECT_MOVIE_SEAT = "/" + PURCHASE + "/" + MOVIE + "/" + SEAT
-const URL_CHECK_MOVIE = "/" + PURCHASE + "/" + MOVIE + "/" + CHECK
-const URL_SELECT_ITEM = "/" + PURCHASE + "/" + ITEM + "/" + INDEX
-const URL_CHECK_ITEM = "/" + PURCHASE + "/" + ITEM + "/" + CHECK
-const URL_COMPLETE = "/" + PURCHASE + "/" + COMPLETE
-
-
-
 // 영화예매(장소, 일정 선택) 페이지
-router.get(URL_SELECT_MOVIE, function(req, res)
+router.get('/movie/index', function(req, res)
 {
-    res.render(URL_SELECT_MOVIE);
+    res.render('purchase/movie/index');
 });
 
-router.post(URL_SELECT_MOVIE, function(req, res)
+router.post('/movie/index', function(req, res)
 {
     /*
     const keyword = req.body.keyword;
@@ -40,33 +21,33 @@ router.post(URL_SELECT_MOVIE, function(req, res)
 })
 
 // 영화예매(좌석 선택) 페이지
-router.get(URL_SELECT_MOVIE_SEAT, function(req, res)
+router.get('/movie/seat', function(req, res)
 {
-    res.render(URL_SELECT_MOVIE_SEAT);
+    res.render('purchase/movie/seat');
 });
 
 // 영화예매 확인 페이지
-router.get(URL_CHECK_MOVIE, function(req, res)
+router.get('/movie/check', function(req, res)
 {
-    res.render(URL_CHECK_MOVIE);
+    res.render('purchase/movie/check');
 });
 
 // 상품 선택 페이지
-router.get(URL_SELECT_ITEM, function(req, res)
+router.get('/item/index', function(req, res)
 {
-    res.render(URL_SELECT_ITEM);
+    res.render('purchase/item/index');
 });
 
 // 상품구매 확인 페이지
-router.get(URL_CHECK_ITEM, function(req, res)
+router.get('/item/check', function(req, res)
 {
-    res.render(URL_CHECK_ITEM);
+    res.render('purchase/item/check');
 });
 
 // 결제완료 페이지
-router.get(URL_COMPLETE, function(req, res)
+router.get('/complete', function(req, res)
 {
-    res.render(URL_COMPLETE);
+    res.render('purchase/complete');
 });
 
 export { router };

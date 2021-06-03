@@ -2,21 +2,42 @@
 <html lang="en">
 <%- include('_component/head.ejs', {titleName: '회원가입'})%>
 <body>
-    <a href="/">메인 화면</a><br>
-    ID
-    <input type="id" name="signin_id" id="input_id"><br>
-    비밀번호
-    <input type="password" name="signin_pw" id="input_pw"><br>
-    이름
-    <input type="text" name="name" id="input_name"><br>
-    생년월일
-    <input type="date" name="birth" id="input_birth"><br>
-    연락처
-    <input type="tel" name="phone" id="input_phone"><br>
-    별명
-    <input type="text" name="nickname" id="input_nickname"><br>
-    이메일
-    <input type="email" name="email" id="input_email"><br>
+    <!--메인 화면-->
+    <%- include('_component/goto_main.ejs')%>
+    <h1>회원가입</h1>
+    <table>
+        <tbody>
+            <tr>
+                <td>ID</td>
+                <td><input type="id" name="signin_id" id="input_id"></td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td><input type="password" name="signin_pw" id="input_pw"></td>
+            </tr>
+            <tr>
+                <td>이름</td>
+                <td><input type="text" name="name" id="input_name"></td>
+            </tr>
+            <tr>
+                <td>생년월일</td>
+                <td><input type="date" name="birth" id="input_birth"></td>
+            </tr>
+            <tr>
+                <td>연락처</td>
+                <td><input type="tel" name="phone" id="input_phone"></td>
+            </tr>
+            <tr>
+                <td>별명</td>
+                <td><input type="text" name="nickname" id="input_nickname"></td>
+            </tr>
+            <tr>
+                <td>이메일</td>
+                <td><input type="email" name="email" id="input_email"></td>
+            </tr>
+        </tbody>
+    </table>
+
     <button id="btn_signup">회원가입</button>
     <script>
         const btn_signup = findId('btn_signup');

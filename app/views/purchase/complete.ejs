@@ -2,9 +2,10 @@
 <html lang="en">
 <%- include('../_component/head.ejs', {titleName: '결제 완료'})%>
 <body>
-    <a href="/">메인 화면</a><br>
-    결제 완료<br>
-    <% if(purchase_type == 'movie') { %>
+    <!--메인 화면-->
+    <%- include('../_component/goto_main.ejs')%>
+    <h1>결제 완료</h1>
+    <% if (purchase_type == "movie") { %>
         <!--영화 결제-->
         영화관 : <%= theater_name %><br>
         상영관 : <%= screen_number %><br>

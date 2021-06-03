@@ -2,27 +2,46 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '좌석예약'})%>
 <body>
-    <a href="/">메인 화면</a><br>
-    <!--????-->
-    좌석 선택창<br>
-    <table>
-        <th></th>
-        <th>A</th>
-        <th>B</th>
-        <th>C</th>
-        <tr>
-            <td>1</td>
-            <td></td>
-            <td>X</td>
-            <td>X</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td></td>
-            <td>X</td>
-            <td>X</td>
-        </tr>
-        </table><br>
-    <a href="/purchase/movie/check">예약 확인</a>
+    <!--메인 화면-->
+    <%- include('../../_component/goto_main.ejs')%>
+    <h1>좌석 선택창</h1>
+    <%
+        let screen_code = 321
+        let screen_max_row = 5
+        let screen_max_col = 5
+        const seat_uid = [
+            [10, 20, 30, 40, 50],
+            [30, 40, 50, 60, 70],
+            [10, 20, 30, 40, 50],
+            [30, 40, 50, 60, 70],
+            [10, 20, 30, 40, 50],
+        ]
+    %>
+    <table screen_code="<%= screen_code %>">
+        <thead>
+            <tr>
+                <th></th>
+            <% for (let seat_c = 0; seat_c < screen_max_col; seat_c++) { %>
+                <th><%= seat_c %></th>
+            <% } %>
+            </tr>
+        </thead>
+        <tbody>
+        <% for (let seat_r = 0; seat_r < screen_max_row; seat_r++) { %>
+            <tr>
+                <th><%= seat_r %></th>
+                <% for (let seat_c = 0; seat_c < screen_max_col; seat_c++) { %>
+                <td>
+                    <input
+                        type="checkbox"
+                        name="<%= seat_r %><%= seat_c %>"
+                        id="<%= seat_uid[seat_r][seat_c] %>">
+                </td>
+                <% } %>
+            </tr>
+        <% } %>
+        </tbody>
+    </table><br>
+    <a href="/purchase/item/check">예약 확인</a>
 </body>
 </html>

@@ -1,16 +1,15 @@
 import { db_router } from "./db.js"
 import express from "express"
 import { user_router } from "./user.js"
-import { router as movie_router } from "./movieinfo.js"
+import { router as movieinfo_router } from "./movieinfo.js"
 import { router as purchase_router } from "./purchase.js"
 
 const router = express.Router()
 
 router.use("/db", db_router)
+router.use("/movieinfo", movieinfo_router)
+router.use("/purchase", purchase_router)
 router.use("/", user_router)
-// ????
-router.use("/movieinfo/", movie_router)
-router.use("/purchase/", purchase_router)
 
 // link page
 const HOME = ""

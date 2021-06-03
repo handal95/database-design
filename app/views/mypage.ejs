@@ -2,7 +2,10 @@
 <html lang="en">
 <%- include('_component/head.ejs', {titleName: '마이 페이지'})%>
 <body>
-    <a href="/">메인 화면</a>
+    <!--메인 화면-->
+    <%- include('_component/goto_main.ejs')%>
+    <h1>마이 페이지</h1>
+    <h2>내 계정 정보</h2>
     ID : <%= account_id %>
     비밀번호
     <input type="password" name="signin_pw" id="input_pw">
@@ -11,10 +14,6 @@
     이메일
     <input type="email", name="email", id="input_email">
     <button id="btn_modify">정보수정</button>
-    <p>현재 포인트</p>
-    <ol>
-        <li>포인트 내역</li>
-    </ol>
 
     <script>
         const btn_modify = findId('btn_modify');
@@ -31,5 +30,10 @@
             requestPostAPI('/mypage', data);
         });
     </script>
+
+    <h2>현재 포인트</h2>
+    <ol>
+        <li>포인트 내역</li>
+    </ol>
 </body>
 </html>

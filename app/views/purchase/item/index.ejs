@@ -2,23 +2,76 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '상품 주문'})%>
 <body>
-    <a href="/">메인 화면</a>
-    <title>상품 주문</title>
-        <p>영화목록</p>
-        <ul>
-            <li>영화1</li>
-            <li>영화2</li>
-        </ul>
-        <p>영화관목록</p>
-        <ul>
-            <li>영화관1</li>
-            <li>영화관2</li>
-        </ul>
-        <p>상영일정목록</p>
-        <ul>
-            <li>일정1</li>
-            <li>일정2</li>
-        </ul>
-    <a href="/purchase/movie/seat">좌석선택</a>
+    <!--메인 화면-->
+    <%- include('../../_component/goto_main.ejs')%>
+    <h1>상품 주문 페이지</h1>
+    <h2>상품 주문</h2>
+    <%
+        let theater_list = ["theater1", "theater2"]
+        let store_list = ["store1", "store2"]
+        let item_list = [
+            {
+                item_code: "213231",
+                item_name: "팝콘",
+                item_category: "스낵",
+                item_price: 4000,
+                remain_quantity: null,
+            },
+            {
+                item_code: "213232",
+                item_name: "콜라",
+                item_category: "스낵",
+                item_price: 2000,
+                remain_quantity: null,
+            },
+            {
+                item_code: "213233",
+                item_name: "나쵸",
+                item_category: "스낵",
+                item_price: 3000,
+                remain_quantity: null,
+            },
+        ]
+    %>
+
+    <h3>영화관목록</h3>
+    <select name="theater" id="theater">
+        <% for(const theater of theater_list) { %>
+            <option value="<%= theater %>"><%= theater %></option>
+        <% } %>
+    </select>
+    <br>
+
+    <h3>상점목록</h3>
+    <select name="store" id="store">
+        <% for(const store of store_list) { %>
+            <option value="<%= store %>"><%= store %></option>
+        <% } %>
+    </select>
+    <br>
+    
+    <button id="search_item">검색</button>
+
+    <h3>상품목록</h3>
+    <table>
+        <thead>
+            <th>상품 이름</th>
+            <th>상품 유형</th>
+            <th>상품 가격</th>
+            <th>상품 재고</th>
+        </thead>
+        <tbody>
+        <% for (const element of item_list) { %>
+            <tr data-session-uid="<%= element.item_code %>">
+                <td><%= element.item_name %></td>
+                <td><%= element.item_category %></td>
+                <td><%= element.item_price %></td>
+                <td><%= element.remain_quantity %></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+        
+    <a href="/purchase/item/check">주문 확인</a>
 </body>
 </html>

@@ -2,14 +2,24 @@
 <html lang="en">
 <%- include('_component/head.ejs', {titleName: '로그인'})%>
 <body>
-    <a href="/">메인 화면</a>
-    로그인 페이지
-    ID
-    <input type="id" name="signin_id" id="input_id">
-    비밀번호
-    <input type="password" name="signin_pw" id="input_pw">
+    <!--메인 화면-->
+    <%- include('_component/goto_main.ejs')%>
+    <h1>로그인 페이지</h1>
+    
+    <table>
+        <tbody>
+            <tr>
+                <td>ID</td>
+                <td><input type="id" name="signin_id" id="input_id"></td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td><input type="password" name="signin_pw" id="input_pw"></td>
+            </tr>
+        </tbody>
+    </table>
+
     <button id="btn_signin">로그인</button>
-    <br>
     <a href="/signup">회원가입</a>
     
     <script>
