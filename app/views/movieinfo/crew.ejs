@@ -9,6 +9,7 @@
     <button id="btn_search">검색</button>
 
     <%
+    // SELECT * FROM crew WHERE crew_code="search_crew_code";
     const crew = {
         crew_code: "2342",
         crew_name: "존 시나",
@@ -19,16 +20,17 @@
         profile_image: "image_path",
     }
 
+    // SELECT * FROM contributor WHERE crew_code="search_crew_code";
     const filmography = [
         {
             movie_code: "4654",
-            movie_name: "분노의 질주",
+            movie_title: "분노의 질주",
             main_role: "배우",
             sub_role: "주연",
         },
         {
             movie_code: "96857",
-            movie_name: "범블비",
+            movie_title: "범블비",
             main_role: "배우",
             sub_role: "주연",
         },
@@ -54,7 +56,7 @@
         <tbody>
             <% for (const movie of filmography) { %>
             <tr>
-                <td><%= movie.movie_name %></td>
+                <td><%= movie.movie_title %></td>
                 <td><%= movie.main_role %></td>
                 <td><%= movie.sub_role %></td>
             </tr>

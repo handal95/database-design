@@ -12,8 +12,27 @@ router.get('/movie', function(req, res)
 
 router.post('/movie', function(req, res)
 {
-    const keyword = req.body.keyword;
-    // query(search)
+    const review = req.body.data;
+    
+    /*
+    후기 작성 : 
+    INSERT INTO review VALUES(
+        "movie_code",
+        "review_sq",
+        "account_id",
+        "new_review_title",
+        "new_comment",
+        "score"
+    );
+    */
+    if (hasSession(req) == true) {
+        const session_account_id = req.session.signin_id;
+        res.render(MYPAGE, {account_id: session_account_id});
+    }
+    else {
+        res.redirect('/signin');
+    }
+
     res.redirect('/movieinfo/movie');
     console.log(`search : ${keyword}`);
 })
@@ -31,5 +50,11 @@ router.post('/crew', function(req, res)
     res.redirect('/movieinfo/crew');
     console.log(`search : ${keyword}`);
 })
+
+// 개별 리뷰 페이지 ???? 라우팅 왜 안 돼
+router.get('/review', function(req, res)
+{
+    res.render('movieinfo/review');
+});
 
 export { router };
