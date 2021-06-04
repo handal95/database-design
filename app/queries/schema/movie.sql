@@ -1,13 +1,17 @@
-movie_code VARCHAR(16) PRIMARY KEY,
+movie_code VARCHAR(16) NOT NULL,
 
 movie_title VARCHAR(64) NOT NULL,
-movie_title_eng VARCHAR(64) NULL,
-production_country VARCHAR(64) NULL,
-running_time DATE NULL,
-synopsis VARCHAR(1024) NULL,
-release_date DATE NULL,
-media_rating NUMBER NULL,
-productor VARCHAR(64) NULL,
-distributor VARCHAR(64) NULL,
-production_status VARCHAR(16) NULL,
-avg_score FLOAT NULL
+production_status VARCHAR(16) NOT NULL,
+movie_title_eng VARCHAR(64),
+production_country VARCHAR(64),
+running_time DATE,
+release_date DATE,
+media_rating NUMBER,
+productor VARCHAR(64),
+distributor VARCHAR(64),
+synopsis VARCHAR(1024),
+avg_score FLOAT NULL,
+
+CONSTRAINT MOVIE_PK
+    PRIMARY KEY(movide_code)
+
