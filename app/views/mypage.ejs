@@ -32,6 +32,81 @@
     </script>
 
     <%
+        const ticket_history = [
+        {
+            ticket_uid: 132,
+            session_date: "2021.06.04.",
+            session_datetime: "16:45",
+            movie_name: "분노의 질주",
+            ticket_price: 32000,
+            reserve_status: "예약"
+        },
+        ]
+    %>
+    <h2>예약기록</h2>
+    <table>
+        <thead>
+            <th>티켓번호</th>
+            <th>날짜</th>
+            <th>시각</th>
+            <th>영화</th>
+            <th>가격</th>
+            <th>상태</th>
+        </thead>
+        <tbody>
+            <% for (const history of ticket_history) { %>
+            <tr>
+                <td><%= history.ticket_uid %></td>
+                <td><%= history.session_date %></td>
+                <td><%= history.session_datetime %></td>
+                <td><%= history.movie_name %></td>
+                <td><%= history.ticket_price %></td>
+                <td><%= history.reserve_status %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <%
+        const basket_history = [
+        {
+            basket_uid: 65465,
+            store_name: "스낵코너",
+            item_name: "팝콘",
+            order_quantity: 2,
+            order_status: "결제완료"
+        },
+        {
+            basket_uid: 65466,
+            store_name: "스낵코너",
+            item_name: "콜라",
+            order_quantity: 2,
+            order_status: "결제완료"
+        },
+        ]
+    %>
+
+    <h2>상품구매기록</h2>
+    <table>
+        <thead>
+            <th>상점</th>
+            <th>상품</th>
+            <th>수량</th>
+            <th>주문상태</th>
+        </thead>
+        <tbody>
+            <% for (const history of basket_history) { %>
+            <tr>
+                <td><%= history.store_name %></td>
+                <td><%= history.item_name %></td>
+                <td><%= history.order_quantity %></td>
+                <td><%= history.order_status %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <%
         // SELECT points_history_sq, reward_category, change_value, detail FROM points_history WHERE account_id="cur_signin_account_id";
         const points_history = [
         {

@@ -5,47 +5,100 @@
     <!--메인 화면-->
     <%- include('_component/goto_main.ejs')%>
     <h1>로그인 페이지</h1>
-    
+    <h2>회원 로그인</h2>
+        <table>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td><input type="id" name="signin_id" id="signin_id"></td>
+                </tr>
+                <tr>
+                    <td>비밀번호</td>
+                    <td><input type="password" name="signin_pw" id="signin_pw"></td>
+                </tr>
+                <tr>
+                    <td><button id="btn_account_signin">회원 로그인</button></td>
+                </tr>
+            </tbody>
+        </table>
+    <h2>비회원 로그인</h2>
     <table>
         <tbody>
             <tr>
-                <td>ID</td>
-                <td><input type="id" name="signin_id" id="input_id"></td>
+                <td>이름</td>
+                <td><input type="id" name="customer_name" id="customer_name"></td>
             </tr>
             <tr>
-                <td>비밀번호</td>
-                <td><input type="password" name="signin_pw" id="input_pw"></td>
+                <td>생년월일</td>
+                <td><input type="password" name="customer_birth_date" id="customer_birth_date"></td>
+            </tr>
+            <tr>
+                <td>전화번호</td>
+                <td><input type="text" name="phone" id="phone"></td>
+            </tr>
+            <tr>
+                <td><button id="btn_customer_signin">비회원 로그인</button></td>
             </tr>
         </tbody>
     </table>
+    <a href="/signup">회원가입</a>
 
 <!--회원/비회원 로그인 병렬 표기-->
-
-    <button id="btn_signin">로그인</button>
-    <a href="/signup">회원가입</a>
     
     <script>
-        const btn_signin = findId('btn_signin');
-        const input_id = findId('input_id');
-        const input_pw = findId('input_pw');
+        // 회원 로그인 변수
+        const btn_account_signin = findId('btn_account_signin');
+        const signin_id = findId('signin_id');
+        const signin_pw = findId('signin_pw');
 
-        btn_signin.addEventListener('click', function(){
+        // 비회원 로그인 변수
+        const btn_customer_signin = findId('btn_customer_signin');
+        const customer_name = findId('customer_name');
+        const customer_birth_date = findId('customer_birth_date');
+        const phone = findId('phone');
+
+        // 회원 로그인 버튼
+        btn_account_signin.addEventListener('click', async function(){
             const data = {
-                id: input_id.value,
-                pw: input_pw.value,
+                id: signin_id.value,
+                pw: signin_pw.value,
             };
-            requestPostAPI('/signin', data)
-            .then(function (response) {
-                if (response.data.result)
-                {
-                    alert('로그인 성공');
-                    window.location.href = '/';
-                }
-                else
-                {
-                    alert('로그인 실패');
-                }
-            });
+
+            const account_login_response = await requestPostAPI('/signin/account', data)
+
+            if (account_login_response.data.result)
+            {
+                alert('로그인 성공');
+                window.location.href = '/';
+            }
+            else
+            {
+                alert('로그인 실패');
+            }
+        });
+
+        // 비회원 로그인 버튼
+        btn_customer_signin.addEventListener('click', async function(){
+            const data = {
+                name: customer_name.value,
+                birth_date: customer_birth_date.value,
+                phone: phone.value,
+            };
+
+            const customer_login_response = await requestPostAPI('/signin/customer', data)
+
+            // 비회원 데이터가 존재해 로그인을 성공한 경우
+            if (customer_login_response.data.result)
+            {
+                alert('비회원 로그인 성공');
+            }
+            // 비회원 데이터 새로 생성
+            else
+            {
+                alert('다음에 로그인할 시 해당 데이터를 입력하시기 바랍니다.');
+                alert('비회원 로그인 성공');
+            }
+            window.location.href = '/';
         });
     </script>
 </body>

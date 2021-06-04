@@ -1,6 +1,6 @@
 /* 메인화면, 회원 로그인, 회원가입, 마이페이지 */
 
-import { hasSession, initSession } from "../utils/sessions.js"
+import { hasSession, initAccountSession, initCustomerSession } from "../utils/sessions.js"
 
 import express from "express";
 
@@ -18,16 +18,41 @@ const URL_SIGNIN = "/" + SIGNIN
 const URL_SIGNUP = "/" + SIGNUP
 const URL_MYPAGE = "/" + MYPAGE
 
-// Sign-in
-router.post(URL_SIGNIN, (req, res) => {
+// account sign-in
+router.post(URL_SIGNIN + "/account", (req, res) => {
     const id = req.body.id;
     const pw = req.body.pw;
     console.log(`request body : ${id} ${pw}`)
 
     // check(id, pw);
-    initSession(req, id, 'nickname', 'email');
+
+    initAccountSession(req, id, 'nickname', 'email');
     res.json({ result: true });
     console.log(`id : ${id}, pw : ${pw}`);
+})
+
+// customer sign-in
+router.post(URL_SIGNIN + "/customer", (req, res) => {
+    const name = req.body.name;
+    const birth_date = req.body.birth_date;
+    const phone = req.body.phone;
+
+    // check(name, birth_date, phone);
+
+    const is_found = false
+    // 만약 일치하는 비회원 데이터가 없다면 새로 생성 후 로그인
+    if (is_found == false)
+    {
+        // INSERT INTO customer VALUES(name, birth_date, phone);
+        initCustomerSession(req, name, birth_date, phone);
+        res.json({ result: false });
+    }
+    // 일치하는 데이터가 있으면 로그인
+    else
+    {
+        initCustomerSession(req, id, 'nickname', 'email');
+        res.json({ result: true });
+    }
 })
 
 router.get(URL_SIGNIN, (req, res) => {

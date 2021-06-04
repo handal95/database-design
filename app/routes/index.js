@@ -4,6 +4,8 @@ import { user_router } from "./user.js"
 import { router as movieinfo_router } from "./movieinfo.js"
 import { router as purchase_router } from "./purchase.js"
 
+import { hasSession, destorySession } from "../utils/sessions.js"
+
 const router = express.Router()
 
 router.use("/db", db_router)
@@ -20,7 +22,30 @@ const URL_HOME = "/" + HOME
 
 // 메인 화면
 router.get(URL_HOME, (req, res) => {
-    res.render(INDEX)
+    if (hasSession(req) == true)
+    {
+        // 회원 로그인 중인 경우
+        if (req.session.signin_category == "account")
+        {
+            const session_account_id = req.session.sign_id;
+            res.render(INDEX, {account_id: session_account_id});
+        }
+        // 비회원 로그인 중인 경우
+        else
+        {
+            const session_customer_name = req.session.name;
+            res.render(INDEX, {account_id: session_customer_name});
+        }
+    }
+    else
+    {
+        res.render(INDEX, {account_id: null});
+    }
+})
+
+router.get(URL_HOME + "logout", (req, res) => {
+    destorySession(req);
+    res.redirect("/");
 })
 
 // TODO : CHECK

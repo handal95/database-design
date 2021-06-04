@@ -56,7 +56,7 @@ router.post('/crew', function(req, res)
     console.log(`search : ${keyword}`);
 })
 
-// 개별 리뷰 페이지 ???? 라우팅 왜 안 돼
+// 개별 리뷰 페이지
 router.get('/review', function(req, res)
 {
     res.render('movieinfo/review');

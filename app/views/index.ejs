@@ -4,10 +4,15 @@
 <body>
     <input type="text" name="search" id="search">
     <a href="/movieinfo/movie">검색</a><br>
+    <% if (account_id == null) { %>
     <a href="/signin">로그인</a><br>
     <a href="/signup">회원가입</a><br>
-    <a href="/purchase/movie/index">영화예매</a><br>
-    <a href="/purchase/item/index">상품구매</a><br>
+    <% } else { %>
+    <p>환영합니다, <%= account_id %>님</p>
     <a href="/mypage">마이페이지</a><br>
+    <a href="/logout">로그아웃</a><br>
+    <% } %>
+    <a href="/purchase/movie/select">영화예매</a><br>
+    <a href="/purchase/item/select">상품구매</a><br>
 </body>
 </html>
