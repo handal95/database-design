@@ -65,30 +65,23 @@
         },
     ]
 
-    /*
-    SELECT review_sq, account_id, review_title, score FROM review WHERE movie_code="search_movie_code";
-    */
     const review = [
         {
-            review_sq: "1",
             account_id: "hihi",
             review_title: "재밌다",
             score: 9.0,
         },
         {
-            review_sq: "2",
             account_id: "hello",
             review_title: "넘넘 벅진감넘치는… 달리고 싶드아~~!!",
             score: 8.0,
         },
         {
-            review_sq: "3",
             account_id: "hihi",
             review_title: "역시 굿!!! 말이 필요없다 ",
             score: 8.8,
         },
         {
-            review_sq: "4",
             account_id: "죠르디",
             review_title: "역시 분노의질주 진짜 스케일 끝장난다 분노의질주 보니까 도쿄가고싶다",
             score: 9.0,
@@ -136,8 +129,6 @@
             <% } %>
         </tbody>
     </table>
-    
-2g
 
     <h2>후기</h2>
     <table>
@@ -167,7 +158,6 @@
     <script>
         const btn_add_review = findId('btn_add_review');
         const movie_code = <%= movie.movie_code %>;
-        const review_sq = findId(''); // 수정 필요
         const account_id = "account_id"
         const new_review_title = findId('new_review_title');
         const new_comment = findId('new_review_text');
@@ -177,7 +167,6 @@
         {
             const data = {
                 movie_code: movie_code.value,
-                review_sq: review_sq.value, // 수정 필요
                 account_id: account_id.value,
                 new_review_title: new_review_title.value
                 new_comment: new_comment.value,
@@ -208,7 +197,7 @@
         </thead>
         <tbody>
             <% for (const review_element of review) { %>
-            <tr id="<%= review_element.review_sq %>">
+            <tr id="<%= review_element.review_title %>">
                 <td><%= review_element.account_id %></td>
                 <td><%= review_element.review_title %></td>
                 <td><%= review_element.score %></td>

@@ -31,9 +31,60 @@
         });
     </script>
 
-    <h2>현재 포인트</h2>
-    <ol>
-        <li>포인트 내역</li>
-    </ol>
+    <%
+        // SELECT points_history_sq, reward_category, change_value, detail FROM points_history WHERE account_id="cur_signin_account_id";
+        const points_history = [
+        {
+            points_history_sq: 1,
+            reward_category: '추가',
+            change_value: 300,
+            detail: "포인트 적립",
+        },
+        {
+            points_history_sq: 2,
+            reward_category: '추가',
+            change_value: 300,
+            detail: "포인트 적립",
+        },
+        {
+            points_history_sq: 3,
+            reward_category: '사용',
+            change_value: 300,
+            detail: "포인트 적립",
+        },
+        {
+            points_history_sq: 4,
+            reward_category: '추가',
+            change_value: 300,
+            detail: "포인트 적립",
+        },
+        ]
+
+        // SELECT SUM(change_value) FROM points_history WHERE account_id="account_id";
+        const cur_points = 600
+    %>
+
+<!--예약했던 티켓 정보-->
+
+    <h2>포인트</h2>
+    <p>현재 포인트 : <%= cur_points %></p>
+    <table>
+        <thead>
+            <th>순차번호</th>
+            <th>적립/사용</th>
+            <th>변동값</th>
+            <th>내용</th>
+        </thead>
+        <tbody>
+            <% for (const history of points_history) { %>
+            <tr>
+                <td><%= history.points_history_sq %></td>
+                <td><%= history.reward_category %></td>
+                <td><%= history.change_value %></td>
+                <td><%= history.detail %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
 </body>
 </html>

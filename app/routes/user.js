@@ -49,8 +49,8 @@ router.post(URL_SIGNUP, (req, res) => {
     const email = req.body.email;
     
     var verified_data = true;
-    /* 중복 아이디 검사 코드 */
 
+    /* 중복 아이디 검사 코드 */
     if (verified_data)
     {
         res.json({
@@ -103,7 +103,6 @@ router.get(URL_MYPAGE, (req, res) => {
         res.redirect(URL_SIGNIN);
     }
 });
-
 
 const user_router = router
 export { user_router };

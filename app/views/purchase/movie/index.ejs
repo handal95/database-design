@@ -26,6 +26,10 @@
             }
         ]
     %>
+    <!-- default : 오늘 날짜-->
+    <h3>날짜</h3>
+    <input type="date" name="session_date" id="session_date"><br>
+
     <h3>영화목록</h3>
     <select name="movie_title" id="movie_title">
         <% for(let idx = 0; idx < movie_list.length; idx++) { %>
@@ -42,11 +46,12 @@
     </select>
     <br>
 
-    <h3>날짜</h3>
-    <input type="date" name="session_date" id="session_date"><br>
+
     
     <button id="search_session">검색</button>
 
+    <!-- 초기 화면은 모든 상영정보 출력 -->
+    <!--상영관, 상영회차 -> 영화관, 상영관-->
     <h3>상영목록</h3>
     <table>
         <thead>
