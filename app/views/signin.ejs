@@ -2,69 +2,67 @@
 <html lang="en">
 <%- include('_component/head.ejs', {titleName: '로그인'})%>
 <body>
-    <!--메인 화면-->
-    <%- include('_component/goto_main.ejs')%>
-    <h1>로그인 페이지</h1>
-    <h2>회원 로그인</h2>
-        <table>
-            <tbody>
-                <tr>
-                    <td>ID</td>
-                    <td><input type="id" name="signin_id" id="signin_id"></td>
-                </tr>
-                <tr>
-                    <td>비밀번호</td>
-                    <td><input type="password" name="signin_pw" id="signin_pw"></td>
-                </tr>
-                <tr>
-                    <td><button id="btn_account_signin">회원 로그인</button></td>
-                </tr>
-            </tbody>
-        </table>
-    <h2>비회원 로그인</h2>
-    <table>
-        <tbody>
-            <tr>
-                <td>이름</td>
-                <td><input type="id" name="customer_name" id="customer_name"></td>
-            </tr>
-            <tr>
-                <td>생년월일</td>
-                <td><input type="password" name="customer_birth_date" id="customer_birth_date"></td>
-            </tr>
-            <tr>
-                <td>전화번호</td>
-                <td><input type="text" name="phone" id="phone"></td>
-            </tr>
-            <tr>
-                <td><button id="btn_customer_signin">비회원 로그인</button></td>
-            </tr>
-        </tbody>
-    </table>
-    <a href="/signup">회원가입</a>
+    <div class="container py-3">
+        <!--메인 화면-->
+        <%- include('_component/goto_main.ejs')%>
+        <h1>로그인 페이지</h1>
 
-<!--회원/비회원 로그인 병렬 표기-->
-    
+        <h2>회원 로그인</h2>
+        <form id="account_signin_form" class="mb-3">
+            <div class="mb-3">
+                <label for="signin_id" class="form-label">ID</label>
+                <input type="text" class="form-control" id="signin_id" required>
+            </div>
+            <div class="mb-3">
+                <label for="signin_pw" class="form-label">비밀번호</label>
+                <input type="password" class="form-control" id="signin_pw" required>
+            </div>
+            <button type="submit" class="btn btn-primary">회원 로그인</button>
+        </form>
+
+        <h2>비회원 로그인</h2>
+        <form id="customer_signin_form" class="mb-3">
+            <div class="mb-3">
+                <label for="customer_name" class="form-label">이름</label>
+                <input type="text" class="form-control" id="customer_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="customer_birth_date" class="form-label">생년월일</label>
+                <input type="password" class="form-control" id="customer_birth_date" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">전화번호</label>
+                <input type="text" class="form-control" id="phone" required>
+            </div>
+            <button type="submit" class="btn btn-primary">비회원 로그인</button>
+        </form>
+
+        <a href="/signup" class="btn btn-secondary">회원가입</a>
+    </div>
+    <!--회원/비회원 로그인 병렬 표기-->
+
     <script>
         // 회원 로그인 변수
-        const btn_account_signin = findId('btn_account_signin');
-        const signin_id = findId('signin_id');
-        const signin_pw = findId('signin_pw');
-
+        const account_signin_form = $('#account_signin_form');
+        const signin_id = $('#signin_id');
+        const signin_pw = $('#signin_pw');
+        
         // 비회원 로그인 변수
-        const btn_customer_signin = findId('btn_customer_signin');
-        const customer_name = findId('customer_name');
-        const customer_birth_date = findId('customer_birth_date');
-        const phone = findId('phone');
+        const customer_signin_form = $('#customer_signin_form');
+        const customer_name = $('#customer_name');
+        const customer_birth_date = $('#customer_birth_date');
+        const phone = $('#phone');
 
         // 회원 로그인 버튼
-        btn_account_signin.addEventListener('click', async function(){
+        account_signin_form.on('submit', async e => {
+            e.preventDefault();
+
             const data = {
-                id: signin_id.value,
-                pw: signin_pw.value,
+                id: signin_id.val(),
+                pw: signin_pw.val(),
             };
 
-            const account_login_response = await requestPostAPI('/signin/account', data)
+            const account_login_response = await requestPostAPI('/signin/account', data);
 
             if (account_login_response.data.result)
             {
@@ -78,11 +76,13 @@
         });
 
         // 비회원 로그인 버튼
-        btn_customer_signin.addEventListener('click', async function(){
+        customer_signin_form.on('submit', async e => {
+            e.preventDefault();
+
             const data = {
-                name: customer_name.value,
-                birth_date: customer_birth_date.value,
-                phone: phone.value,
+                name: customer_name.val(),
+                birth_date: customer_birth_date.val(),
+                phone: phone.val(),
             };
 
             const customer_login_response = await requestPostAPI('/signin/customer', data)

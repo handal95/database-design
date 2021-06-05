@@ -25,6 +25,7 @@ router.get(URL_HOME, (req, res) => {
     if (hasSession(req) == true)
     {
         // 회원 로그인 중인 경우
+        console.log(req.session);
         if (req.session.signin_category == "account")
         {
             const session_account_id = req.session.sign_id;

@@ -6,77 +6,6 @@
     <%- include('../../_component/goto_main.ejs')%>
     <h1>티켓 예약 페이지</h1>
     <h2>영화티켓 예약</h2>
-    <%
-        let movie_list = ["movie1", "movie2"]
-        let theater_list = ["theater1", "theater2"]
-        let session_list = [
-            {
-                theater_name: "청량리 롯데시네마",
-                screen_name: "session1",
-                session_datetime: "12:35",
-                subtitle_category: null
-            },
-            {
-                theater_name: "청량리 롯데시네마",
-                screen_name: "session2",
-                session_datetime: "14:50",
-                subtitle_category: "eng"
-            }
-        ]
-    %>
-
-    <script>
-        // 페이지가 모두 로드된 후 실행하는 부분
-        $(document).ready(() => {
-            // 각 id값을 받아와 변수에 저장
-            const tmp_data = $('#tmp_data');
-            const date = $('#date');
-            const movie = $('#movie');
-            const theater = $('#theater');
-
-            // 각 변수에 변화가 일어나는지 감지 (change 이벤트 감지 == addEventListener)
-            // 변화가 일어나면 함수를 호출
-            date.on('change', change_list);
-            movie.on('change', change_list);
-            theater.on('change', change_list);
-
-            function change_list()
-            {
-                // 세 값을 읽음
-                const val_date = $(date).val();
-                const val_movie = $(movie).val();
-                const val_theater = $(theater).val();
-                
-                const data = {
-                    date: val_session,
-                    movie: val_movie,
-                    theater: val_theater
-                }
-
-                // do request
-                const response_data = await requestPostAPI('purchase/', data)
-                
-                if (response_data.body.result == false)
-                {
-                    alert('실패')
-                }
-
-                // 그 값을 읽어서 tmp_data에 넣자
-                // <li>로 넣겠음 (<li> : list 태그)
-                const ul = $('<ul></ul>')
-                ul.append($(`<li>${response_data.body.val_session_date}</li>`));
-                ul.append($(`<li>${val_movie_list}</li>`));
-                ul.append($(`<li>${val_theater_list}</li>`));
-                
-                // tmp_data에 ul을 첨부
-                tmp_data.html(ul.html());
-            }
-        })
-    </script>
-
-    <div id="tmp_data">
-
-    </div>
 
     <!-- default : 오늘 날짜-->
     <%
@@ -84,31 +13,19 @@
         const year = today.getFullYear();
         const month = ("0" + (today.getMonth() + 1)).slice(-2);
         const date = ("0" + today.getDate()).slice(-2);
-
+        // YYYY-MM-DD
         const today_text = `${year}-${month}-${date}`
     %>
     <h3>날짜</h3>
     <input type="date" name="session_date" id="session_date" value="<%= today_text %>"><br>
 
     <h3>영화목록</h3>
-    <select name="movie_list" id="movie_list">
-        <option disabled selected>===</option>
-        <% for(let idx = 0; idx < movie_list.length; idx++) { %>
-        <option value="<%= movie_list[idx] %>"><%= movie_list[idx] %></option>
-        <% } %>
-    </select>
+    <select name="movie_list" id="movie_select"></select>
     <br>
 
     <h3>영화관목록</h3>
-    <select name="theater_list" id="theater_list">
-        <option disabled selected>===</option>
-        <% for(let idx = 0; idx < theater_list.length; idx++) { %>
-        <option value="<%= theater_list[idx] %>"><%= theater_list[idx] %></option>
-        <% } %>
-    </select>
+    <select name="theater_select" id="theater_select"></select>
     <br>
-
-    <button id="search_session">검색</button>
 
     <!-- 초기 화면은 모든 상영정보 출력 -->
     <h3>상영목록</h3>
@@ -116,30 +33,193 @@
         <thead>
             <th>영화관</th>
             <th>상영관</th>
+            <th>영화</th>
             <th>상영시각</th>
             <th>자막유형</th>
         </thead>
-        <tbody>
-        <% for (const element of session_list) { %>
-            <tr data_session_uid="<%= element.session_uid %>">
-                <td><%= element.theater_name %></td>
-                <td><%= element.screen_name %></td>
-                <td><%= element.session_datetime %></td>
-                <td><%= element.subtitle_category %></td>
-            </tr>
-        <% } %>
-        </tbody>
+        <tbody id="session_table"></tbody>
     </table>
 
     <button id = "btn_goto_seat">좌석선택</button>
+
     <script>
-        // 좌석 선택 버튼
-        btn_goto_seat.addEventListener('click', async function(){
-            const data = {
-                theater_name: ,
+        // 페이지가 모두 로드된 후 실행하는 부분
+        $(document).ready(() => {
+            // 각 id값을 받아와 변수에 저장
+            const session_date = $('#session_date');
+            const movie_select = $('#movie_select');
+            const theater_select = $('#theater_select');
 
+            init_theater_list();
+            init_movie_list();
+
+            // 각 변수에 변화가 일어나는지 감지 (change 이벤트 감지 == addEventListener)
+            // 변화가 일어나면 함수를 호출
+            session_date.on('change', change_session_date);
+            movie_select.on('change', change_theater_list);
+            theater_select.on('change', change_movie_list);
+
+            function clear_session_table()
+            {
+                const session_table = $("#session_table");
+                session_table.html('');
+            }
+
+            // 페이지 초반 로드 시 영화관 선택 목록을 만들기 위한 함수
+            async function init_theater_list()
+            {
+                const response_data = await requestPostAPI('/purchase/movie/select/init_theater')
+                const theater_list = response_data.data.theater_list;
+
+                // 리스트 값을 받아서 option 내용을 바꿈
+                theater_select.html('');
+                theater_select.append($(`<option disabled selected value="">===</option>`));
+                for (const theater of theater_list)
+                {
+                    theater_select.append($(`<option id=${theater.theater_code}>${theater.theater_name}</option>`));
+                }
+            }
+
+            // 영화 선택 목록 초기화
+            async function init_movie_list()
+            {
+                const response_data = await requestPostAPI('/purchase/movie/select/init_movie')
+                const movie_list = response_data.data.movie_list;
+
+                // 리스트 값을 받아서 option 내용을 바꿈
+                movie_select.html('');
+                movie_select.append($(`<option disabled selected value="">===</option>`));
+                for (const movie of movie_list)
+                {
+                    movie_select.append($(`<option id=${movie.movie_code}>${movie.movie_title}</option>`));
+                }
+            }
+
+            // 영화 선택 후 영화관 목록을 바꾸면서 상영일정 목록을 갱신하는 함수
+            async function change_theater_list()
+            {
+                // 입력 데이터를 읽음
+                const val_date = $(session_date).val();
+                const val_movie = $(movie_select).val();
+
+                const data = {
+                    session_date: val_date,
+                    movie_code: val_movie,
+                    };
+
+                // do request
+                const response_data = await requestPostAPI('/purchase/movie/select/filter_theater', data)
+                const theater_list = response_data.data.theater_list;
+
+                clear_session_table();
+                // 영화 선택 목록 변경
+                theater_select.html('');
+                theater_select.append($(`<option disabled selected value="">===</option>`));
+                for (const theater of theater_list)
+                {
+                    theater_select.append($(`<option id=${theater.theater_code}>${theater.theater_name}</option>`));
+                }
+            }
+
+            // 영화관 선택 후 영화 목록을 바꾸면서 상영일정 목록을 갱신하는 함수
+            async function change_movie_list()
+            {
+                // 입력 데이터를 읽음
+                const val_date = $(session_date).val();
+                const val_theater = $(movie_select).val();
+
+                const data = {
+                    session_date: val_date,
+                    theater_code: val_theater,
+                    };
+
+                // do request
+                const response_data = await requestPostAPI('/purchase/movie/select/filter_movie', data)
+                const movie_list = response_data.data.movie_list;
+
+                clear_session_table();
+                // 영화관 선택 목록 변경
+                movie_select.html('');
+                movie_select.append($(`<option disabled selected value="">===</option>`));
+                for (const movie of movie_list)
+                {
+                    movie_select.append($(`<option id=${movie.movie_code}>${movie.movie_name}</option>`));
+                }
+            }
+
+            // 날짜 선택 후 영화, 영화관 목록을 바꾸는 함수
+            async function change_session_date()
+            {
+                // 입력 데이터를 읽음
+                const val_date = $(session_date).val();
+
+                const data = {
+                    session_date: val_date,
+                    };
+
+                // do request
+                const response_data = await requestPostAPI('/purchase/movie/select/change_date', data)
+                const movie_list = response_data.data.movie_list;
+
+                clear_session_table();
+                // 리스트 값을 받아서 option 내용을 바꿈
+                movie_select.html('');
+                movie_select.append($(`<option disabled selected value="">===</option>`));
+                for (const movie of movie_list)
+                {
+                    movie_select.append($(`<option id=${movie.store_code}>${movie.store_name}</option>`));
+                }
+
+                theater_select.html('');
+                theater_select.append($(`<option disabled selected value="">===</option>`));
+                for (const theater of movie_list)
+                {
+                    theater_select.append($(`<option id=${theater.theater_code}>${theater.theater_name}</option>`));
+                }
+            }
+
+            // 영화 선택 후 영화관 목록을 바꾸면서 상영일정 목록을 갱신하는 함수
+            async function change_session_table()
+            {
+                // 상영일정 테이블의 id값을 받아옴
+                const session_table = $("#session_table");
+
+                // 입력 데이터를 읽음
+                const val_date = $(session_date).val();
+                const val_theater = $(theater_select).val();
+                const val_movie = $(movie_select).val();
+
+                const data = {
+                    session_date: val_date,
+                    theater_code: val_theater,
+                    movie_code: val_movie,
+                    };
+
+                // do request
+                const response_data = await requestPostAPI('/purchase/movie/select/filter_session', data)
+                const session_list = response_data.data.session_list;
+
+                clear_session_table();
+                for (const session of session_list)
+                {
+                    session_table.append(
+                        `<tr id="${session.theater_name}">
+                            <td>${session.screen_name}</td>
+                            <td>${session.movie_title}</td>
+                            <td>${session.session_datetime}</td>
+                            <td>${session.subtitle_category}</td>
+                        </tr>`
+                    );
+                }
+            }
+            
+            /*
+            // 좌석 선택 페이지 이동 버튼
+            btn_goto_seat.addEventListener('click', async function(){
+                const data = {
+                    theater_name: ,
             };
-
+            
             const customer_login_response = await requestPostAPI('/purchase/movie/select/gotoseat', data)
 
             // 비회원 데이터가 존재해 로그인을 성공한 경우
@@ -154,7 +234,7 @@
                 alert('비회원 로그인 성공');
             }
             window.location.href = '/';
-        });
-    </script>
+        });*/
+        })
 </body>
 </html>
