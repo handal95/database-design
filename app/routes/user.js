@@ -1,9 +1,10 @@
 /* 메인화면, 회원 로그인, 회원가입, 마이페이지 */
 
-import { hasSession, initAccountSession, initCustomerSession } from "../utils/sessions.js"
+import { hasSession, initCustomerSession } from "../utils/sessions.js"
 
 import express from "express";
-import { signup_process } from "../js/user/signup.js"
+import { signin_account_process } from "../js/process/signin.js"
+import { signup_process } from "../js/entities/signup.js.js.js"
 
 const router = express.Router()
 
@@ -21,19 +22,24 @@ const URL_MYPAGE = "/" + MYPAGE
 
 // account sign-in
 router.post(URL_SIGNIN + "/account", (req, res) => {
-    const id = req.body.id;
-    const pw = req.body.pw;
-    console.log(`request body : ${id} ${pw}`)
-
-    // check(id, pw);
-
-    initAccountSession(req, id, 'nickname', 'email');
+    if(!signin_account_process(req, res)){
+        console.log("SIGNIN FAILUARE")
+        res.json({ result: false })
+    }
+    console.log("SIGNIN SUCCESS")
     res.json({ result: true });
-    console.log(`id : ${id}, pw : ${pw}`);
 })
 
 // customer sign-in
 router.post(URL_SIGNIN + "/customer", (req, res) => {
+    if(!signin_account_process(req, res)){
+        console.log("SIGNIN FAILUARE")
+        res.json({ result: false })
+    }
+    console.log("SIGNIN SUCCESS")
+    res.json({ result: true });
+
+    
     const name = req.body.name;
     const birth_date = req.body.birth_date;
     const phone = req.body.phone;
@@ -57,23 +63,19 @@ router.post(URL_SIGNIN + "/customer", (req, res) => {
 })
 
 router.get(URL_SIGNIN, (req, res) => {
-    if (hasSession(req) == true) {
+    if (hasSession(req)) {
         res.redirect(URL_HOME)
-    } else {
-        res.render(SIGNIN)
     }
+    res.render(SIGNIN)
 })
 
 // Sign-up
 router.post(URL_SIGNUP, (req, res) => {
-    if(signup_process(req, res)) {
-        res.json({ result: true, });
-        console.log(`id : ${id}, pw : ${pw}, name : ${name}, birth : ${birth}, phone : ${phone}, nickname : ${nickname}, email : ${email}`);
-    }
-    else {
+    if(!signup_process(req, res)) {
         res.json({ result: false, });
         console.log('Sign up Failed');
     }
+    res.json({ result: true, });
 });
 
 router.get(URL_SIGNUP, (req, res) => {

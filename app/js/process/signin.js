@@ -1,7 +1,7 @@
 import { doDBRelease, getDBConnect } from "../db/connect.js"
-import { insert_customer, issue_customer_code } from "../user/customer.js"
+import { insert_customer, issue_customer_code } from "../entities/customer.js"
 
-import { get_account_info } from "../user/account.js"
+import { get_account_info } from "../entities/account.js"
 import { initAccountSession } from "../../utils/sessions.js"
 
 export async function signin_account_process(req, res) {

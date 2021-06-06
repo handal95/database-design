@@ -3,20 +3,20 @@ export function hasSession(req) {
     return !!req.session.views;
 }
 
-export function initAccountSession(req, sign_id, nickname, email) {
+export function initAccountSession(req, data) {
     req.session.views = 1;
     req.session.signin_category = "account";
-    req.session.sign_id = sign_id;
-    req.session.nickname = nickname;
-    req.session.email = email;
+    req.session.sign_id = data.account_id;
+    req.session.nickname = data.nickname;
+    req.session.email = data.email;
 }
 
-export function initCustomerSession(req, name, birth_date, phone) {
+export function initCustomerSession(req, data) {
     req.session.views = 1;
     req.session.signin_category = "customer";
-    req.session.name = name;
-    req.session.birth_date = birth_date;
-    req.session.phone = phone;
+    req.session.name = data.name;
+    req.session.birth_date = data.birth_date;
+    req.session.phone = data.phone;
 }
 
 export function destorySession(req) {
