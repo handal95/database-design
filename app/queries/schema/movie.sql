@@ -15,4 +15,3 @@ avg_score FLOAT NOT NULL DEFAULT 0.0
 
 CONSTRAINT MOVIE_PK
     PRIMARY KEY(movie_code)
-

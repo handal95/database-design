@@ -1,7 +1,7 @@
-session_uid VARCHAR(16) NOT NULL,
-seat_uid VARCHAR(16) NOT NULL,
+session_uid NUMBER(16, 0) NOT NULL,
+seat_uid NUMBER(16, 0) NOT NULL,
 
-ticket_uid VARCHAR(16) NOT NULL,
+ticket_uid NUMBER(16, 0) NOT NULL,
 reserve_status VARCHAR(16) NOT NULL,
 
 CONSTRAINT TICKET_PK
@@ -15,4 +15,3 @@ CONSTRAINT SEAT_UID
 
 CONSTRAINT TICKET_UID_FK 
     FOREIGN KEY(ticket_uid) REFERENCES ticket(ticket_uid)
-

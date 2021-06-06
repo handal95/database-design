@@ -1,4 +1,5 @@
-session_uid VARCHAR(16) NOT NULL,
+session_uid NUMBER(16, 0) NOT NULL
+    CONSTRAINT MOVIE_SESSION_UID_CK CHECK(session_uid >= 0),
 
 screen_code VARCHAR(16) NOT NULL,
 movie_code VARCHAR(16) NOT NULL,

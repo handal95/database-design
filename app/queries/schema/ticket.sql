@@ -1,6 +1,7 @@
-ticket_uid VARCHAR(16) NOT NULL,
+ticket_uid NUMBER(16, 0) NOT NULL
+    CONSTRAINT TICKET_UID_CK CHECK(ticket_uid >= 0),
 
-payment_uid VARCHAR(16) NOT NULL,
+payment_uid NUMBER(16, 0) NOT NULL,
 ticket_price NUMBER(8, 0) NOT NULL
     CONSTRAINT TICKET_PRICE_CK CHECK(ticket_price >= 0),
 adult_no NUMBER(2, 0) NOT NULL DEFAULT 0

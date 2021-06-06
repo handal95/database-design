@@ -1,4 +1,4 @@
-payment_uid VARCHAR(16) NOT NULL,
+payment_uid NUMBER(16, 0) NOT NULL,
 payment_history_sq NUMBER(4, 0) NOT NULL
     CONSTRAINT PAYMNET_HISTORY_CK CHECK(payment_history_sq >= 0),
 
