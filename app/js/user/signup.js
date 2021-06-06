@@ -1,31 +1,26 @@
 import db_config from "../../configs/db_config.js"
 import oracle from "oracledb"
 
-function check_uniqueness(conn, req){
+async function check_uniqueness(conn, req){
     let account_id = req.body.id
     let query = (
         `SELECT 1 FROM ACCOUNT WHERE account_id = '${account_id}'`
     )
-        
-    let uniqueness = async () => {
-        return new Promise((resolve, reject) => {
-            conn.execute(query, (err, result) => {
-                if(err){
-                    console.log(`${err.errorNum} QUERY(${query}) can not excuted`);
-                    console.error(` - ${err.message}`)
-                    resolve(false)
-                }
-                resolve(result.rows.length == 0)
-            })
-        })
+
+    let uniqueness = false;
+    try{
+        const result = await conn.execute(query)
+        uniqueness = result.rows.length == 0
+    } catch(err) {
+        console.log(`${err.errorNum} QUERY(${query}) can not excuted`);
+        console.error(` - ${err.message}`)
+        uniqueness = false
     }
-    console.log("log1 ", uniqueness)
-    console.log("log2 ", uniqueness())
-    console.log("log3 ", uniqueness().resolve)
+
     return uniqueness
 }
 
-function insert_customer(conn, req, data){
+async function insert_customer(conn, req, data){
     let query = (
         "INSERT INTO CUSTOMER(customer_code, customer_name, customer_birth_date, phone)" +
         "VALUES(:customer_code, :customer_name, :customer_birth_date, :phone)"
@@ -38,19 +33,21 @@ function insert_customer(conn, req, data){
         req.body.phone  // customer_phone
     ]
 
-    conn.execute(query, values, (err, result)=>{
-        if(err) {
-            console.log(`${err.errorNum} QUERY(${query}) can not excuted`);
-            console.error(` - ${err.message}`)
-            return false
-        }
+    let is_success = false
+    try{
+        const result = await conn.execute(query, values)
         console.log("Customer INSERT : ", result.rowsAffected)
-        return true
-    })
-    return false
+        is_success = true
+    } catch (err) {
+        console.log(`${err.errorNum} QUERY(${query}) can not excuted`);
+        console.error(` - ${err.message}`)
+        is_success = false
+    }
+    
+    return is_success
 } 
 
-function insert_account(conn, req, data){
+async function insert_account(conn, req, data){
     let query = (
         "INSERT INTO ACCOUNT(account_id, customer_code, nickname, pwdkey, email)" +
         "VALUES(:account_id, :customer_code, :nickname, :pwdkey, :email)"
@@ -64,50 +61,49 @@ function insert_account(conn, req, data){
         req.body.email, // email
     ]
 
-    conn.execute(query, values, (err, result)=>{
-        if(err) {
-            console.log(`${err.errorNum} QUERY(${query}) can not excuted`);
-            console.error(` - ${err.message}`)
-            return false
-        }
+    let is_success = false
+    try{
+        const result = await conn.execute(query, values)
         console.log("Account INSERT : ", result.rowsAffected)
-        return true
-    })
+        is_success = true
+    } catch (err) {
+        console.log(`${err.errorNum} QUERY(${query}) can not excuted`);
+        console.error(` - ${err.message}`)
+        is_success = false
+    }
 
-    return false
+    return is_success
 } 
 
-export function signup_process(req, res) {
+export async function signup_process(req, res) {
     let is_success = false
-    oracle.getConnection(db_config, (err, conn) => {
-        if(err){
-            console.log("===> duplicate check error")
-            throw err
-        }
-        let is_uniqueness = check_uniqueness(conn, req)
+    
+    try{
+        const conn = await oracle.getConnection(db_config)
 
-        console.log("PROCESS UNIQUENESS : " , is_uniqueness)
-        if(!is_uniqueness){
+        if(!await check_uniqueness(conn, req)) {
             console.log("UNIQUNESS FAIL")
             return false
-        } else {
-            console.log("uniqueness ok")
         }
+        console.log("UNIQUENESS OK")
         
-        // let CUSTOMER_CODE = "1234567890123459"
-        // let is_success_customer = insert_customer(conn, req, CUSTOMER_CODE)
+        const CUSTOMER_CODE = "0000000000000002"
+        if(!await insert_customer(conn, req, CUSTOMER_CODE)){
+            console.log("CUSTOMER FAILURE")
+            return false
+        }
+        console.log("CUSTOMER SUCCESS")
 
-        // if(!is_success_customer){
-        //     console.log("INSERT CUSTOMER FAIL")
-        //     return false
-        // }
+        if(!await insert_account(conn, req, CUSTOMER_CODE)){
+            console.log("ACCOUNT FAILURE")
+            return false
+        }
+        console.log("ACCOUNT SUCCESS")
 
-        // let is_success_account = insert_account(conn, req, CUSTOMER_CODE)
-        // if(!is_success_account){
-        //     console.log("INSERT ACCOUNT FAIL")
-        //     return false
-        // }
-        // is_success = true
-    })
-    return is_success
+        return true
+    }
+    catch(err) {
+        console.log("SIGNUP PROCESS ERROR, ERR")
+        return false
+    }
 }
