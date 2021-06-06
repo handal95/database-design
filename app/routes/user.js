@@ -3,6 +3,7 @@
 import { hasSession, initAccountSession, initCustomerSession } from "../utils/sessions.js"
 
 import express from "express";
+import { signup_process } from "../js/user/signup.js"
 
 const router = express.Router()
 
@@ -65,40 +66,21 @@ router.get(URL_SIGNIN, (req, res) => {
 
 // Sign-up
 router.post(URL_SIGNUP, (req, res) => {
-    const id = req.body.id;
-    const pw = req.body.pw;
-    const name = req.body.name;
-    const birth = req.body.birth;
-    const phone = req.body.phone;
-    const nickname = req.body.nickname;
-    const email = req.body.email;
-    
-    var verified_data = true;
-
-    /* 중복 아이디 검사 코드 */
-    if (verified_data)
-    {
-        res.json({
-            result: true,
-        });
+    if(signup_process(req, res)) {
+        res.json({ result: true, });
         console.log(`id : ${id}, pw : ${pw}, name : ${name}, birth : ${birth}, phone : ${phone}, nickname : ${nickname}, email : ${email}`);
     }
-    else
-    {
-        res.json({
-            result: false,
-        });
+    else {
+        res.json({ result: false, });
         console.log('Sign up Failed');
     }
 });
 
 router.get(URL_SIGNUP, (req, res) => {
-    if (hasSession(req) == true) {
+    if (hasSession(req)) {
         res.redirect(URL_HOME);
     }
-    else {
-        res.render(SIGNUP);
-    }
+    res.render(SIGNUP);
 });
 
 // MYPAGE
