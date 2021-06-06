@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../_component/head.ejs', {titleName: '결제 완료'})%>
+<body>
+    <!--메인 화면-->
+    <%- include('../../_component/goto_main.ejs')%>
+    <!--이 페이지 보여주기 전 결제 창 하나 대충 띄워주기-->
+    <h1>결제 완료</h1>
+    <div id="payment_result">
+        영화관 : <%= theater_name %><br>
+        상영관 : <%= screen_number %><br>
+        좌석 : <%= seat_row %><%= seat_col %><br>
+        영화 : <%= movie_title %><br>
+        가격 : <%= payment_price %><br>
+        결제방법 : <%= payment_method %><br>
+    </div>
+    <a href="/">메인 화면</a><br>
+
+    <script>
+    $(document).ready(() => {
+        // 각 id값을 받아와 변수에 저장
+        const purchase_result = $('#purchase_result');
+
+        render_payment_result();
+
+        // 결제 결과를 화면에 출력하는 함수
+        async function render_payment_result()
+        {
+            const payment_uid = payment_uid;
+
+            const response_data = await requestPostAPI('/purchase/complete/load_data');
+            const theater_list = response_data.data.theater_list;
+
+            // 리스트 값을 받아서 option 내용을 바꿈
+            theater_select.html('');
+            theater_select.append($(`<option disabled selected value="">===</option>`));
+            for (const theater of theater_list)
+            {
+                theater_select.append($(`<option id=${theater.theater_code}>${theater.theater_name}</option>`));
+            }
+        }
+
+    });
+    </script>
+</body>
+</html>
