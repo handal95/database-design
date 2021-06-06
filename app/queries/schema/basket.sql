@@ -4,7 +4,7 @@ basket_uid NUMBER(16, 0) NOT NULL
 store_code VARCHAR(16) NOT NULL,
 item_code VARCHAR(16) NOT NULL,
 payment_uid NUMBER(16, 0) NOT NULL,
-order_quantity NUMBER(4, 0) NOT NULL DEFAULT 1
+order_quantity NUMBER(4, 0) DEFAULT 1 NOT NULL
     CONSTRAINT BASKET_ORDER_QUANTITY_CK CHECK(order_quantity >= 1),
 order_status VARCHAR(16) NOT NULL,
 
