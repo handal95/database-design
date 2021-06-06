@@ -1,8 +1,9 @@
 account_id VARCHAR(16) NOT NULL,
-points_sq NUMBER(4) NOT NULL,
+points_sq NUMBER(4, 0) NOT NULL
+    CONSTRAINT POINTS_SQ_CK CHECK(points_sq >= 0),
 
 reward_category VARCHAR(16) NOT NULL,
-change_value NUMBER(8),
+change_value NUMBER(8, 0) NOT NULL,
 points_detail VARCHAR(1024),
 
 CONSTRAINT POINTS_PK

@@ -1,10 +1,10 @@
 seat_uid VARCHAR(16) NOT NULL,
 
 screen_code VARCHAR(16) NOT NULL,
-seat_category VARCHAR(16) NOT NULL,
+seat_category VARCHAR(16),
 seat_status VARCHAR(16) NOT NULL,
-seat_row VARCHAR(2) NOT NULL,
-seat_col VARCHAR(2) NOT NULL,
+seat_row VARCHAR(4) NOT NULL,
+seat_col VARCHAR(4) NOT NULL,
 
 CONSTRAINT SEAT_PK
     PRIMARY KEY(seat_uid),

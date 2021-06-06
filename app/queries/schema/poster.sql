@@ -1,5 +1,6 @@
 movie_code VARCHAR(16) NOT NULL,
-poster_sq NUMBER(4) NOT NULL,
+poster_sq NUMBER(4, 0) NOT NULL
+    CONSTRAINT POSTER_SQ_CK CHECK(poster_sq >= 0),
 
 poster_image BLOB,
 

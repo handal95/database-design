@@ -1,6 +1,6 @@
 movie_code VARCHAR(16) NOT NULL,
 genre_sq NUMBER(4, 0) NOT NULL
-    CONSTRAINT genre_sq_ck CHECK(genre_sq > 0),
+    CONSTRAINT GENRE_SQ_CK CHECK(genre_sq >= 0),
 
 genre_name VARCHAR(32) NOT NULL,
 

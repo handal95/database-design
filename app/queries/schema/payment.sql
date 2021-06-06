@@ -1,8 +1,8 @@
-payment_uid NUMBER(16) NOT NULL,
+payment_uid VARCHAR(16) NOT NULL,
 
-customer_code VARCHAR(16),
-payment_price NUMBER(8),
-payment_method VARCHAR(16),
+customer_code VARCHAR(16) NOT NULL,
+payment_price NUMBER(8, 0) NOT NULL,
+payment_method VARCHAR(16) NOT NULL,
 
 CONSTRAINT PAYMENT_PK
     PRIMARY KEY(payment_uid),

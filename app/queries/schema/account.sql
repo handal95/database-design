@@ -1,10 +1,10 @@
 account_id VARCHAR(16) NOT NULL,
 
 customer_code VARCHAR(16) NOT NULL,
-nickname VARCHAR(16),
-pwdkey VARCHAR(256),
-email VARCHAR(64),
-points NUMBER(8),
+nickname VARCHAR(16) NOT NULL,
+pwdkey VARCHAR(256) NOT NULL,
+email VARCHAR(64) NOT NULL,
+points NUMBER(8, 0) NOT NULL,
 
 CONSTRAINT ACCOUNT_PK
     PRIMARY KEY(account_id),
