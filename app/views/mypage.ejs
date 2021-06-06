@@ -6,7 +6,7 @@
     <%- include('_component/goto_main.ejs')%>
     <h1>마이 페이지</h1>
     <h2>내 계정 정보</h2>
-    ID : <%= account_id %>
+    ID : <%= account_id %><br>
     비밀번호
     <input type="password" name="signin_pw" id="input_pw">
     별명
@@ -31,18 +31,7 @@
         });
     </script>
 
-    <%
-        const ticket_history = [
-        {
-            ticket_uid: 132,
-            session_date: "2021.06.04.",
-            session_datetime: "16:45",
-            movie_name: "분노의 질주",
-            ticket_price: 32000,
-            reserve_status: "예약"
-        },
-        ]
-    %>
+    <!--티켓 예약 정보-->
     <h2>예약기록</h2>
     <table>
         <thead>
@@ -53,39 +42,10 @@
             <th>가격</th>
             <th>상태</th>
         </thead>
-        <tbody>
-            <% for (const history of ticket_history) { %>
-            <tr>
-                <td><%= history.ticket_uid %></td>
-                <td><%= history.session_date %></td>
-                <td><%= history.session_datetime %></td>
-                <td><%= history.movie_name %></td>
-                <td><%= history.ticket_price %></td>
-                <td><%= history.reserve_status %></td>
-            </tr>
-            <% } %>
-        </tbody>
+        <tbody id="ticket_purchase_history"></tbody>
     </table>
 
-    <%
-        const basket_history = [
-        {
-            basket_uid: 65465,
-            store_name: "스낵코너",
-            item_name: "팝콘",
-            order_quantity: 2,
-            order_status: "결제완료"
-        },
-        {
-            basket_uid: 65466,
-            store_name: "스낵코너",
-            item_name: "콜라",
-            order_quantity: 2,
-            order_status: "결제완료"
-        },
-        ]
-    %>
-
+    <!--상품 구매 정보-->
     <h2>상품구매기록</h2>
     <table>
         <thead>
@@ -94,55 +54,13 @@
             <th>수량</th>
             <th>주문상태</th>
         </thead>
-        <tbody>
-            <% for (const history of basket_history) { %>
-            <tr>
-                <td><%= history.store_name %></td>
-                <td><%= history.item_name %></td>
-                <td><%= history.order_quantity %></td>
-                <td><%= history.order_status %></td>
-            </tr>
-            <% } %>
-        </tbody>
+        <tbody id="item_purchase_history"></tbody>
     </table>
 
-    <%
-        // SELECT points_history_sq, reward_category, change_value, detail FROM points_history WHERE account_id="cur_signin_account_id";
-        const points_history = [
-        {
-            points_history_sq: 1,
-            reward_category: '추가',
-            change_value: 300,
-            detail: "포인트 적립",
-        },
-        {
-            points_history_sq: 2,
-            reward_category: '추가',
-            change_value: 300,
-            detail: "포인트 적립",
-        },
-        {
-            points_history_sq: 3,
-            reward_category: '사용',
-            change_value: 300,
-            detail: "포인트 적립",
-        },
-        {
-            points_history_sq: 4,
-            reward_category: '추가',
-            change_value: 300,
-            detail: "포인트 적립",
-        },
-        ]
 
-        // SELECT SUM(change_value) FROM points_history WHERE account_id="account_id";
-        const cur_points = 600
-    %>
-
-<!--예약했던 티켓 정보-->
-
+    <!--포인트 사용, 적립 정보-->
     <h2>포인트</h2>
-    <p>현재 포인트 : <%= cur_points %></p>
+    <div id="cur_points"></div>
     <table>
         <thead>
             <th>순차번호</th>
@@ -150,16 +68,97 @@
             <th>변동값</th>
             <th>내용</th>
         </thead>
-        <tbody>
-            <% for (const history of points_history) { %>
-            <tr>
-                <td><%= history.points_history_sq %></td>
-                <td><%= history.reward_category %></td>
-                <td><%= history.change_value %></td>
-                <td><%= history.detail %></td>
-            </tr>
-            <% } %>
-        </tbody>
+        <tbody id="points_history"></tbody>
     </table>
+
+    <script>
+        // 세션 내 id 값을 받아오는 부분, 이 부분 왜 안 됨???
+        const account_id = "d";// account_id = account_id;
+        $(document).ready(() => {
+            fill_ticket_purchase_history();
+            fill_item_purchase_history();
+            fill_points_history();
+
+            // 티켓 구매 이력
+            async function fill_ticket_purchase_history()
+            {
+                const ticket_purchase_history = $('#ticket_purchase_history');
+                const data = {account_id: account_id}
+
+                const response_data = await requestPostAPI('/mypage/ticket', data)
+                const history_list = response_data.data.ticket_history_list;
+
+                // 티켓 예약 이력 데이터 화면에 입력
+                ticket_purchase_history.html('');
+                for (const history of history_list)
+                {
+                    ticket_purchase_history.append(
+                        `<tr id="${history.ticket_uid}">
+                            <td>${history.ticket_uid}</td>
+                            <td>${history.session_date}</td>
+                            <td>${history.session_datetime}</td>
+                            <td>${history.movie_name}</td>
+                            <td>${history.ticket_price}</td>
+                            <td>${history.reserve_status}</td>
+                        </tr>`
+                    );
+                }
+            }
+
+            // 상품 구매 이력
+            async function fill_item_purchase_history()
+            {
+                const item_purchase_history= $('#item_purchase_history');
+                const data = {account_id: account_id}
+
+                const response_data = await requestPostAPI('/mypage/item', data)
+                const history_list = response_data.data.basket_history_list;
+
+                // 티켓 예약 이력 데이터 화면에 입력
+                item_purchase_history.html('');
+                for (const history of history_list)
+                {
+                    item_purchase_history.append(
+                        `<tr id="${history.basket_uid}">
+                            <td>${history.store_name}</td>
+                            <td>${history.item_name}</td>
+                            <td>${history.order_quantity}</td>
+                            <td>${history.order_status}</td>
+                        </tr>`
+                    );
+                }
+            }
+
+            // 포인트 적립, 사용 이력
+            async function fill_points_history()
+            {
+                const points_history = $('#points_history');
+                const cur_points = $('#cur_points');
+                const data = {account_id: account_id}
+
+                const response_data = await requestPostAPI('/mypage/points', data)
+                const points_sum = response_data.data.points_sum;
+                const history_list = response_data.data.points_history_list;
+
+                cur_points.html("현재 포인트 : ")
+                cur_points.append(`${points_sum}`)
+
+                // 티켓 예약 이력 데이터 화면에 입력
+                points_history.html('');
+                for (const history of history_list)
+                {
+                    points_history.append(
+                        `<tr id="${history.points_history_sq}">
+                            <td>${history.points_history_sq}</td>
+                            <td>${history.reward_category}</td>
+                            <td>${history.change_value}</td>
+                            <td>${history.detail}</td>
+                        </tr>`
+                    );
+                }
+            }
+        })
+    </script>
+
 </body>
 </html>
