@@ -213,6 +213,8 @@ router.post('/movie/select/filter_session', function(req, res)
     const theater_code = req.body.theater_code || null;
     const movie_code = req.body.movie_code || null;
 
+    // SELECT FROM WHERE;
+
     const session_list = [
         {
             theater_name: "청량리 롯데시네마",
@@ -256,8 +258,16 @@ router.get('/movie/check', function(req, res)
 // 상품 선택 페이지
 router.get('/item/select', function(req, res)
 {
-    res.render('purchase/item/select');
+    if (hasSession(req))
+    {
+        res.render('purchase/item/select');
+    }
+    else
+    {
+        res.redirect('/signin');
+    }
 });
+
 
 // 상품 선택 페이지 영화관 리스트 불러오기
 router.post('/item/select/init_theater', function(req, res)
@@ -340,6 +350,8 @@ router.get('/item/check', function(req, res)
 {
     res.render('purchase/item/check');
 });
+
+
 
 // 결제완료 페이지
 router.get('/complete', function(req, res)

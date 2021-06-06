@@ -8,8 +8,11 @@
 <button id="btn_pay">결제</button><br>
     <script>
         const payment_method = findId('payment_method')
-        btn_pay.addEventListener('click', function(){
+        
+        function paycheck()
+        {
             const data = {
+                
                 payment_price: payment_price,
                 payment_method: payment_method.value,
             };
@@ -25,5 +28,7 @@
                     alert('결제 실패');
                 }
             });
-        });
+        }
+
+        btn_pay.addEventListener('click', paycheck());
     </script>
