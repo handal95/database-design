@@ -2,7 +2,7 @@ session_uid VARCHAR(16) NOT NULL,
 seat_uid VARCHAR(16) NOT NULL,
 
 ticket_uid VARCHAR(16),
-reserver_status VARCHAR(16),
+reserve_status VARCHAR(16),
 
 CONSTRAINT TICKET_PK
     PRIMARY KEY(ticket_uid),

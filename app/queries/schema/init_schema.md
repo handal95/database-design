@@ -13,7 +13,7 @@
 4. CUSTOMER
     1. ACCOUNT 
         1. REVIEW
-        2. POINTS_HISTORY
+        2. POINTS
     2. PAYMENT
         1. PAYMENT_HISTORY
         2. TICKET
@@ -68,3 +68,8 @@ CUSTOMER
 
 # UNIQUE 대상
 # DEFAULT 대상
+
+# 0607
+TICKET(reserve_status) -> (ticket_status)
+REVIEW(comment) -> REVIEW(review_detail)
+POINTS_HISTORY(detail) -> (points_detail)

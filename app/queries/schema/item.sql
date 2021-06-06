@@ -9,5 +9,5 @@ remain_quantity NUMBER(4),
 CONSTRAINT ITEM_PK
     PRIMARY KEY(store_code, item_code),
 
-CONSTRAINT STORE_CODE_FK 
+CONSTRAINT ITEM_STORE_CODE_FK 
     FOREIGN KEY(store_code) REFERENCES store(store_code)

@@ -13,5 +13,5 @@ synopsis VARCHAR(1024),
 avg_score FLOAT NULL,
 
 CONSTRAINT MOVIE_PK
-    PRIMARY KEY(movide_code)
+    PRIMARY KEY(movie_code)
 
