@@ -4,9 +4,9 @@ ticket_uid NUMBER(16, 0) NOT NULL
 payment_uid NUMBER(16, 0) NOT NULL,
 ticket_price NUMBER(8, 0) NOT NULL
     CONSTRAINT TICKET_PRICE_CK CHECK(ticket_price >= 0),
-adult_no NUMBER(2, 0) NOT NULL DEFAULT 0
+adult_no NUMBER(2, 0) DEFAULT 0 NOT NULL
     CONSTRAINT TICKET_ADULT_NO_CK CHECK(adult_no >= 0),
-child_no NUMBER(2, 0) NOT NULL DEFAULT 0
+child_no NUMBER(2, 0) DEFAULT 0 NOT NULL 
     CONSTRAINT TICKET_CHILD_NO_CK CHECK(child_no >= 0),
 ticket_status VARCHAR(16) NOT NULL,
 
