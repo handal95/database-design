@@ -9,7 +9,7 @@ release_date DATE,
 media_rating VARCHAR(16),
 productor VARCHAR(64),
 distributor VARCHAR(64),
-synopsis VARCHAR(1024),
+synopsis VARCHAR(2048),
 avg_score FLOAT DEFAULT 0.0 NOT NULL
     CONSTRAINT MOVIE_AVG_SCORE_CK CHECK(avg_score >= 0.0),
 
