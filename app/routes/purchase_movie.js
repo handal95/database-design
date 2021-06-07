@@ -292,10 +292,12 @@ router.get('/check', function(req, res)
     const session_uid = req.query.session_uid;
     const adult_no = req.query.adult_no;
     const child_no = req.query.child_no;
-    const reserved_seat_list = encodeURIComponent(JSON.stringify(req.query.reserve_seat_list));
+    const reserved_seat_list = JSON.parse(decodeURIComponent(req.query.reserved_seat_list));
     // 티켓 가격 계산
     const payment_price = ticket_adult_price * adult_no + ticket_child_price * child_no;
-    
+
+    console.log('reserved_seat_list');
+    console.log(reserved_seat_list);
     /*
     SELECT T.theater_name, S.screen_name, M.movie_title
     FROM theater T, screen S, movie_session M
@@ -311,7 +313,6 @@ router.get('/check', function(req, res)
     const screen_name = "3관";
     const movie_title = "인디펜던스 데이";
 
-    console.log(reserved_seat_list)
 
     res.render('purchase/movie/check', {
         theater_name,

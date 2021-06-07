@@ -19,7 +19,6 @@
             </tr>
 
         </thead>
-            <!--??? 좌석 정보 안 읽어와짐-->
             <% for (const seat of reserved_seat_list) { %>
             <tr id="<%= seat.seat_uid %>">
                 <td><%= seat.seat_row %></td>
@@ -79,12 +78,15 @@
         }
 
         // ???? 여기가 안 됨
-        const adult_no = adult_no;
-        const child_no = child_no;
-        const payment_price = payment_price;
+        const adult_no = <%= adult_no %>;
+        const child_no = <%= child_no %>;
+        const payment_price = <%= payment_price %>;
         const payment_process_data = {
             customer_code,
-            payment_method: payment_method,
+            adult_no,
+            child_no,
+            payment_price,
+            payment_method: payment_method.val(),
             reserve_status: "예약"
         };
 

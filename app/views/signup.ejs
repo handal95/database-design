@@ -29,8 +29,8 @@
                 const today_text = `${year}-${month}-${date}`;
                 %>
                 <!-- default : 오늘 날짜-->
-                <label for="input_birth" class="form-label">생년월일</label>
-                <input type="date" class="form-control" id="input_birth" value="<%= today_text %>" required>
+                <label for="input_birth_date" class="form-label">생년월일</label>
+                <input type="date" class="form-control" id="input_birth_date" value="<%= today_text %>" required>
             </div>
             <div class="mb-3">
                 <label for="input_phone" class="form-label">연락처</label>
@@ -53,7 +53,7 @@
         const input_id = $('#input_id');
         const input_pw = $('#input_pw');
         const input_name = $('#input_name');
-        const input_birth = $('#input_birth');
+        const input_birth_date = $('#input_birth_date');
         const input_phone = $('#input_phone');
         const input_nickname = $('#input_nickname');
         const input_email = $('#input_email');
@@ -66,7 +66,7 @@
                 id: input_id.val(),
                 pw: input_pw.val(),
                 name: input_name.val(),
-                birth: input_birth.val(),
+                birth_date: input_birth_date.val(),
                 phone: input_phone.val(),
                 nickname: input_nickname.val(),
                 email: input_email.val(),
