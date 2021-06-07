@@ -121,10 +121,10 @@
 
             // do request
             const response_data = await requestPostAPI('/purchase/movie/select/filter_session', data)
-            const session_list = response_data.data.session_list;
+            const sessions = response_data.data.sessions;
 
             clear_session_table();
-            for (const session of session_list)
+            for (const session of sessions)
             {
                 session_table.append(
                     `<tr>
