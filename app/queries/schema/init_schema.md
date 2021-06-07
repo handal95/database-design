@@ -5,11 +5,11 @@
     3. CONTRIBUTOR
 3. FACILITY_CODE
     1. THEATER
-        1. STORE
-        2. ITEM
-    2. SCREEN
-        1. SEAT
-        2. MOVIE_SESSION
+        1. STORE v
+            1. ITEM v
+        2. SCREEN
+            1. SEAT
+            2. MOVIE_SESSION
 4. CUSTOMER
     1. ACCOUNT 
         1. REVIEW
@@ -17,7 +17,28 @@
     2. PAYMENT
         1. PAYMENT_HISTORY
         2. TICKET
-        3. BASKET
+            1. BASKET v
+
+CREW
+MOVIE
+FACILITY_cODE
+CUSTOMER
+    GENRE
+    POSTER
+    CONTRIBUTOR
+    THEATER
+    ACCOUNT
+    PAYMENT
+        STORE
+        SCREEN
+        REVIEW
+        POINTS
+        PAYMENT_HISTORY
+        TICKET
+        BASKET
+            ITEM
+            SEAT
+            MOVIE_SESSION    
 
 
 # code VARCHAR(16)

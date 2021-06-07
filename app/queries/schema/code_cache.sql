@@ -1,0 +1,5 @@
+code_cache_key VARCHAR(32) NOT NULL,
+code_cache_value VARCHAR(16) DEFAULT 0 NOT NULL,
+
+CONSTRAINT CODE_CACHE_KEY_PK
+    PRIMARY KEY(code_cache_key)

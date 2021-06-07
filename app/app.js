@@ -1,10 +1,14 @@
 import express from "express";
 import morgan from "morgan";
+import oracle from "oracledb"
 import path from 'path';
 import { router } from "./routes/index.js";
 import session from 'express-session';
 
 const app = express();
+
+oracle.outFormat = oracle.OBJECT
+oracle.autoCommit = true
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(path.resolve(), '/views'));
