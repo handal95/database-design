@@ -2,6 +2,8 @@ import { doDBRelease, getDBConnect } from "../db/connect.js"
 
 import { delete_record } from "../db/delete.js"
 import fs from "fs"
+import { get_seat_amount } from "../entities/screen.js"
+import { insert_screen_seat } from "../entities/seat.js"
 import { insert_seed } from "../db/insert.js"
 
 const BASE_PATH = "./queries/seeder/"
@@ -12,6 +14,29 @@ const SCHEMA_LIST = [
     "item",  "movie_session", "seat", "basket", "reserve"
 ]
 
+
+export async function seed_seat(req) {
+    let is_success = false
+
+    // DB 연결
+    const conn = await getDBConnect()
+    try{
+
+        const screen_info = await get_seat_amount(conn, req)
+        for(let i = 0; i < screen_info.length; i++){
+            await insert_screen_seat(conn, screen_info[i])
+        }
+
+    } catch (err) {
+        console.log("(create) : Process is failed by ", err)
+        is_success = false
+
+    } finally {
+        await doDBRelease(conn)
+    }
+
+    return is_success
+}
 
 export async function seed_seat(req) {
     let is_success = false
@@ -100,11 +125,3 @@ export async function delete_data(req) {
     
     return is_success
 } 
-
-router.get("/seed/:table", (req, res) => {
-    if(!seed_data(req)) {
-        res.send("Query Fail")
-    } else {
-        res.send("Query Success")
-    }
-})
