@@ -55,42 +55,51 @@
         const btn_goto_seat = $('#btn_goto_seat');
         const session_table = $("#session_table");
 
-        init_theater_list();
-        init_movie_list();
-
         // 각 변수에 변화가 일어나는지 감지 (change 이벤트 감지 == addEventListener)
         // 변화가 일어나면 함수를 호출
-        session_date.on('change', decide_session_date);
+        session_date.on('change', change_session_date);
         theater_select.on('change', decide_theater);
         movie_select.on('change', decide_movie);
-
         session_table.on('click', '.btn_goto_seat', select_movie_session);
 
         function clear_session_table()
         {
             session_table.html('');
         }
-
-        // 페이지 초반 로드 시 영화관 선택 목록을 만들기 위한 함수
-        async function init_theater_list() {
-            const response_data = await requestPostAPI('/purchase/movie/select/init_movie_session')
-            const theater_list = response_data.data;
-
-            // 리스트 값을 받아서 option 내용을 바꿈
-            theater_select.html('');
-            theater_select.append($(`<option disabled selected value="">===</option>`));
-            for (const theater of theater_list)
-            {
-                theater_select.append($(`<option id=${theater.theater_code}>${theater.theater_name}</option>`));
-            }
-        }
-
-        // 영화 선택 목록 초기화
-        async function init_movie_list()
+        function clear_movie_select()
         {
-            // 리스트 값을 받아서 option 내용을 바꿈
             movie_select.html('');
             movie_select.append($(`<option disabled selected value="">===</option>`));
+        }
+        function clear_theater_select()
+        {
+            theater_select.html('');
+            theater_select.append($(`<option disabled selected value="">===</option>`));
+        }
+
+        function change_session_date()
+        {
+            // theater_select 초기화
+            clear_theater_select();
+            // movie_select 초기화
+            clear_movie_select();
+
+            update_session_table();
+            reset_theater_list();
+            reset_movie_list();
+        }
+
+        // 영화 선택 후 영화관 목록을 바꾸면서 상영일정 목록을 갱신하는 함수
+        async function decide_theater()
+        {
+            clear_movie_select();
+            update_session_table();
+        }
+        // 영화관 선택 후 영화 목록을 바꾸면서 상영일정 목록을 갱신하는 함수
+        async function decide_movie()
+        {
+            clear_theater_select();
+            update_session_table();
         }
 
         // 상영일정 테이블 갱신
@@ -129,73 +138,53 @@
             }
         }
 
-        // 날짜 선택 후 영화, 영화관 목록을 바꾸는 함수
-        async function decide_session_date()
-        {
+        async function reset_theater_list() {
             // 입력 데이터를 읽음
             const val_date = $(session_date).val();
-
-            const data = {
-                session_date: val_date,
-            };
-
-            // do request
-            const response_data = await requestPostAPI('/purchase/movie/select/change_theater_list', data)
-            const theater_list = response_data.data.theater_list;
-
-            // 영화관 선택 목록 변경
-            theater_select.html('');
-            theater_select.append($(`<option disabled selected value="">===</option>`));
-            for (const theater of theater_list)
-            {
-                theater_select.append($(`<option id=${theater.theater_code}>${theater.theater_name}</option>`));
-            }
-            init_movie_list();
-            clear_session_table();
-        }
-
-        // 영화 선택 후 영화관 목록을 바꾸면서 상영일정 목록을 갱신하는 함수
-        async function decide_theater()
-        {
-            // 입력 데이터를 읽음
-            const val_date = $(session_date).val();
-            const val_theater = $(movie_select).val();
-
-            const data = {
-                session_date: val_date,
-                movie_select: val_theater,
-            };
-
-            // do request
-            const response_data = await requestPostAPI('/purchase/movie/select/change_movie_list', data)
-            const movie_list = response_data.data.movie_list;
-
-            // 영화 선택 목록 변경
-            movie_select.html('');
-            movie_select.append($(`<option disabled selected value="">===</option>`));
-            for (const movie of movie_list)
-            {
-                movie_select.append($(`<option id=${movie.movie_code}>${movie.movie_title}</option>`));
-            }
-            update_session_table();
-        }
-
-        // 영화관 선택 후 영화 목록을 바꾸면서 상영일정 목록을 갱신하는 함수
-        async function decide_movie()
-        {
-            // 입력 데이터를 읽음
-            const val_date = $(session_date).val();
-            const val_theater = $(theater_select).val();
             const val_movie = $(movie_select).val();
 
             const data = {
                 session_date: val_date,
-                theater_code: val_theater,
                 movie_code: val_movie,
             };
 
-            update_session_table();
+            // do request
+            const response_data = await requestPostAPI('/purchase/movie/select/init_movie_session', data)
+            const theater_list = response_data.data.theaters;
+
+            // 영화관 선택 목록 변경
+            clear_theater_select();
+            for (const theater of theater_list)
+            {
+                theater_select.append($(`<option id=${theater.theater_code}>${theater.theater_name}</option>`));
+            }
         }
+
+        async function reset_movie_list() {
+            // 입력 데이터를 읽음
+            const val_date = $(session_date).val();
+            const val_theater = (theater_select).val();
+
+            const data = {
+                session_date: val_date,
+                theater_code: val_theater,
+            };
+
+            // do request
+            const response_data = await requestPostAPI('/purchase/movie/select/init_movie_session', data)
+            const movie_list = response_data.data.movies;
+
+            // 영화 선택 목록 변경
+            clear_movie_select();
+            for (const movie of movie_list)
+            {
+                movie_select.append($(`<option id=${movie.movie_code}>${movie.movie_title}</option>`));
+            }
+        }
+
+        update_session_table();
+        reset_theater_list();
+        reset_movie_list();
 
         // 테이블의 Row 클릭시 값 가져오기
         function select_movie_session(event)
