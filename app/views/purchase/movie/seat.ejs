@@ -2,85 +2,100 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '좌석예약'})%>
 <body>
-    <!--메인 화면-->
-    <%- include('../../_component/goto_main.ejs')%>
-    <h1>좌석 선택창</h1>
-
-    <%
-    // 여러 개 체크할 수 있도록 고치기
-    // 성인, 청소년 숫자 입력 화면 추가
-    // 각 좌석마다 예약 가능/불가능 여부 보여주기
-    
-    // 스크린 방향이 어디인지 표시
-    // 좌석 클래스 구분해서 보여주기
-
-    const screen_seat = [];
-
-    for (let row = 0; row < max_row_num; row++) {
-        screen_seat.push([]);
-        for (let col = 0; col < max_col_num; col++) {
-            screen_seat[row].push(null);
+    <style>
+        td, th {
+            padding: 1em;
+            text-align: center;
         }
-    }
+    </style>
 
-    seat_list.forEach(seat => {
-        const { seat_row, seat_col } = seat;
-        screen_seat[seat_row][seat_col] = seat;
-    });
+    <div class="container my-3">
+        <!--메인 화면-->
+        <%- include('../../_component/goto_main.ejs')%>
+        <h1>좌석 선택창</h1>
 
-    %>
+        <%
+        // 여러 개 체크할 수 있도록 고치기
+        // 성인, 청소년 숫자 입력 화면 추가
+        // 각 좌석마다 예약 가능/불가능 여부 보여주기
+        
+        // 스크린 방향이 어디인지 표시
+        // 좌석 클래스 구분해서 보여주기
 
-    <table>
-        <thead id="screen_col_index">
-            <!-- 좌석의 열 인덱스 표시 -->
-            <tr></tr>
-                <th></th>
-                <% for (let col = 0; col < max_col_num; col++) { %>
-                    <th><%= col %></th>;
-                <% } %>
-            </tr>
-        </thead>
-        <tbody id="screen_seat_struct">
-            <!-- 좌석 행 인덱스와 좌석 표시 -->
-            <% for (let row = 0; row < max_row_num; row++) { %>
-                <tr>
-                <% const alphabet = String.fromCharCode(65 + row); %>
-                    <th><%= alphabet %></th>
+        const screen_seat = [];
+
+        for (let row = 0; row < max_row_num; row++) {
+            screen_seat.push([]);
+            for (let col = 0; col < max_col_num; col++) {
+                screen_seat[row].push(null);
+            }
+        }
+
+        seat_list.forEach(seat => {
+            const { seat_row, seat_col } = seat;
+            screen_seat[seat_row][seat_col] = seat;
+        });
+
+        %>
+
+        <table>
+            <thead id="screen_col_index">
+                <!-- 좌석의 열 인덱스 표시 -->
+                <tr></tr>
+                    <th></th>
                     <% for (let col = 0; col < max_col_num; col++) { %>
-                        <td>
-                            <% if (screen_seat[row][col]) { %>
-                                <% const is_reserved = !screen_seat[row][col].reserve_status; %>
-                                <% const is_disable = !screen_seat[row][col].seat_status || is_reserved; %>
-                                <% const disabled_prop = is_disable ? 'disabled' : ''; %>
-                                <% const checked_prop = is_reserved ? 'checked' : ''; %>
-                                <!-- 좌석이 사용 불가능하면 태그 내 disabled 속성 추가 -->
-                                <input
-                                    type="checkbox"
-                                    class="form-check-input"
-                                    name="<%= `seat-${row}-${col}` %>"
-                                    data-row="<%= row %>"
-                                    data-col="<%= col %>"
-                                    id="<%= screen_seat[row][col].seat_uid %>"
-                                    <%= disabled_prop %>
-                                    <%= checked_prop %>
-                                >
-                            <% } %>
-                        </td>
+                        <th><%= col %></th>
                     <% } %>
                 </tr>
-            <% } %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="screen_seat_struct">
+                <!-- 좌석 행 인덱스와 좌석 표시 -->
+                <% for (let row = 0; row < max_row_num; row++) { %>
+                    <tr>
+                    <% const alphabet = String.fromCharCode(65 + row); %>
+                        <th><%= alphabet %></th>
+                        <% for (let col = 0; col < max_col_num; col++) { %>
+                            <td>
+                                <% if (screen_seat[row][col]) { %>
+                                    <% const is_reserved = !screen_seat[row][col].reserve_status; %>
+                                    <% const is_disable = !screen_seat[row][col].seat_status || is_reserved; %>
+                                    <% const disabled_prop = is_disable ? 'disabled' : ''; %>
+                                    <% const checked_prop = is_reserved ? 'checked' : ''; %>
+                                    <!-- 좌석이 사용 불가능하면 태그 내 disabled 속성 추가 -->
+                                    <input
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        name="<%= `seat-${row}-${col}` %>"
+                                        data-row="<%= row %>"
+                                        data-col="<%= col %>"
+                                        id="<%= screen_seat[row][col].seat_uid %>"
+                                        <%= disabled_prop %>
+                                        <%= checked_prop %>
+                                    >
+                                <% } %>
+                            </td>
+                        <% } %>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
 
-    <button id="sub_adult">-</button>
-    성인 : <span id="adult_no"></span>
-    <button id="add_adult">+</button>
+        <div class="my-3">
+            <button id="sub_adult" class="btn btn-outline-primary">-</button>
+            <span class="px-3">성인 : <span id="adult_no"></span></span>
+            <button id="add_adult" class="btn btn-outline-primary">+</button>
+        </div>
 
-    <button id="sub_child">-</button>
-    청소년 : <span id="child_no"></span>
-    <button id="add_child">+</button>
+        <div class="my-3">
+            <button id="sub_child" class="btn btn-outline-primary">-</button>
+            <span class="px-3">청소년 : <span id="child_no"></span></span>
+            <button id="add_child" class="btn btn-outline-primary">+</button>
+        </div>
 
-    <button id="btn_goto_check">예약 확인</button>
+        <button id="btn_goto_check" class="btn btn-primary">예약 확인</button>
+    </div>
+
+
 
     <script>
     const screen_seat = <%- JSON.stringify(screen_seat) %>;

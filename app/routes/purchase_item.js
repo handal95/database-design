@@ -97,6 +97,8 @@ router.post('/select/filter_item', function(req, res)
 // 상품구매 확인 결제내용 불러오기
 router.get('/check', function(req, res)
 {
+    const item_name = req.query.it
+
     res.render('purchase/item/check');
 });
 

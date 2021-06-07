@@ -156,7 +156,7 @@
             clear_theater_select();
             for (const theater of theater_list)
             {
-                theater_select.append($(`<option id=${theater.theater_code}>${theater.theater_name}</option>`));
+                theater_select.append($(`<option value=${theater.theater_code}>${theater.theater_name}</option>`));
             }
         }
 
@@ -178,7 +178,7 @@
             clear_movie_select();
             for (const movie of movie_list)
             {
-                movie_select.append($(`<option id=${movie.movie_code}>${movie.movie_title}</option>`));
+                movie_select.append($(`<option value=${movie.movie_code}>${movie.movie_title}</option>`));
             }
         }
 

@@ -2,41 +2,46 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '구매 확인'})%>
 <body>
-    <!--메인 화면-->
-    <%- include('../../_component/goto_main.ejs')%>
-    <h1>영화 예약 확인</h1>
 
-    <p>영화관 : <%= theater_name %></p>
-    <p>상영관 : <%= screen_name %></p>
-    <p>영화 : <%= movie_title %></p>
-    <p>좌석</p>
-    <table>
-        <thead>
-            <tr>
-                <th>좌석행</th>
-                <th>좌석열</th>
-                <th>좌석유형</th>
-            </tr>
+    <div class="container my-3">
+        <!--메인 화면-->
+        <%- include('../../_component/goto_main.ejs')%>
+        <h1>영화 예약 확인</h1>
 
-        </thead>
-            <% for (const seat of reserved_seat_list) { %>
-            <tr id="<%= seat.seat_uid %>">
-                <td><%= seat.seat_row %></td>
-                <td><%= seat.seat_col %></td>
-                <td><%= seat.seat_category %></td>
-            </tr>
-            <% } %>
-    </table>
+        <ul>
+            <li>영화관 : <%= theater_name %></li>
+            <li>상영관 : <%= screen_name %></li>
+            <li>영화 : <%= movie_title %></li>
+        </ul>
+        <p>좌석</p> 
+        <table>
+            <thead>
+                <tr>
+                    <th>좌석행</th>
+                    <th>좌석열</th>
+                    <th>좌석유형</th>
+                </tr>
 
-    <h2>결제</h2>
-    <p>성인 수: <%= adult_no %></p>
-    <p>청소년 수 : <%= child_no %></p>
-    <p>가격 : <%= payment_price %></p>
+            </thead>
+                <% for (const seat of reserved_seat_list) { %>
+                <tr id="<%= seat.seat_uid %>">
+                    <td><%= seat.seat_row %></td>
+                    <td><%= seat.seat_col %></td>
+                    <td><%= seat.seat_category %></td>
+                </tr>
+                <% } %>
+        </table>
 
-    <!--결제 방법 선택-->
-    <div>
-        <select id="payment_method"></select>
-        <button id="btn_pay">결제</button>
+        <h2>결제</h2>
+        <p>성인 수: <%= adult_no %></p>
+        <p>청소년 수 : <%= child_no %></p>
+        <p>가격 : <%= payment_price %></p>
+
+        <!--결제 방법 선택-->
+        <div>
+            <select id="payment_method"></select>
+            <button id="btn_pay">결제</button>
+        </div>
     </div>
 
     <script>
