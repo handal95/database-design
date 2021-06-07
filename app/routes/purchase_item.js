@@ -191,7 +191,7 @@ router.post('/check/check_payment', function(req, res)
 router.post('/check/process_payment', function(req, res)
 {
     
-})
+});
 
 // 상품구매 결제 완료 페이지 데이터 불러오기
 router.post('/complete/load_data', function(req, res)
