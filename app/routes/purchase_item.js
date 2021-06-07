@@ -97,9 +97,23 @@ router.post('/select/filter_item', function(req, res)
 // 상품구매 확인 결제내용 불러오기
 router.get('/check', function(req, res)
 {
-    const item_name = req.query.it
+    const theater_name = req.query.theater_name;
+    const store_name = req.query.store_name;
+    const basket_list = JSON.parse(decodeURIComponent(req.query.basket_list));
+    let payment_price = 0;
 
-    res.render('purchase/item/check');
+    // 각 basket의 상품과 주문수량으로 총 결제 금액을 계산 
+    for (const basket of basket_list)
+    {
+        payment_price += basket.item_price * basket.order_quantity;
+    }
+
+    res.render('purchase/item/check', {
+        theater_name,
+        store_name,
+        basket_list,
+        payment_price,
+    });
 });
 
 // 상품구매 확인 페이지 현재 로그인 중인 세션의 유저 customer_code를 얻음
@@ -192,11 +206,104 @@ router.post('/check/check_payment', function(req, res)
 // 상품구매 확인 페이지 결제 진행
 router.post('/check/process_payment', function(req, res)
 {
+    const customer_code = req.body.customer_code;
+    const payment_price = req.body.payment_price;   // ticket_price와 동일
+    const payment_method = req.body.payment_method;
+    const ticket_price = req.body.payment_price;    // payment_price와 동일
+    const adult_no = req.body.adult_no;
+    const child_no = req.body.child_no;
+    const reserve_status = req.body.reserve_status;    
+
+    /*
+    // payment 데이터 생성
+    INSERT INTO payment VALUES(
+        "customer_code", 
+        "payment_price",
+        "payment_method"
+    );
+    */
+
+    // payment_uid 받아서 저장
+    const payment_uid = "payment_uid";
     
+    /*
+    // basket 갯수만큼 데이터 생성
+    for (basket 갯수만큼)
+    {
+        INSERT INTO basket VALUES(
+            "basket_uid",
+            "store_code",
+            "payment_uid",
+            "item_code",
+            "order_quantity",
+            "주문" // order_status
+        );
+    }
+
+    */
+    const basket_uid_list = ["basket_uid1", "basket_uid2",];
+    /*
+    // payment_history 데이터 생성
+    SELECT payment_uid
+    FROM payment
+    WHERE customer_code;
+    INSERT INTO payment_history VALUES(
+        "payment_history_sq", 
+        "payment_uid",
+        "결제" // payment_status
+    );
+    */
+
+    // 회원 로그인 중이라면 포인트 데이터 생성
+    if (isAccountSession(req))
+    {
+        // 포인트로 결제했다면 포인트 사용
+        if (payment_method == "포인트")
+        {
+        const session_account_id = req.session.account_id;
+        const points_value = payment_price;
+        /*
+        INSERT INTO account_points VALUES(
+            "session_account_id",
+            "points_sq..?",
+            "사용",
+            points_value,
+            "(store_name)에서 (item_name) 주문에 사용"
+        );
+        */
+        }
+        // 포인트 이외의 방법으로 결제했다면 포인트 적립
+        else
+        {
+        const session_account_id = req.session.account_id;
+        const points_value = payment_price * points_ratio;
+        /*
+        INSERT INTO account_points VALUES(
+            "session_account_id",
+            "points_sq..?",
+            "적립",
+            points_value,
+            "(store_name)에서 (item_name) 주문의 보상"
+        );
+        */
+        }
+    }
+    res.json({
+        payment_uid,
+        ticket_uid,
+        session_uid,
+        result: true
+    });
 });
 
 // 상품구매 결제 완료 페이지 데이터 불러오기
 router.post('/complete/load_data', function(req, res)
+{
+    
+});
+
+// 상품 결제완료 페이지
+router.get('/complete', function(req, res)
 {
     const payment_uid = req.body.payment_uid;
 
@@ -234,11 +341,7 @@ router.post('/complete/load_data', function(req, res)
         basket_list: basket_list,
         payment_data: payment_data
     });
-});
 
-// 상품 결제완료 페이지
-router.get('/complete', function(req, res)
-{
     res.render('purchase/item/complete');
 });
 

@@ -12,25 +12,25 @@
             <li>영화관 : <%= theater_name %></li>
             <li>상영관 : <%= screen_name %></li>
             <li>영화 : <%= movie_title %></li>
-        </ul>
-        <p>좌석</p> 
-        <table>
-            <thead>
-                <tr>
-                    <th>좌석행</th>
-                    <th>좌석열</th>
-                    <th>좌석유형</th>
-                </tr>
-
-            </thead>
-                <% for (const seat of reserved_seat_list) { %>
-                <tr id="<%= seat.seat_uid %>">
-                    <td><%= seat.seat_row %></td>
-                    <td><%= seat.seat_col %></td>
-                    <td><%= seat.seat_category %></td>
-                </tr>
-                <% } %>
-        </table>
+            <li>좌석
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>좌석행</th>
+                            <th>좌석열</th>
+                            <th>좌석유형</th>
+                        </tr>
+                    </thead>
+                    <% for (const seat of reserved_seat_list) { %>
+                        <tr id="<%= seat.seat_uid %>">
+                            <td><%= seat.seat_row %></td>
+                            <td><%= seat.seat_col %></td>
+                            <td><%= seat.seat_category %></td>
+                        </tr>
+                    <% } %>
+                    </table>
+                </li>
+            </ul>
 
         <h2>결제</h2>
         <p>성인 수: <%= adult_no %></p>

@@ -7,35 +7,32 @@
 
     <!--주문을 하고 order, payment 데이터가 생기는 걸로-->
     <h1>상품 주문 확인</h1>
-    <%
-        const data = {
-            theater_name: "theater1",
-            store_name: "3관",
-            item_name: "혼영세트(팝콘+콜라L)",
-            item_price: 8000,
-            order_quantity: 3,
-            purchase_category: "item",
-        }
-        data.payment_price = data.item_price * data.order_quantity
-    %>
-    <p>영화관 이름 : <%= data.theater_name %></p>
-    <p>상점 이름 : <%= data.store_name %></p>
-    <p>상품 이름 : <%= data.item_name %></p>
-    <p>상품 가격 : <%= data.item_price %></p>
-    <p>주문 갯수 : <%= data.order_quantity %></p>
-    <p>결제 가격 : <%= data.payment_price %></p>
 
+    <p>영화관 이름 : <%= theater_name %></p>
+    <p>상점 이름 : <%= store_name %></p>
     <table>
         <thead>
             <tr>
-                <th>영화관 이름</th>
+                <th>상품 이름</th>
+                <th>상품 가격</th>
+                <th>주문 수량</th>
+                <th>소계</th>
             </tr>
         </thead>
         <tbody>
-
+            <% for (const basket of basket_list) { %>
+            <tr id="<%= basket.item_code %>">
+                <td><%= basket.item_name%></td>
+                <td><%= basket.item_price%></td>
+                <td><%= basket.order_quantity%></td>
+                <td><%= basket.item_price * basket.order_quantity %></td>
+            </tr>
+            <% } %>
         </tbody>
     </table>
 
+    <h2>결제</h2>
+    <p>가격 : <%= payment_price %></p>
     <!--결제 방법 선택-->
     <div>
         <select id="payment_method"></select>
@@ -97,7 +94,7 @@
             reserve_status: "예약"
         };
 
-        const payment_process_response_data = await requestPostAPI('/purchase/movie/check/process_payment', payment_process_data);
+        const payment_process_response_data = await requestPostAPI('/purchase/item/check/process_payment', payment_process_data);
         const is_payment_success = payment_process_response_data.data.result;
 
         // 결제 성공 시 결제 완료 페이지로 이동
@@ -105,15 +102,11 @@
         {
             alert('결제 완료');
             const payment_uid = payment_process_response_data.data.payment_uid;
-            const ticket_uid = payment_process_response_data.data.ticket_uid;
-            const session_uid = payment_process_response_data.data.session_uid;
-
+            
             // 필요한 정보를 string으로 변환 후 다음 페이지 요청
-            const href = '/purchase/movie/complete';
+            const href = '/purchase/item/complete';
             const queryParams = {
                     payment_uid,
-                    ticket_uid,
-                    session_uid,
                 };
             const queryString = Object.entries(queryParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
             

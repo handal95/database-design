@@ -38,25 +38,34 @@
         <tbody id="basket_table"></tbody>
     </table>
 
-    <button id="goto_check">주문 확인</button>
+    <button id="btn_goto_check">주문 확인</button>
 
     <script>
-    const basket = {}; // key: item_code, value: order_quantity
+    const item_info = {}; // key: item_code, value: item
+    const basket_quantity = {}; // key: item_code, value: order_quantity
+    const selected_theater = {
+        code: null,
+        name: null,
+    };
+    const selected_store = {
+        code: null,
+        name: null,
+    };
 
     // 페이지가 모두 로드된 후 실행하는 부분
     $(document).ready(() => {
         // 각 id값을 받아와 변수에 저장
         const theater_select = $('#theater_select');
         const store_select = $('#store_select');
-        const item_table = $("#item_table");
+        const item_table = $("#item_table")
         const basket_table = $("#basket_table");
-        const goto_check = $("#goto_check");
+        const btn_goto_check = $("#btn_goto_check");
 
         function clear_basket()
         {
-            for (let key in basket)
+            for (let key in basket_quantity)
             {
-                delete basket[key];
+                delete basket_quantity[key];
             }
             basket_table.html('');
         }
@@ -92,7 +101,7 @@
             theater_select.append($(`<option disabled selected value="">===</option>`));
             for (const theater of theater_list)
             {
-                theater_select.append($(`<option id=${theater.theater_code}>${theater.theater_name}</option>`));
+                theater_select.append($(`<option value=${theater.theater_code}>${theater.theater_name}</option>`));
             }
         }
 
@@ -101,9 +110,12 @@
         {
             // 영화관 데이터를 읽음
             const val_theater = $(theater_select).val();
-            const data = {theater_code: val_theater};
-
+            
+            selected_theater.code = $(theater_select).val();
+            selected_theater.name = $(theater_select).text();
+            
             // do request
+            const data = {theater_code: val_theater};
             const response_data = await requestPostAPI('/purchase/item/select/filter_store', data)
             const store_list = response_data.data.store_list;
 
@@ -112,7 +124,7 @@
             store_select.append($(`<option disabled selected value="">===</option>`));
             for (const store of store_list)
             {
-                store_select.append($(`<option id=${store.store_code}>${store.store_name}</option>`));
+                store_select.append($(`<option value=${store.store_code}>${store.store_name}</option>`));
             }
 
             clear_item_table();
@@ -122,14 +134,14 @@
         // 영화관, 상점 선택 후 상품 목록을 보여주는 함수
         async function change_item_table()
         {
-            // 상품 테이블의 id값을 받아옴
-            const item_table = $("#item_table");
             // 상점 코드를 읽음
             const val_store = $(store_select).val();
 
-            const data = {store_code: val_store};
+            selected_store.code = $(store_select).val();
+            selected_store.name = $(store_select).text();
 
             // do request
+            const data = {store_code: val_store};
             const response_data = await requestPostAPI('/purchase/item/select/filter_item', data)
             const item_list = response_data.data.item_list;
 
@@ -138,6 +150,7 @@
 
             for (const item of item_list)
             {
+                item_info[item.item_code] = item;
                 item_table.append(
                     `<tr id="${item.item_code}">
                         <td>${item.item_name}</td>
@@ -149,12 +162,9 @@
                                 btn-sm
                                 btn-primary
                                 btn_select_item"
-                                data-id="${item.item_code}"
-                                data-name="${item.item_name}"
-                                data-price="${item.item_price}">선택
+                                data-id="${item.item_code}">선택
                             </button>
                         </td>
-                        
                     </tr>`
                 );
             }
@@ -164,7 +174,7 @@
         function update_item_quantity(item_code)
         {
             const target = basket_table.find(`tr[data-id=\"${item_code}\"] .order_quantity`);
-            target.text(basket[item_code]);
+            target.text(basket_quantity[item_code]);
         }
 
         // 장바구니 내 상품 갯수를 빼는 함수
@@ -173,17 +183,17 @@
             const target_item = $(event.target).parent().parent();
             const item_code = target_item.attr("data-id");
             // 갯수 1 감소
-            basket[item_code] = basket[item_code] - 1;
+            basket_quantity[item_code] = basket_quantity[item_code] - 1;
 
             // 해당 상품을 장바구니에서 하나 뺀 후의 갯수가 1개 이상일 때 
-            if (basket[item_code])
+            if (basket_quantity[item_code])
             {
                 update_item_quantity(item_code);
             }
             // 장바구니에서 하나 뺀 후 갯수가 0개라면 제외
             else
             {
-                delete basket[item_code];
+                delete basket_quantity[item_code];
                 target_item.remove();
             }
         }
@@ -193,7 +203,7 @@
         {
             const target_item = $(event.target).parent().parent();
             const item_code = target_item.attr("data-id");
-            basket[item_code] = basket[item_code] + 1;
+            basket_quantity[item_code] = basket_quantity[item_code] + 1;
             
             update_item_quantity(item_code);
         }
@@ -203,17 +213,17 @@
         async function add_item_basket_table(event)
         {
             const item_code = $(event.target).attr("data-id");
-            const item_name = $(event.target).attr("data-name");
-            const item_price = $(event.target).attr("data-price");
+            const item_name = item_info[item_code].item_name;
+            const item_price = item_info[item_code].item_price;
 
-            if (basket[item_code])
+            if (basket_quantity[item_code])
             {
-                basket[item_code] = basket[item_code] + 1;
+                basket_quantity[item_code] = basket_quantity[item_code] + 1;
                 update_item_quantity(item_code);
             }
             else 
             {
-                basket[item_code] = 1;
+                basket_quantity[item_code] = 1;
                 basket_table.append(
                     `<tr data-id="${item_code}">
                         <td>${item_name}</td>
@@ -221,7 +231,7 @@
                         <td>
                             <button class="btn btn-sm btn-primary btn_sub_item">-</button>
                         </td>
-                        <td class="order_quantity">${basket[item_code]}</td>
+                        <td class="order_quantity">${basket_quantity[item_code]}</td>
                         <td>
                             <button class="btn btn-sm btn-primary btn_add_item">+</button>
                         </td>
@@ -235,20 +245,21 @@
         
         function goto_check(event)
         {
-            const stor_name = $(store_select).val();
-            const store_name = $(store_select).val();
+            const theater_code = selected_theater.code;
+            const theater_name = selected_theater.name;
+            const store_code = selected_store.code;
+            const store_name = selected_store.name;
             const basket_list = [];
 
-            // ????
-            for (let key in basket)
+            for (let item_code in basket_quantity)
             {
                 // 장바구니 내용을 basket_list 배열에 넣음
-                basket_table.push([
-                    item_code: key,
-                    item_name: "",
-                    item_price: "",
-                    order_quantity: basket[key],
-                ]);
+                basket_list.push({
+                    item_code: item_code,
+                    item_name: item_info[item_code].item_name,
+                    item_price: item_info[item_code].item_price,
+                    order_quantity: basket_quantity[item_code],
+                });
             }
             
             // 장바구니에 항목이 없으면 버튼 작동 비활성화
