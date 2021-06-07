@@ -1,5 +1,6 @@
 import { doDBRelease, getDBConnect } from "../db/connect.js"
 
+import { delete_record } from "../db/delete.js"
 import fs from "fs"
 import { insert_seed } from "../db/insert.js"
 
@@ -27,6 +28,32 @@ export async function seed_data(req) {
                 // 데이터 주입
                 await insert_seed(conn, table[i], query_bodies[j])
             }
+        }
+        
+        is_success = true
+
+    } catch (err) {
+        console.log("(create) : Process is failed by ", err)
+        is_success = false
+
+    } finally {
+        await doDBRelease(conn)
+    }
+    
+    return is_success
+} 
+
+export async function delete_data(req) {
+    let is_success = false
+    let table = (req.params.table == "all") ? SCHEMA_LIST : [ req.params.table ]
+
+    // DB 연결
+    const conn = await getDBConnect()
+    try {
+        // 스키마 불러오기
+        const query_body = ''
+        for(let i = 0; i < table.length; i++){
+            await delete_record(conn, table[i], query_body)
         }
         
         is_success = true

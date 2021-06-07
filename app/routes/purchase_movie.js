@@ -3,6 +3,7 @@
 import { isAccountSession, isCustomerSession } from "../utils/sessions.js";
 
 import express from "express";
+import { fetch_movie_session_info } from "../js/process/movie_session.js"
 import { hasSession } from "../js/process/session.js"
 import { theater_fetch_process } from "../js/process/ticket.js"
 
@@ -15,6 +16,17 @@ let theater_list = [
     {
         theater_code: "theater_code1",
         theater_name: "theater_name2",
+    },
+]
+
+let movie_list = [
+    {
+        movie_code: "movie_code",
+        movie_title: "movie_title",
+    },
+    {
+        movie_code: "movie_code1",
+        movie_title: "movie_title1",
     },
 ]
 
@@ -36,15 +48,17 @@ router.get(URL_SELECT, (req, res) => {
     }
 });
 
+
 // 상영일정 선택 페이지 영화관 리스트 초기화
 router.post(`${URL_SELECT}/init_theater`, async (req, res) => {
+    req.body.session_date = '2021-06-08'
+    console.log(req.body)
     await theater_fetch_process(req)
     res.json(req.params.theaters);
 });
 
 // 상영일정 선택 페이지 날짜 변경
-router.post('/select/change_theater_list', function(req, res)
-{
+router.post('/select/change_theater_list', (req, res) => {
     const session_date = req.body.session_date;
 
     /*
@@ -59,8 +73,7 @@ router.post('/select/change_theater_list', function(req, res)
 
 
 // 상영일정 선택 페이지 영화를 기준으로 영화관 목록 바꾸기
-router.post('/select/change_movie_list', function(req, res)
-{
+router.post('/select/change_movie_list', (req, res) => {
     const date = req.body.session_date;
     const theater_code = req.body.movie_code;
 
@@ -72,31 +85,17 @@ router.post('/select/change_movie_list', function(req, res)
     )
     */ 
 
-    const movie_list = [
-        {
-            movie_code: "movie_code",
-            movie_title: "movie_title",
-        },
-        {
-            movie_code: "movie_code1",
-            movie_title: "movie_title1",
-        },
-    ]
-
-    res.json({
-        movie_list,
-    });
+    res.json({ movie_list });
 });
 
 // 상영일정 선택 페이지 상영일정 필터링
-router.post('/select/filter_session', function(req, res)
-{
+router.post('/select/filter_session', async (req, res) => {
     const session_date = req.body.session_date || null;
     const theater_code = req.body.theater_code || null;
     const movie_code = req.body.movie_code || null;
 
+    await fetch_movie_session_info(req)
     // SELECT FROM WHERE;
-
     const session_list = [
         {
             session_uid: "654654",
@@ -120,8 +119,7 @@ router.post('/select/filter_session', function(req, res)
 });
 
 // 영화예매(좌석 선택) 페이지
-router.get('/seat', function(req, res)
-{
+router.get('/seat', (req, res) => {
     const session_uid = req.query.session_uid;
     
     /*
@@ -196,8 +194,7 @@ router.get('/seat', function(req, res)
 });
 
 // 영화예매(좌석 선택) 페이지
-router.post('/seat/get_seat', function(req, res)
-{
+router.post('/seat/get_seat', (req, res) => {
     const screen_code = req.query.screen_code;
 
     /*
@@ -232,8 +229,7 @@ router.post('/seat/get_seat', function(req, res)
 });
 
 // 영화예매 확인 페이지
-router.get('/check', function(req, res)
-{
+router.get('/check', (req, res) => {
     const session_uid = req.query.session_uid;
     const adult_no = req.query.adult_no;
     const child_no = req.query.child_no;
@@ -271,8 +267,7 @@ router.get('/check', function(req, res)
 });
 
 // 영화예매 확인 페이지 현재 로그인 중인 세션의 유저 customer_code를 얻음
-router.post('/check/customer_code', function(req, res)
-{
+router.post('/check/customer_code', (req, res) => {
     // 회원 로그인인 경우
     if (isAccountSession(req))
     {
@@ -313,8 +308,7 @@ router.post('/check/customer_code', function(req, res)
 });
 
 // 영화예매 확인 페이지 결제 가능 여부 확인
-router.post('/check/check_payment', function(req, res)
-{
+router.post('/check/check_payment', (req, res) => {
     const payment_price = req.body.payment_price;
     const payment_method = req.body.payment_method;
 
@@ -357,8 +351,7 @@ router.post('/check/check_payment', function(req, res)
 });
 
 // 영화예매 확인 페이지 결제 진행
-router.post('/check/process_payment', function(req, res)
-{
+router.post('/check/process_payment', (req, res) => {
     const customer_code = req.body.customer_code;
     const payment_price = req.body.payment_price;   // ticket_price와 동일
     const payment_method = req.body.payment_method;
@@ -460,8 +453,7 @@ router.post('/check/process_payment', function(req, res)
 });
 
 // 상품 결제완료 페이지
-router.get('/complete', function(req, res)
-{
+router.get('/complete', (req, res) => {
     const payment_uid = req.body.payment_uid;
     const ticket_uid = req.body.ticket_uid;    
     const session_uid = req.body.session_uid;
