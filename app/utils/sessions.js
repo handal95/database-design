@@ -16,9 +16,11 @@ export function isCustomerSession(req) {
 export async function initAccountSession(req, data) {
     req.session.views = 1;
     req.session.signin_category = "account";
-    req.session.sign_id = data.account_id;
+    req.session.account_id = data.account_id;
     req.session.nickname = data.nickname;
     req.session.email = data.email;
+
+    console.log("INIT SESSION OLD ACCOUNT")
 }
 
 export async function initCustomerSession(req, data) {
@@ -27,6 +29,8 @@ export async function initCustomerSession(req, data) {
     req.session.name = data.name;
     req.session.birth_date = data.birth_date;
     req.session.phone = data.phone;
+
+    console.log("INIT SESSION OLD CUSTOMER")
 }
 
 export function destorySession(req) {

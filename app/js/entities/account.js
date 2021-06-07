@@ -18,7 +18,6 @@ export async function get_account_info(conn, req){
         email: result.data.EMAIL
     }
     
-    console.log(data)
     return data
 }
 

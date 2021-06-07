@@ -1,7 +1,8 @@
 /* 영화 예매, 상품 구매 페이지*/
 
-import express from "express";
 import { hasSession, isAccountSession, isCustomerSession } from "../utils/sessions.js";
+
+import express from "express";
 
 const router = express.Router({ mergeParams: true });
 
@@ -332,7 +333,7 @@ router.post('/check/customer_code', function(req, res)
     if (isAccountSession(req))
     {
         const signin_type = "account";
-        const session_account_id = req.session.sign_id;
+        const session_account_id = req.session.account_id;
         /*
         // account의 customer_code를 검색
         SELECT customer_code
@@ -478,7 +479,7 @@ router.post('/check/process_payment', function(req, res)
         // 포인트로 결제했다면 포인트 사용
         if (payment_method == "포인트")
         {
-        const session_account_id = req.session.sign_id;
+        const session_account_id = req.session.account_id;
         const points_value = payment_price;
         /*
         INSERT INTO account_points VALUES(
@@ -493,7 +494,7 @@ router.post('/check/process_payment', function(req, res)
         // 포인트 이외의 방법으로 결제했다면 포인트 적립
         else
         {
-        const session_account_id = req.session.sign_id;
+        const session_account_id = req.session.account_id;
         const points_value = payment_price * points_ratio;
         /*
         INSERT INTO account_points VALUES(
