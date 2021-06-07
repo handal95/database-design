@@ -4,19 +4,21 @@ import { delete_customer } from "./customer.js"
 import { insert_record } from "../db/insert.js"
 
 export async function get_account_info(conn, req){
-    let query_body = `WHERE ACCOUNT_ID = '${req.body.id}' AND PWDKEY = '${req.body.pw}'`
+    let query_body = `WHERE account_id = '${req.body.id}' AND PWDKEY = '${req.body.pw}'`
     let columns = "account_id, nickname, email"
 
-    const result = await select_one(conn, "ACCOUNT", query_body, columns)
+    let result = await select_one(conn, "ACCOUNT", query_body, columns)
     if(!result.existence){
         throw `ACCOUNT ID(${req.body.id}) is invalid`
     }
-    
+
     let data = {
-        account_id: result.values.ACCOUNT_ID,
-        nickname: result.values.NICKNAME,
-        email: result.values.EMAIL
+        account_id: result.data.ACCOUNT_ID,
+        nickname: result.data.NICKNAME,
+        email: result.data.EMAIL
     }
+    
+    console.log(data)
     return data
 }
 

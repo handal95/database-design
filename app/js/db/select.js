@@ -31,7 +31,7 @@ export async function select_one(conn, table, query_body, columns="*", force=tru
 
     let data = {
         data: {},
-        values: 0,
+        length: 0,
         existence : false,
         uniqueness: false,
     }
@@ -48,14 +48,14 @@ export async function select_one(conn, table, query_body, columns="*", force=tru
 
         data = {
             data: result.rows[0],
-            values: result.rows.length,
+            length: result.rows.length,
             existence: result.rows.length > 0,
             uniqueness: (result.rows.length == 0)
         }
 
     } catch(err) {
         console.log(`${err.errorNum} QUERY(${query}) can not excuted`);
-        console.error(` - ${err.message}`)
+        console.log(` - ${err}, ${err.message}`)
     }
 
     return data

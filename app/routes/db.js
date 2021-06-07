@@ -1,19 +1,9 @@
 import { connect_test, create_table, drop_table } from "../js/process/schema.js"
 
-import db_config from "../configs/db_config.js"
 import express from "express"
-import { query_schema } from "../utils/queries.js"
 
 const router = express.Router({ mergeParams: true });
-oracle.outFormat = oracle.OBJECT;
-oracle.autoCommit = true;
 
-const schema_list = [ 
-    "customer", "facility_code", "movie", "crew", "payment",
-    "account", "theater", "genre", "poster", "contributor",
-    "payment_history",  "review", "store", "screen", "points",
-    "ticket", "item",  "movie_session", "seat", "basket",
-]
 
 router.get("/", (req, res) => {
     if(!connect_test(req, res)){

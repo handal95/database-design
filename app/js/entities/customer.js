@@ -1,6 +1,7 @@
+import { select_exists, select_one } from "../db/select.js"
+
 import { fill_code } from "../../utils/string.js"
 import { insert_record } from "../db/insert.js"
-import { select_exists } from "../db/select.js"
 
 // TEMP
 export async function issue_customer_code(conn, category, raw_code, req){
@@ -20,13 +21,14 @@ export async function issue_customer_code(conn, category, raw_code, req){
 
 export async function insert_customer(conn, req){
     let query_body = (
-        "(customer_code, customer_name, customer_birth_date, phone)" +
-        "VALUES(:customer_code, :customer_name, :customer_birth_date, :phone)"
+        "(customer_code, customer_name, customer_birth_date, phone) " +
+        "VALUES (:customer_code, :customer_name, :customer_birth_date, :phone)"
     )
+    console.log(req.body)
     let values = [
         req.body.code,  // customer_code
         req.body.name,  // customer_name
-        req.body.birth, // customer_birth_date
+        req.body.birth_date, // customer_birth_date
         req.body.phone  // customer_phone
     ]
 
@@ -45,4 +47,27 @@ export async function delete_customer(conn, req){
     if(!result.response){
         throw "DELETE CUSTOMER FAIL"
     }
+}
+
+export async function get_customer_info(conn, req){
+    let query_body = (
+        `WHERE customer_name = '${req.body.name}' ` +
+            `AND customer_birth_date = '${req.body.birth_date}' ` +
+            `AND phone = '${req.body.phone}'`
+
+    )
+    let columns = "customer_name, customer_birth_date, phone"
+
+    let result = await select_one(conn, "CUSTOMER", query_body, columns)
+    if(!result.existence){
+        throw `CUSTOMER is not exist`
+    }
+
+    let data = {
+        account_id: result.data.ACCOUNT_ID,
+        nickname: result.data.NICKNAME,
+        email: result.data.EMAIL
+    }
+    
+    return data
 }

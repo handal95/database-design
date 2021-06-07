@@ -1,9 +1,9 @@
 /* 메인화면, 회원 로그인, 회원가입, 마이페이지 */
 
-import { hasSession, initCustomerSession } from "../utils/sessions.js"
+import { signin_account_process, signin_customer_process } from "../js/process/signin.js"
 
 import express from "express";
-import { signin_account_process } from "../js/process/signin.js"
+import { hasSession } from "../utils/sessions.js"
 import { signup_process } from "../js/process/signup.js"
 
 const router = express.Router({ mergeParams: true });
@@ -32,34 +32,13 @@ router.post(URL_SIGNIN + "/account", (req, res) => {
 
 // customer sign-in
 router.post(URL_SIGNIN + "/customer", (req, res) => {
-    if(!signin_account_process(req, res)){
+    if(!signin_customer_process(req, res)){
         console.log("SIGNIN FAILUARE")
         res.json({ result: false })
     }
     console.log("SIGNIN SUCCESS")
     res.json({ result: true });
 
-    
-    const name = req.body.name;
-    const birth_date = req.body.birth_date;
-    const phone = req.body.phone;
-
-    // check(name, birth_date, phone);
-
-    const is_found = false
-    // 만약 일치하는 비회원 데이터가 없다면 새로 생성 후 로그인
-    if (is_found == false)
-    {
-        // INSERT INTO customer VALUES(name, birth_date, phone);
-        initCustomerSession(req, name, birth_date, phone);
-        res.json({ result: false });
-    }
-    // 일치하는 데이터가 있으면 로그인
-    else
-    {
-        initCustomerSession(req, id, 'nickname', 'email');
-        res.json({ result: true });
-    }
 })
 
 router.get(URL_SIGNIN, (req, res) => {

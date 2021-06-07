@@ -6,7 +6,7 @@ export async function insert_record(conn, table, query_body, values){
     }
 
     try{
-        const result = await conn.execute(query, values)
+        await conn.execute(query, values)
         data = {
             response: true
         }

@@ -13,7 +13,7 @@ export function isCustomerSession(req) {
     return !!(req.session.signin_category == "customer");
 }
 
-export function initAccountSession(req, sign_id, nickname, email) {
+export async function initAccountSession(req, data) {
     req.session.views = 1;
     req.session.signin_category = "account";
     req.session.sign_id = data.account_id;
@@ -21,7 +21,7 @@ export function initAccountSession(req, sign_id, nickname, email) {
     req.session.email = data.email;
 }
 
-export function initCustomerSession(req, data) {
+export async function initCustomerSession(req, data) {
     req.session.views = 1;
     req.session.signin_category = "customer";
     req.session.name = data.name;

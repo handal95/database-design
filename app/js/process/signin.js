@@ -1,8 +1,10 @@
 import { doDBRelease, getDBConnect } from "../db/connect.js"
-import { insert_customer, issue_customer_code } from "../entities/customer.js"
 
 import { get_account_info } from "../entities/account.js"
+import { get_customer_info } from "../entities/customer.js"
 import { initAccountSession } from "../../utils/sessions.js"
+import { issue_customer_code } from "../entities/customer.js"
+import { signup_process_customer } from "./signup.js"
 
 export async function signin_account_process(req, res) {
     let is_success = false
@@ -14,7 +16,7 @@ export async function signin_account_process(req, res) {
         console.log("(signin) : VALID ACCOUNT CHECK")
         
         // 계정 세션 등록
-        initAccountSession(req, data);
+        await initAccountSession(req, data);
         console.log("(signin) : ACCOUNT SESSION ON")
 
         console.log("(signup) : ALL SIGN IN PROCESS IS OK")
@@ -35,21 +37,25 @@ export async function signin_customer_process(req, res) {
     let is_success = false
 
     const conn = getDBConnect()
+    let data = {}
     try{
-
-        // 고객 코드 발급
-        await issue_customer_code(conn, "customer", req.body.phone, req)
-        console.log("(signin) : CODE ISSUE OK")
-
-        // 고객 정보 등록
-        await insert_customer(conn, req)
-        console.log("(signup) : INSERT CUSTOMER INFO OK")        
+        try{
+            // 계정 정보 호출
+            data = await get_customer_info(conn, req)
+            console.log("(signin) : VALID CUSTOMER CHECK")
+        } catch (err) {
+            console.log("(signin) : customer info is not exists -> do subprocess")
+            // 비회원 계정 등록 절차 진행
+            await signup_process_customer(req, res)
+            console.log("(signin) : CREATE CUSTOMER INFO")
+            data = await get_customer_info(conn, req)
+            console.log("(signin) : VALID CUSTOMER CHECK")
+        }
 
         // 계정 세션 등록
-        initCustomerSession(req, data);
-        console.log("(signin) : ACCOUNT SESSION ON")
-
-        console.log("(signup) : ALL SIGN IN PROCESS IS OK")
+        await initCustomerSession(req, data);
+        console.log("(signin) : CUSTOMER SESSION ON")
+        console.log("(signin) : ALL SIGN IN PROCESS IS OK")
         is_success = true
     }
     catch(err) {
@@ -58,6 +64,8 @@ export async function signin_customer_process(req, res) {
     } finally {
         await doDBRelease(conn)
     }
+
+    console.log(issue_customer_code)
 
     return is_success
 }

@@ -34,3 +34,26 @@ export async function signup_process(req, res) {
 
     return is_success
 }
+
+export async function signup_process_customer(req, res) {
+    let is_success = false
+
+    const conn = await getDBConnect()
+    try {
+        // 고객 코드 발급
+        await issue_customer_code(conn, "customer", req.body.phone, req)
+        console.log("(signup) : CODE ISSUE OK")
+
+        // 고객 정보 등록
+        await insert_customer(conn, req)
+        console.log("(signup) : INSERT CUSTOMER INFO OK")          
+    }
+    catch(err) {
+        console.log("(SIGNUP) : Process is failed by ", err)
+        is_success = false
+    } finally {
+        await doDBRelease(conn)
+    }
+
+    return is_success
+}
