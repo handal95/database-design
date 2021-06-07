@@ -67,8 +67,8 @@
             e.preventDefault();
 
             const data = {
-                id: signin_id.val(),
-                pw: signin_pw.val(),
+                account_id: signin_id.val(),
+                pwdkey: signin_pw.val(),
             };
 
             const account_login_response = await requestPostAPI('/signin/account', data);

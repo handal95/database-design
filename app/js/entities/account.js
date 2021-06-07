@@ -4,12 +4,12 @@ import { delete_customer } from "./customer.js"
 import { insert_record } from "../db/insert.js"
 
 export async function get_account_info(conn, req){
-    let query_body = `WHERE account_id = '${req.body.id}' AND PWDKEY = '${req.body.pw}'`
+    let query_body = `WHERE account_id = '${req.body.account_id}' AND PWDKEY = '${req.body.pwdkey}'`
     let columns = "account_id, nickname, email"
 
     let result = await select_one(conn, "ACCOUNT", query_body, columns)
     if(!result.existence){
-        throw `ACCOUNT ID(${req.body.id}) is invalid`
+        throw `ACCOUNT ID(${req.body.account_id}) is invalid`
     }
 
     let data = {
@@ -22,11 +22,11 @@ export async function get_account_info(conn, req){
 }
 
 export async function check_duplicate_account(conn, req){
-    let query_body = `WHERE account_id = '${req.body.id}'`
+    let query_body = `WHERE account_id = '${req.body.account_id}'`
 
     const result = await select_exists(conn, "ACCOUNT", query_body)
     if(!result.uniqueness){
-        throw `ACCOUNT ID(${req.body.id}) is already existence`
+        throw `ACCOUNT ID(${req.body.account_id}) is already existence`
     }
 }
 
@@ -45,10 +45,10 @@ export async function insert_account(conn, req){
         "VALUES(:account_id, :customer_code, :nickname, :pwdkey, :email)"
     )
     let values = [
-        req.body.id,        // account_id
+        req.body.account_id,        // account_id
         req.body.code,      // customer code
         req.body.nickname,  // nickname
-        req.body.pw,        // pwdkey
+        req.body.pwdkey,        // pwdkey
         req.body.email,     // email
     ]
 

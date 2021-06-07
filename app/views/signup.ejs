@@ -12,8 +12,8 @@
                 <input type="text" class="form-control" id="input_id" required>
             </div>
             <div class="mb-3">
-                <label for="input_pw" class="form-label">비밀번호</label>
-                <input type="password" class="form-control" id="input_pw" required>
+                <label for="input_pwdkey" class="form-label">비밀번호</label>
+                <input type="password" class="form-control" id="input_pwdkey" required>
             </div>
             <div class="mb-3">
                 <label for="input_name" class="form-label">이름</label>
@@ -51,7 +51,7 @@
     <script>
         const signup_form = $('#signup_form');
         const input_id = $('#input_id');
-        const input_pw = $('#input_pw');
+        const input_pwdkey = $('#input_pwdkey');
         const input_name = $('#input_name');
         const input_birth_date = $('#input_birth_date');
         const input_phone = $('#input_phone');
@@ -63,8 +63,8 @@
             e.preventDefault();
 
             const data = {
-                id: input_id.val(),
-                pw: input_pw.val(),
+                account_id: input_id.val(),
+                pwdkey: input_pwdkey.val(),
                 name: input_name.val(),
                 birth_date: input_birth_date.val(),
                 phone: input_phone.val(),

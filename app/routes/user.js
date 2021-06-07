@@ -65,7 +65,7 @@ router.post(URL_MYPAGE, (req, res) => {
         res.redirect(URL_SIGNIN);
     }
 
-    const pw = req.body.pw;
+    const pwdkey = req.body.pwdkey;
     const nickname = req.body.nickname;
     const email = req.body.email;
 
@@ -74,7 +74,7 @@ router.post(URL_MYPAGE, (req, res) => {
     res.json({
         message:'success'
     });
-    console.log(`pw : ${pw}, nickname : ${nickname}, email : ${email}`);
+    console.log(`pwdkey : ${pwdkey}, nickname : ${nickname}, email : ${email}`);
 });
 
 // 마이페이지에서 유저가 구매한 티켓 목록을 불러오는 함수
