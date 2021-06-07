@@ -11,7 +11,7 @@ const SCHEMA_LIST = [
     "item",  "movie_session", "seat", "basket", "reserve"
 ]
 
-export async function connect_test(req, res) {
+export async function connect_test(req) {
     let is_success = false
     
     // DB 연결
@@ -29,9 +29,9 @@ export async function connect_test(req, res) {
     return is_success
 }
 
-export async function create_table(req, res, params) {
+export async function create_table(req) {
     let is_success = false
-    let table = (params == "all") ? SCHEMA_LIST : [ params ]
+    let table = (req.params.table == "all") ? SCHEMA_LIST : [ req.params.table ]
     // DB 연결
     const conn = await getDBConnect()
     try{
@@ -58,9 +58,9 @@ export async function create_table(req, res, params) {
 }
 
 
-export async function drop_table(req, res, params) {
+export async function drop_table(req) {
     let is_success = false
-    let table = (params == "all") ? SCHEMA_LIST : [ params ]
+    let table = (req.params.table == "all") ? SCHEMA_LIST : [ req.params.table ]
 
     // DB 연결
     const conn = await getDBConnect()

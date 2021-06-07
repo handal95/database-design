@@ -1,3 +1,5 @@
+import { printQueryError } from "./connect.js"
+
 export async function select_exists(conn, table, query_body){
     let query = `SELECT 1 FROM ${table} ${query_body}`
 
@@ -15,10 +17,7 @@ export async function select_exists(conn, table, query_body){
             existence: result.rows.length > 0,
             uniqueness: (result.rows.length == 0)
         }
-    } catch(err) {
-        console.log(`${err.errorNum} QUERY(${query}) can not excuted`);
-        console.error(` - ${err.message}`)
-    }
+    } catch(err) { printQueryError(err, query) }
 
     return data
 }
@@ -30,6 +29,7 @@ export async function select_one(conn, table, query_body, columns="*", force=tru
     )
 
     let data = {
+        response : false,
         data: {},
         length: 0,
         existence : false,
@@ -38,12 +38,18 @@ export async function select_one(conn, table, query_body, columns="*", force=tru
     
     try{
         const result = await conn.execute(query)
+        // 결과가 한 개도 없을 때
         if(result.rows.length == 0){
-            throw `RESULT IS EMPTY`
+            console.log(`Query(${query}) RESULT IS EMPTY`)
+            
+            return data
         }
-
+        
+        // 결과가 여러 개 있을 때
         if(force && result.rows.length > 1){
-            throw `RESULT IS NOT ONLY ONE (${result.rows.length})`
+            console.log(`Query(${query}) RESULT IS NOT ONLY ONE`)
+
+            return data
         }
 
         data = {
@@ -53,10 +59,7 @@ export async function select_one(conn, table, query_body, columns="*", force=tru
             uniqueness: (result.rows.length == 0)
         }
 
-    } catch(err) {
-        console.log(`${err.errorNum} QUERY(${query}) can not excuted`);
-        console.log(` - ${err}, ${err.message}`)
-    }
+    } catch(err) { printQueryError(err, query) }
 
     return data
 }

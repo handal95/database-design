@@ -24,12 +24,12 @@ export async function insert_customer(conn, req){
         "(customer_code, customer_name, customer_birth_date, phone) " +
         "VALUES (:customer_code, :customer_name, :customer_birth_date, :phone)"
     )
-    console.log(req.body)
+
     let values = [
-        req.body.code,  // customer_code
-        req.body.name,  // customer_name
+        req.body.code,       // customer_code
+        req.body.name,       // customer_name
         req.body.birth_date, // customer_birth_date
-        req.body.phone  // customer_phone
+        req.body.phone       // customer_phone
     ]
 
     const result = await insert_record(conn, "CUSTOMER", query_body, values)

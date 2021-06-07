@@ -3,19 +3,18 @@
 import { signin_account_process, signin_customer_process } from "../js/process/signin.js"
 
 import express from "express";
-import { hasSession } from "../utils/sessions.js"
+import { hasSession } from "../js/process/session.js"
 import { signup_process } from "../js/process/signup.js"
 
 const router = express.Router({ mergeParams: true });
 
 // link page
-const HOME = ""
 const SIGNIN = "signin"
 const SIGNUP = "signup"
 const MYPAGE = "mypage"
 
 // url
-const URL_HOME = "/" + HOME
+const URL_HOME = "/"
 const URL_SIGNIN = "/" + SIGNIN
 const URL_SIGNUP = "/" + SIGNUP
 const URL_MYPAGE = "/" + MYPAGE
@@ -67,9 +66,8 @@ router.get(URL_SIGNUP, (req, res) => {
 // MYPAGE
 router.post(URL_MYPAGE, (req, res) => {
     // 로그인이 안 되어 있으면 로그인 창으로 리다이렉트
-    if (hasSession(req) == false){
+    if (!hasSession(req)){
         res.redirect(URL_SIGNIN);
-        return;
     }
 
     const pw = req.body.pw;

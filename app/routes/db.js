@@ -6,7 +6,7 @@ const router = express.Router({ mergeParams: true });
 
 
 router.get("/", (req, res) => {
-    if(!connect_test(req, res)){
+    if(!connect_test(req)){
         console.log("DB CONNECT FAIL")
         res.send("DB is not connected")
     }
@@ -15,14 +15,14 @@ router.get("/", (req, res) => {
 })
 
 router.get("/create/:table", (req, res) => {
-    if(!create_table(req, res, req.params.table)){
+    if(!create_table(req)){
         res.send("Query Fail")
     }
     res.send("Query Success")
 })
 
 router.get("/drop/:table", (req, res) => {
-    if(!drop_table(req, res, req.params.table)){
+    if(!drop_table(req)){
         res.send("Query Fail")
     }
     res.send("Query Success")
