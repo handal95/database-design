@@ -4,8 +4,13 @@ seat_uid NUMBER(16, 0) NOT NULL
 screen_code VARCHAR(16) NOT NULL,
 seat_category VARCHAR(16),
 seat_status VARCHAR(16) NOT NULL,
+<<<<<<< HEAD
 seat_row VARCHAR(4) NOT NULL
 seat_col VARCHAR(4) NOT NULL
+=======
+seat_row VARCHAR(4) NOT NULL,
+seat_col VARCHAR(4) NOT NULL,
+>>>>>>> parent of 1cc2259 (add seed seat)
 
 CONSTRAINT SEAT_PK
     PRIMARY KEY(seat_uid),

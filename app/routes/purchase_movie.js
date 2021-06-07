@@ -43,17 +43,55 @@ router.post(`${URL_SELECT}/init_movie_session`, async (req, res) => {
 // 상영일정 선택 페이지 상영일정 필터링
 // INIT_MOVIE_SESSION 과 동일함
 router.post(`${URL_SELECT}/filter_session`, async (req, res) => {
+<<<<<<< HEAD
     const session_date = req.body.session_date;
     const theater_code = req.body.theater_code;
     const movie_code = req.body.movie_code;
+=======
+    req.body.session_date = (req.body.session_date == null) ? '2021-06-08' : req.body.session_date
+    await fetch_movie_session_info(req)
+
+    console.log(req.params)
+    res.json({
+        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
+        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
+    });
+});
+
+// 상영일정 선택 페이지 날짜 변경
+// INIT_MOVIE_SESSION 과 동일함
+router.post(`${URL_SELECT}/change_theater_list`, async (req, res) => {
+    req.body.session_date = (req.body.session_date == null) ? '2021-06-08' : req.body.session_date
+    await fetch_movie_session_info(req)
+
+    console.log(req.params)
+    res.json({
+        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
+        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
+    });
+});
+>>>>>>> parent of 1cc2259 (add seed seat)
 
     // do something
     await fetch_movie_session_info(req)
 
+<<<<<<< HEAD
     res.json({
         sessions: req.params.sessions,
     })
     console.log(req.params)
+=======
+// 상영일정 선택 페이지 영화를 기준으로 영화관 목록 바꾸기
+router.post(`${URL_SELECT}/change_movie_list`, async (req, res) => {
+    req.body.session_date = (req.body.session_date == null) ? '2021-06-08' : req.body.session_date
+    await fetch_movie_session_info(req)
+
+    console.log(req.params)
+    res.json({
+        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
+        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
+    });
+>>>>>>> parent of 1cc2259 (add seed seat)
 });
 
 

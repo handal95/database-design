@@ -30,6 +30,14 @@ router.get("/drop/:table", (req, res) => {
     }
 })
 
+router.get("/seed/seat", (req, res) => {
+    if(!seed_data(req)) {
+        res.send("Query Fail")
+    } else {
+        res.send("Query Success")
+    }
+})
+
 router.get("/seed/:table", (req, res) => {
     if(!seed_data(req)) {
         res.send("Query Fail")
