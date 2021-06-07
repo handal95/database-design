@@ -100,10 +100,9 @@
     <script>
     const screen_seat = <%- JSON.stringify(screen_seat) %>;
 
-    let
-        adult_no = 0,
-        child_no = 0,
-        selected_seat = [];
+    let adult_no = 0;
+    let child_no = 0;
+    let selected_seat = [];
 
     const screen_code = "<%= screen_code %>";
     const session_uid = "<%= session_uid %>";
@@ -152,7 +151,10 @@
         {
             const next_adult_no = adult_no + d_adult;
             const next_child_no = child_no + d_child;
-            if (next_adult_no < 0 || next_child_no < 0) return;
+            if (next_adult_no < 0 || next_child_no < 0) 
+            {
+                return;
+            }
 
             // show updated values
             adult_no = next_adult_no;

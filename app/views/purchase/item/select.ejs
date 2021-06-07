@@ -43,11 +43,11 @@
     <script>
     const item_info = {}; // key: item_code, value: item
     const basket_quantity = {}; // key: item_code, value: order_quantity
-    const selected_theater = {
+    let selected_theater = {
         code: null,
         name: null,
     };
-    const selected_store = {
+    let selected_store = {
         code: null,
         name: null,
     };
@@ -93,7 +93,7 @@
         // 페이지 초반 로드 시 영화관 선택 목록을 만들기 위한 함수
         async function init_theater_list()
         {
-            const response_data = await requestPostAPI('/purchase/item/select/init_movie_session')
+            const response_data = await requestPostAPI('/purchase/item/select/init_movie_session');
             const theater_list = response_data.data.theater_list;
 
             // 리스트 값을 받아서 option 내용을 바꿈
@@ -269,7 +269,9 @@
             const href = '/purchase/item/check';
 
             const queryParams = {
+                theater_code,
                 theater_name,
+                store_code,
                 store_name,
                 basket_list: JSON.stringify(basket_list),
             };

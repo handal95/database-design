@@ -5,11 +5,10 @@
     <!--메인 화면-->
     <%- include('../../_component/goto_main.ejs')%>
 
-    <!--주문을 하고 order, payment 데이터가 생기는 걸로-->
     <h1>상품 주문 확인</h1>
 
-    <p>영화관 이름 : <%= theater_name %></p>
-    <p>상점 이름 : <%= store_name %></p>
+    <p>영화관 이름 : <%= theater_code %></p>
+    <p>상점 이름 : <%= store_code %></p>
     <table>
         <thead>
             <tr>
@@ -77,21 +76,18 @@
             return false;
         }
 
-        const theater_name = <%= theater_name %>;
-        const store_name = <%= store_name %>;
-        //*****
-        const item_name = <%= item_name %>;
-        const item_price = <%= item_price %>;
-        const order_quantity = <%= order_quantity %>;
-
+        const theater_code = <%= theater_code %>;
+        const store_code = <%= store_code %>;
+        const basket_list = <%= basket_list %>;
         const payment_price = <%= payment_price %>;
         const payment_process_data = {
             customer_code,
-            adult_no,
-            child_no,
+            theater_code,
+            store_code,
+            basket_list,
             payment_price,
             payment_method: payment_method.val(),
-            reserve_status: "예약"
+            order_status: "주문"
         };
 
         const payment_process_response_data = await requestPostAPI('/purchase/item/check/process_payment', payment_process_data);

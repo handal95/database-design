@@ -97,7 +97,9 @@ router.post('/select/filter_item', function(req, res)
 // 상품구매 확인 결제내용 불러오기
 router.get('/check', function(req, res)
 {
+    const theater_code = req.query.theater_code;
     const theater_name = req.query.theater_name;
+    const store_code = req.query.store_code;
     const store_name = req.query.store_name;
     const basket_list = JSON.parse(decodeURIComponent(req.query.basket_list));
     let payment_price = 0;
@@ -109,7 +111,9 @@ router.get('/check', function(req, res)
     }
 
     res.render('purchase/item/check', {
+        theater_code,
         theater_name,
+        store_code,
         store_name,
         basket_list,
         payment_price,
@@ -207,12 +211,12 @@ router.post('/check/check_payment', function(req, res)
 router.post('/check/process_payment', function(req, res)
 {
     const customer_code = req.body.customer_code;
-    const payment_price = req.body.payment_price;   // ticket_price와 동일
+    const theater_code = req.body.theater_code;
+    const store_code = req.body.store_code;
+    const basket_list = req.body.basket_list;
+    const payment_price = req.body.payment_price;
     const payment_method = req.body.payment_method;
-    const ticket_price = req.body.payment_price;    // payment_price와 동일
-    const adult_no = req.body.adult_no;
-    const child_no = req.body.child_no;
-    const reserve_status = req.body.reserve_status;    
+    const order_status = req.body.order_status;    
 
     /*
     // payment 데이터 생성
@@ -228,14 +232,14 @@ router.post('/check/process_payment', function(req, res)
     
     /*
     // basket 갯수만큼 데이터 생성
-    for (basket 갯수만큼)
+    for (const basket of basket_list)
     {
         INSERT INTO basket VALUES(
             "basket_uid",
             "store_code",
             "payment_uid",
-            "item_code",
-            "order_quantity",
+            "basket.item_code",
+            "basket.order_quantity",
             "주문" // order_status
         );
     }
