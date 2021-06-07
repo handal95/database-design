@@ -1,5 +1,5 @@
-export async function select_exists(conn, table, subquery){
-    let query = `SELECT 1 FROM ${table} ${subquery}`
+export async function select_exists(conn, table, query_body){
+    let query = `SELECT 1 FROM ${table} ${query_body}`
 
     let data = {
         data: {},
@@ -24,9 +24,9 @@ export async function select_exists(conn, table, subquery){
 }
 
 
-export async function select_one(conn, table, subquery, columns="*", force=true){
+export async function select_one(conn, table, query_body, columns="*", force=true){
     let query = (
-        `SELECT ${columns} FROM ${table} ${subquery}`
+        `SELECT ${columns} FROM ${table} ${query_body}`
     )
 
     let data = {

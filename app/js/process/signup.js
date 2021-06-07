@@ -1,6 +1,6 @@
-import { check_duplicate_account, insert_account } from "./account.js"
+import { check_duplicate_account, insert_account } from "../entities/account.js"
 import { doDBRelease, getDBConnect } from "../db/connect.js"
-import { insert_customer, issue_customer_code } from "./customer.js"
+import { insert_customer, issue_customer_code } from "../entities/customer.js"
 
 export async function signup_process(req, res) {
     let is_success = false

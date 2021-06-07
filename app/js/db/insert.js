@@ -1,5 +1,5 @@
-export async function insert_record(conn, table, subquery, values){
-    let query = `INSERT INTO ${table} ${subquery}`
+export async function insert_record(conn, table, query_body, values){
+    let query = `INSERT INTO ${table} ${query_body}`
 
     let data = {
         response: false

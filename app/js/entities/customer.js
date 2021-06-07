@@ -10,8 +10,8 @@ export async function issue_customer_code(conn, category, raw_code, req){
 
     const CUSTOMER_CODE = category[0].toUpperCase() + fill_code(raw_code)
     
-    let subquery = `WHERE customer_code = '${CUSTOMER_CODE}'`
-    const result = await select_exists(conn, "CUSTOMER", subquery)
+    let query_body = `WHERE customer_code = '${CUSTOMER_CODE}'`
+    const result = await select_exists(conn, "CUSTOMER", query_body)
     if(result.existence){
         throw "CUSTOMER CODE ISSUE FAIL"
     }
@@ -19,7 +19,7 @@ export async function issue_customer_code(conn, category, raw_code, req){
 }
 
 export async function insert_customer(conn, req){
-    let subquery = (
+    let query_body = (
         "(customer_code, customer_name, customer_birth_date, phone)" +
         "VALUES(:customer_code, :customer_name, :customer_birth_date, :phone)"
     )
@@ -30,18 +30,18 @@ export async function insert_customer(conn, req){
         req.body.phone  // customer_phone
     ]
 
-    const result = await insert_record(conn, "CUSTOMER", subquery, values)
+    const result = await insert_record(conn, "CUSTOMER", query_body, values)
     if(!result.response){
         throw "INSERT CUSTOMER FAIL"
     }
 } 
 
 export async function delete_customer(conn, req){
-    let subquery = (
+    let query_body = (
         `WHERE customer_code = '${req.body.code}'`
     )
 
-    const result = await delete_record(conn, "CUSTOMER", subquery)
+    const result = await delete_record(conn, "CUSTOMER", query_body)
     if(!result.response){
         throw "DELETE CUSTOMER FAIL"
     }

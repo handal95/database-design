@@ -7,7 +7,7 @@ export async function getDBConnect(){
         return DB_CONNECT
     } catch (err) {
         console.error("DB CONNECTION ERROR")
-        doRelease(DB_CONNECT)
+        doDBRelease(DB_CONNECT)
         throw err
     }
 }

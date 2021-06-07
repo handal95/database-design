@@ -1,5 +1,5 @@
-export async function delete_record(conn, table, subquery){
-    let query = `DELETE FROM ${table} ${subquery}`
+export async function delete_record(conn, table, query_body){
+    let query = `DELETE FROM ${table} ${query_body}`
 
     let data = {
         response: false,

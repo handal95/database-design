@@ -4,7 +4,7 @@ import { hasSession, initCustomerSession } from "../utils/sessions.js"
 
 import express from "express";
 import { signin_account_process } from "../js/process/signin.js"
-import { signup_process } from "../js/entities/signup.js.js.js"
+import { signup_process } from "../js/process/signup.js"
 
 const router = express.Router()
 
