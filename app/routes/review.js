@@ -8,12 +8,29 @@ const router = express.Router({ mergeParams: true });
 // 리뷰 상세내용 페이지
 router.get('/read', function(req, res)
 {
+    const movie_code = req.query.movie_code;
     const movie_title = req.query.movie_title;
     const review_sq = req.query.review_sq;
 
+    /*
+    SELECT account_id, review_title, comment, score
+    FROM review
+    WHERE movie_code = "movie_code"
+    AND review_sq = "review_sq";
+    */
+
+    const review = {
+            movie_code,
+            movie_title,
+            review_sq,
+            account_id: "account_id",
+            review_title: "review_title",
+            comment: "commment",
+            score: 8.0,
+        }
+
     res.render('movieinfo/review/read', {
-        movie_title,
-        review_sq,
+        review,
     });
 })
 
@@ -37,18 +54,19 @@ router.get('/write', function(req, res)
 // 리뷰 작성 페이지 게시
 router.post('/write/register', function(req, res)
 {
+    /*
     if (!isAccountSession(req))
     {
         res.redirect('/signin');
         return;
     }
-
-    const account_id = req.session.account_id;
+    */
+    //const account_id = req.session.account_id;
     const movie_code = req.body.movie_code;
     const review_title = req.body.review_title;
     const comment = req.body.comment;
     const score = req.body.score;
-
+    
     /*
     // 후기 작성
     INSERT INTO review VALUES(

@@ -19,6 +19,7 @@
         onchange='range_change(this)'>
     <span id='score'></span>
     <button id="btn_register">등록</button>
+
     <script>
     const movie_code = <%= movie_code %>;
     const review_title = findId("review_title");
@@ -35,7 +36,7 @@
     }
 
     // 리뷰 등록 버튼
-    function register()
+    async function register()
     {
         const data = {
             movie_code,
@@ -43,7 +44,7 @@
             comment,
             score,
         };
-        const response_data = await requestPostAPI('/movieinfo/movie/review/write/register', data);
+        const response_data = await requestPostAPI('/movieinfo/review/write/register', data);
         
         if (response_data.data.result == true)
         {

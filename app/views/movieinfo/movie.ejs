@@ -67,7 +67,7 @@
             <tr>
                 <td><%= review.account_id %></td>
                 <td>
-                    <a href="/movieinfo/review/read?movie_title="><%= review.review_title %></a>
+                    <a href="/movieinfo/review/read?movie_code=<%= movie.movie_code %>&movie_title=<% movie.movie_title %>&review_sq=<%= review.review_sq %>"><%= review.review_title %></a>
                     </a>
                 </td>
                 <td><%= review.score %></td>
