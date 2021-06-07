@@ -517,26 +517,25 @@ router.post('/check/process_payment', function(req, res)
 // 상품 결제완료 페이지
 router.get('/complete', function(req, res)
 {
-    const payment_uid = req.query.payment_uid;
-
-    res.render('purchase/movie/complete', {payment_uid,});
-});
-
-// 상품 결제완료 페이지
-router.post('/complete/load_data', function(req, res)
-{
     const payment_uid = req.body.payment_uid;
     const ticket_uid = req.body.ticket_uid;    
     const session_uid = req.body.session_uid;
-    
+
     /*
-    // 영화관 이름, 상영관 이름, 상영영화제목
-    SELECT T.theater_name, S.screen_name, M.movie_title
+    // 영화관 이름, 상영관 이름, 상영날짜, 상영시각, 상영영화제목
+    SELECT T.theater_name, S.screen_name, M.session_date, M.session_datetime, M.movie_title
     FROM theater T, screen S, movie_session M 
     WHERE T.theater_code = S.theater_code
     AND S.screen_code = M.screen_code
     AND session_uid = "session_uid";
+    */
+    const theater_name = "theater_name";
+    const screen_name = "screen_name";
+    const movie_title = "movie_title";
+    const session_date = "session_date";
+    const session_datetime = "session_datetime";
 
+    /*
     // 예약 좌석
     SELECT S.seat_row, S.seat_col
     FROM S.seat, R.reserve
@@ -561,9 +560,14 @@ router.post('/complete/load_data', function(req, res)
     WHERE payment_uid = "payment_uid";
     */
 
-    res.json({
+    const payment_price = "payment_price";
+    const payment_method = "payment_method";
+
+    res.render('purchase/movie/complete', {
         theater_name,
         screen_name,
+        session_date,
+        session_datetime,
         movie_title,
         seat_list,
         payment_price,
