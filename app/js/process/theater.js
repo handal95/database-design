@@ -1,19 +1,20 @@
 import { doDBRelease, getDBConnect } from "../db/connect.js"
-import { get_sessioning_movie, get_sessioning_theater } from "../entities/movie_session.js"
 
-export async function fetch_sessioning_theater_info(req) {
+import { get_theater_info } from "../entities/theater.js"
+
+export async function fetch_theater_process(req) {
     let is_success = false
 
     const conn = await getDBConnect()
     try{
-        // 영화 상영 정보 호출
-        await get_distinct_theater_info(conn, req)
-        console.log("(session) : THEATER CHECK")
+        // 계정 정보 호출
+        req.params.theaters = await get_theater_info(conn, req)
+        console.log("(ticket) : THEATER CHECK")
         
         is_success = true
     }
     catch(err) {
-        console.log("(session) : Process is failed by ", err)
+        console.log("(ticket) : Process is failed by ", err)
     } finally {
         await doDBRelease(conn)
     }
@@ -21,8 +22,7 @@ export async function fetch_sessioning_theater_info(req) {
     return is_success
 }
 
-
-export async function fetch_movie_session_process(req) {
+export async function fetch_init_theater_process(req) {
     let is_success = false
 
     const conn = await getDBConnect()

@@ -1,5 +1,15 @@
 import { printQueryError } from "./connect.js"
 
+function check_empty_result(result_rows, query, print_detail=false){
+    if(result_rows.length == 0){
+        let message = "RESULT IS EMPTY"
+        if(print_detail){
+            message += `\n    - Query(${query})`
+        }
+        throw message
+    }
+}
+
 export async function select_exists(conn, table, query_body){
     let query = `SELECT 1 FROM ${table} ${query_body}`
 
@@ -38,12 +48,7 @@ export async function select_data(conn, table, query_body, columns="*", force=tr
     
     try{
         const result = await conn.execute(query)
-        // 결과가 한 개도 없을 때
-        if(result.rows.length == 0){
-            console.log(`Query(${query}) RESULT IS EMPTY`)
-            
-            return data
-        }
+        check_empty_result(result.rows, query)
 
         data = {
             data: result.rows,
@@ -72,12 +77,7 @@ export async function select_one(conn, table, query_body, columns="*", force=tru
     
     try{
         const result = await conn.execute(query)
-        // 결과가 한 개도 없을 때
-        if(result.rows.length == 0){
-            console.log(`Query(${query}) RESULT IS EMPTY`)
-            
-            return data
-        }
+        check_empty_result(result.rows, query)
         
         // 결과가 여러 개 있을 때
         if(force && result.rows.length > 1){
@@ -109,12 +109,7 @@ export async function select_query(conn, query){
     
     try{
         const result = await conn.execute(query)
-        // 결과가 한 개도 없을 때
-        if(result.rows.length == 0){
-            console.log(`Query(${query}) RESULT IS EMPTY`)
-            
-            return data
-        }
+        check_empty_result(result.rows, query)
         
         data = {
             data: result.rows,

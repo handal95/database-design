@@ -12,7 +12,6 @@ function create_table(table_name, schema, err, conn) {
             return;
         }
 
-        console.log(result.metaData);  //테이블 스키마
         doRelease(conn);
         console.log("TABLE CREATED")
     });

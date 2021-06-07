@@ -16,11 +16,18 @@ export async function getDBConnect(){
     }
 }
 
-export function printQueryError(err, query){
-    console.error(
-        `    ${err.errorNum} QUERY(${query}) can not excuted \n` +
-        `     - ${err.message}`
-    )
+export function printQueryError(err, query, print=true){
+    if(print){
+        if(err.errorNum != undefined){
+            console.error(
+                `    ${err.errorNum} QUERY(${query}) can not excuted \n` +
+                `     - ${err.message}`
+            )
+            throw err
+        } else {
+            console.error(err)
+        }
+    }
 }
 
 export async function doDBRelease(conn){
