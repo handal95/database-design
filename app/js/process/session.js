@@ -1,6 +1,4 @@
 export function hasSession(req) {
-    console.log("HAS SESSION :", (req.session.views))
-    console.log("HAS SESSION :", (!!req.session.views))
     // not not을 통해 bool 형으로 형변환
     return !!req.session.views
 }
@@ -25,9 +23,6 @@ export async function initSession(req, session_category, params) {
         req.session.birth_date = params.birth_date
         req.session.phone = params.phone
     }
-
-    console.log(req.session)
-    console.log("INIT SESSION NEW")
 }
 
 export function destorySession(req) {

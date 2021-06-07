@@ -27,7 +27,6 @@ const URL_HOME = "/"
 router.get(URL_HOME, (req, res) => {
     let params = { account_id: null }
 
-    console.log(req.session)
     if (hasSession(req)) {
         // 접속 세션 유형
         const SESSION_CATEGORY = req.session.signin_category
@@ -46,7 +45,6 @@ router.get(URL_HOME, (req, res) => {
         }
     }
 
-    console.log("PARAMS", params)
     // INDEX PAGE rendering
     res.render(INDEX, params)
 })

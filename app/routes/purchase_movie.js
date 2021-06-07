@@ -1,10 +1,24 @@
 /* 영화 예매, 상품 구매 페이지*/
 
-import { hasSession, isAccountSession, isCustomerSession } from "../utils/sessions.js";
+import { isAccountSession, isCustomerSession } from "../utils/sessions.js";
 
 import express from "express";
+import { hasSession } from "../js/process/session.js"
+import { theater_fetch_process } from "../js/process/ticket.js"
 
 const router = express.Router({ mergeParams: true });
+let theater_list = [
+    {
+        theater_code: "theater_code",
+        theater_name: "theater_name",
+    },
+    {
+        theater_code: "theater_code1",
+        theater_name: "theater_name2",
+    },
+]
+
+const URL_SELECT = "/select"
 
 // 인당 티켓 가격
 const ticket_adult_price = 8000;
@@ -13,76 +27,19 @@ const ticket_child_price = 5000;
 const points_ratio = 0.1;
 
 // 영화예매(장소, 일정 선택) 페이지
-router.get('/select', function(req, res)
-{
-    if (hasSession(req))
-    {
-        res.render('purchase/movie/select');
-    }
-    else
-    {
+router.get(URL_SELECT, (req, res) => {
+    // 로그인 되어있지 않다면 로그인 페이지로 이동
+    if (!hasSession(req)) {
         res.redirect('/signin');
+    } else {
+        res.render('purchase/movie/select');
     }
 });
 
-// 검색 항목 범위를 변경
-router.post('/select/set_list', function(req, res)
-{
-    const date = req.body.date;
-    const movie = req.body.movie || null;
-    const theater = req.body.theater || null;
-
-    // query(search)
-    
-    /*
-    theater_list -> date
-    
-    SELECT DISTINCT screen_code
-    FROM movie_session
-    WHERE session_date="date"
-    AND movie_code="movie";?
-    */
-
-    /*
-    movie_list ->
-
-    SELECT DISTINCT movie_code
-    FROM movie_session
-    WHERE session_date="date"
-    AND <screen_code로 영화관 정보 추출>;?
-    */
-    const theater_list = [];
-    const movie_list = [];
-
-    res.json({
-        theater_list: theater_list,
-        movie_list: movie_list,
-    });
-})
-
 // 상영일정 선택 페이지 영화관 리스트 초기화
-router.post('/select/init_theater', function(req, res)
-{
-    /*
-    쿼리문 우예 짜지;
-    SELECT T.theater_code, T.theater_name
-    FROM movie_session MS, session S, theater T 
-    WHERE S.session LIKE T.theater_code ;
-    */
-    const theater_list = [
-        {
-            theater_code: "theater_code",
-            theater_name: "theater_name",
-        },
-        {
-            theater_code: "theater_code1",
-            theater_name: "theater_name2",
-        },
-    ]
-
-    res.json({
-        theater_list,
-    });
+router.post(`${URL_SELECT}/init_theater`, async (req, res) => {
+    await theater_fetch_process(req)
+    res.json(req.params.theaters);
 });
 
 // 상영일정 선택 페이지 날짜 변경
@@ -97,20 +54,7 @@ router.post('/select/change_theater_list', function(req, res)
         AND session_date = "session_date";
     */
 
-    const theater_list = [
-        {
-            theater_code: "theater_code",
-            theater_name: "theater_name",
-        },
-        {
-            theater_code: "theater_code1",
-            theater_name: "theater_name2",
-        },
-    ]
-
-    res.json({
-        theater_list: theater_list,
-    });
+    res.json({ theater_list: theater_list });
 });
 
 
