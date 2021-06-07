@@ -1,5 +1,5 @@
 import { connect_test, create_table, drop_table } from "../js/process/schema.js"
-import { delete_data, seed_data } from "../js/process/seeder.js"
+import { delete_data, seed_data, seed_seat } from "../js/process/seeder.js"
 
 import express from "express"
 
@@ -30,6 +30,13 @@ router.get("/drop/:table", (req, res) => {
     }
 })
 
+router.get("/seed/seat", (req, res) => {
+    if(!seed_seat(req)) {
+        res.send("Query Fail")
+    } else {
+        res.send("Query Success")
+    }
+})
 router.get("/seed/:table", (req, res) => {
     if(!seed_data(req)) {
         res.send("Query Fail")
