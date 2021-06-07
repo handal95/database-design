@@ -1,5 +1,5 @@
 import { fill_code } from "../../utils/string.js"
-import { insert_record } from "../db/insert.js"
+import { insert_seed } from "../db/insert.js"
 import { select_data } from "../db/select.js"
 
 export async function get_seats(conn, req){
@@ -42,9 +42,9 @@ export async function insert_screen_seat(conn, screen_info) {
         }
         
         for (let c = 1; c <= cols_length; c++){
-            const row_code = fill_code(`${r}`, '0', 2)
-            const col_code = fill_code(`${c}`, '0', 2)
-            const seat_uid = `${SCREEN_CODE}_S${row_code}${col_code}`
+            const row_code = fill_code(`${r}`, '0', 3)
+            const col_code = fill_code(`${c}`, '0', 3)
+            let seat_uid = seat_code_to_uid(`${SCREEN_CODE}${row_code}${col_code}`)            
 
             if(seat_category == "PRIME"){
                 if( c <= 2 || c > cols_length - 2){
@@ -53,10 +53,24 @@ export async function insert_screen_seat(conn, screen_info) {
             }
 
             let query_body = (
-                `VALUES('${seat_uid}', '${SCREEN_CODE}', '${seat_category}', '${r}', '${c}')`
+                `'${seat_uid}', '${SCREEN_CODE}', '${seat_category}', '${seat_status}', '${r}', '${c}'`
             )
-            await insert_record(conn, "SEAT", )
+            await insert_seed(conn, "SEAT", query_body)
 
         }
     }
+}
+
+// temp function
+function seat_code_to_uid(raw_code, uid){
+    let seat_uid = raw_code.replace(/_/gi, "")
+    // THEATER PREFIX
+    seat_uid = seat_uid.replace(/T/, 1)
+
+    // SCREEN CATEGORY PREFIX
+    seat_uid = seat_uid.replace(/N/, 1)
+    seat_uid = seat_uid.replace(/X/, 2)
+    seat_uid = seat_uid.replace(/I/, 3)
+
+    return seat_uid
 }
