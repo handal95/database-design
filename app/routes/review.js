@@ -5,23 +5,29 @@ import { hasSession, isAccountSession } from "../utils/sessions.js";
 
 const router = express.Router({ mergeParams: true });
 
+// 리뷰 상세내용 페이지
 router.get('/read', function(req, res)
 {
     const movie_title = req.query.movie_title;
     const review_sq = req.query.review_sq;
 
-    res.render('movieinfo/review/write', {movie_title, review_sq});
+    res.render('movieinfo/review/read', {
+        movie_title,
+        review_sq,
+    });
 })
 
 // 영화 리뷰 작성 페이지
 router.get('/write', function(req, res)
 {
+    /*
     // 회원 로그인한 상태에서만 리뷰 작성 가능
     if (!isAccountSession(req))
     {
         res.redirect('/signin');
         return;
     }
+    */
     const movie_code = req.query.movie_code;
     const movie_title = req.query.movie_title;
 

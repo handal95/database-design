@@ -21,31 +21,53 @@
             <th>상품 이름</th>
             <th>상품 유형</th>
             <th>상품 가격</th>
-            <th>
+            <th></th>
         </thead>
         <tbody id="item_table"></tbody>
     </table>
-        
+
+    <h3>장바구니</h3>
+    <table>
+        <thead>
+            <th>상품 이름</th>
+            <th>상품 가격</th>
+            <th></th>
+            <th>주문 수량</th>
+            <th></th>
+        </thead>
+        <tbody id="basket_table"></tbody>
+    </table>
+
+    <button id="goto_"></button>
     <a href="/purchase/item/check">주문 확인</a>
 
-
     <script>
+    const basket = {}; // key: item_code, value: order_quantity
+
     // 페이지가 모두 로드된 후 실행하는 부분
     $(document).ready(() => {
         // 각 id값을 받아와 변수에 저장
         const theater_select = $('#theater_select');
         const store_select = $('#store_select');
+        const item_table = $("#item_table");
+        const basket_table = $("#basket_table");
 
         init_theater_list();
 
         // 각 변수에 변화가 일어나는지 감지 (change 이벤트 감지 == addEventListener)
         // 변화가 일어나면 함수를 호출
-        theater_select.on('change', change_store_list);
+        theater_select.on('change', () => {
+            change_store_list();
+            clear_basket_table();
+        });
         store_select.on('change', change_item_table);
+
+        item_table.on('click', '.btn_select_item', add_item_basket_table);
+        basket_table.on('click', '.btn_sub_item', sub_item_in_basket);
+        basket_table.on('click', '.btn_add_item', add_item_in_basket);
 
         function clear_item_table()
         {
-            const item_table = $("#item_table");
             item_table.html('');
         }
 
@@ -84,6 +106,7 @@
             }
 
             clear_item_table();
+            clear_basket_table();
         }
 
         // 영화관, 상점 선택 후 상품 목록을 보여주는 함수
@@ -110,6 +133,93 @@
                         <td>${item.item_name}</td>
                         <td>${item.item_category}</td>
                         <td>${item.item_price}</td>
+                        <td>
+                            <button
+                                class="btn
+                                btn-sm
+                                btn-primary
+                                btn_select_item"
+                                data-id="${item.item_code}"
+                                data-name="${item.item_name}"
+                                data-price="${item.item_price}">선택
+                            </button>
+                        </td>
+                        
+                    </tr>`
+                );
+            }
+        }
+
+        function clear_basket_table()
+        {
+            basket_table.html('');
+        }
+
+        // 장바구니 내 상품 주문수량 변경
+        function update_item_quantity(item_code)
+        {
+            const target = basket_table.find(`tr[data-id=\"${item_code}\"] .order_quantity`);
+            target.text(basket[item_code]);
+        }
+
+        // 장바구니 내 상품 갯수를 빼는 함수
+        function sub_item_in_basket(event)
+        {
+            const target_item = $(event.target).parent().parent();
+            const item_code = target_item.attr("data-id");
+            // 갯수 1 감소
+            basket[item_code] = basket[item_code] - 1;
+
+            // 해당 상품을 장바구니에서 하나 뺀 후의 갯수가 1개 이상일 때 
+            if (basket[item_code])
+            {
+                update_item_quantity(item_code);
+            }
+            // 장바구니에서 하나 뺀 후 갯수가 0개라면 제외
+            else
+            {
+                delete basket[item_code];
+                target_item.remove();
+            }
+        }
+
+        // 장바구니 내 상품 갯수를 더하는 함수
+        function add_item_in_basket(event)
+        {
+            const target_item = $(event.target).parent().parent();
+            const item_code = target_item.attr("data-id");
+            basket[item_code] = basket[item_code] + 1;
+            
+            update_item_quantity(item_code);
+        }
+
+        // 상품 선택 후 담은 장바구니의 상품 목록을 갱신하는 함수
+        // 추가한 후 계속 버튼을 누르면 상품 주문갯수 증가
+        async function add_item_basket_table(event)
+        {
+            const item_code = $(event.target).attr("data-id");
+            const item_name = $(event.target).attr("data-name");
+            const item_price = $(event.target).attr("data-price");
+
+            if (basket[item_code])
+            {
+                basket[item_code] = basket[item_code] + 1;
+                update_item_quantity(item_code);
+            }
+            else 
+            {
+                basket[item_code] = 1;
+                basket_table.append(
+                    `<tr data-id="${item_code}">
+                        <td>${item_name}</td>
+                        <td>${item_price}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary btn_sub_item">-</button>
+                        </td>
+                        <td class="order_quantity">${basket[item_code]}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary btn_add_item">+</button>
+                        </td>
                     </tr>`
                 );
             }

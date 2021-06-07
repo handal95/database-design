@@ -332,8 +332,8 @@ router.post('/check/check_payment', function(req, res)
         // 회원 로그인일 경우
         if (isAccountSession(req))
         {
-            // SELECT points FROM account WHERE account_id;
             // 현재 계정의 포인트 값을 확인
+            // SELECT points FROM account WHERE account_id;
             const cur_points = 300;
             // 현재 포인트 값보다 결제금액이 크거나 같으면 true
             if (payment_price <= cur_points)

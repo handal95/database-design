@@ -51,8 +51,10 @@
         </tbody>
     </table>
 
+    <!--후기 작성 페이지로 가기-->
+    <a href="/movieinfo/review/write?movie_code=<%= movie.movie_code %>&movie_title=<%= movie.movie_title %>">리뷰 작성하기</a>
+    
     <!--후기 목록-->
-    <a href = '/movieinfo/review/write?movie_code=<%= movie.movie_code %>&movie_title=<%= movie.movie_title %>'>리뷰 작성하기</a>
     <table>
         <thead>
             <th>아이디</th>
@@ -64,7 +66,10 @@
         <% for (const review of review_list) { %>
             <tr>
                 <td><%= review.account_id %></td>
-                <td><%= review.review_title %></td>
+                <td>
+                    <a href="/movieinfo/review/read?movie_title="><%= review.review_title %></a>
+                    </a>
+                </td>
                 <td><%= review.score %></td>
                 <td></td>
             </tr>
