@@ -1,3 +1,3 @@
-export function fill_code(str){
-    return new Array(16-str.length).join('_') + str;
+export function fill_code(str, char='_', width=16){
+    return new Array(width-str.length).join(char) + str;
 }

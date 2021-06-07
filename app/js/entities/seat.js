@@ -32,7 +32,7 @@ export async function insert_screen_seat(conn, screen_info) {
     // 좌석의 유형은 위치에 의해서만 결정된다.
     // ECONOMY(앞에서 1~2번 줄) STANDARD(기본) PRIME(양 끝이 아닌 뒤에서 1~2번 줄) 
     // 초기 생성시, 상영관이 현재 영업중이라면 이용 가능, 그 외 이용 불가
-    const SEAT_STATUS = (screen_info == "OPENED") ? "AVAILABLE" : "UNAVAILABLE"
+    const seat_status = (screen_info == "OPENED") ? "AVAILABLE" : "UNAVAILABLE"
     for(let r = 1; r <= rows_length; r++){
         let seat_category = "STANDARD"
         if( r <= 2 ) {
@@ -42,9 +42,9 @@ export async function insert_screen_seat(conn, screen_info) {
         }
         
         for (let c = 1; c <= cols_length; c++){
-            const row_code = fill_code(r.toString(), '0', 3)
-            const col_code = fill_code(c.toString(), '0', 3)
-            const seat_uid = `${SCREEN_CODE}_${row_code}${col_code}`
+            const row_code = fill_code(`${r}`, '0', 3)
+            const col_code = fill_code(`${c}`, '0', 3)
+            let seat_uid = seat_code_to_uid(`${SCREEN_CODE}${row_code}${col_code}`)            
 
             if(seat_category == "PRIME"){
                 if( c <= 2 || c > cols_length - 2){
@@ -53,10 +53,24 @@ export async function insert_screen_seat(conn, screen_info) {
             }
 
             let query_body = (
-                `'${seat_uid}', '${SCREEN_CODE}', '${seat_category}', '${SEAT_STATUS}', ${r}, ${c}`
+                `'${seat_uid}', '${SCREEN_CODE}', '${seat_category}', '${seat_status}', '${r}', '${c}'`
             )
             await insert_seed(conn, "SEAT", query_body)
 
         }
     }
+}
+
+// temp function
+function seat_code_to_uid(raw_code, uid){
+    let seat_uid = raw_code.replace(/_/gi, "")
+    // THEATER PREFIX
+    seat_uid = seat_uid.replace(/T/, 1)
+
+    // SCREEN CATEGORY PREFIX
+    seat_uid = seat_uid.replace(/N/, 1)
+    seat_uid = seat_uid.replace(/X/, 2)
+    seat_uid = seat_uid.replace(/I/, 3)
+
+    return seat_uid
 }

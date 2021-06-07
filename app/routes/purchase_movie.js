@@ -8,6 +8,27 @@ import { hasSession } from "../js/process/session.js"
 import { theater_fetch_process } from "../js/process/ticket.js"
 
 const router = express.Router({ mergeParams: true });
+let theater_list = [
+    {
+        theater_code: "theater_code",
+        theater_name: "theater_name",
+    },
+    {
+        theater_code: "theater_code1",
+        theater_name: "theater_name2",
+    },
+]
+
+let movie_list = [
+    {
+        movie_code: "movie_code",
+        movie_title: "movie_title",
+    },
+    {
+        movie_code: "movie_code1",
+        movie_title: "movie_title1",
+    },
+]
 
 const URL_SELECT = "/select"
 

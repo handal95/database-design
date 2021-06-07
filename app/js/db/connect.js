@@ -22,7 +22,7 @@ export function printQueryError(err, query){
         `     - ${err.message}`
     )
 }
-// T004045_I00001_S0504
+
 export async function doDBRelease(conn){
     try { 
         conn.release()
