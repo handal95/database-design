@@ -18,7 +18,8 @@ export async function fetch_filter_movie_session(req) {
 
         data = []
         for(let i = 0; i < movie_sessions.length; i++){
-            req.params.screen_code = movie_sessions[i].SCREEN_CODE,
+            req.params.session_uid = movie_sessions[i].SESSION_UID
+            req.params.screen_code = movie_sessions[i].SCREEN_CODE
             req.params.movie_code = movie_sessions[i].MOVIE_CODE
             req.params.session_datetime = movie_sessions[i].SESSION_DATETIME
             const screen_info = await get_screen_info_by_code(conn, req)
@@ -30,6 +31,7 @@ export async function fetch_filter_movie_session(req) {
             req.params.movie_title = movie_info[0].MOVIE_TITLE
             
             let session = {
+                session_uid: req.params.session_uid,
                 theater_code: req.params.theater_code,
                 theater_name: req.params.theater_name,
                 screen_name: req.params.screen_name,

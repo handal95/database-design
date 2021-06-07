@@ -12,9 +12,17 @@ export async function get_seat_amount(conn, req){
 }
 
 
-
 export async function get_screen_info_by_code(conn, req){
     let query = `SELECT theater_code, screen_name FROM screen WHERE screen_code = '${req.params.screen_code}'`
+
+    let result = await select_query(conn, query)
+    let data = result.data
+
+    return data
+}
+
+export async function get_seat_amount_by_screen_code(conn, req){
+    let query = `SELECT seat_amount FROM screen WHERE screen_code = '${req.params.screen_code}'`
 
     let result = await select_query(conn, query)
     let data = result.data

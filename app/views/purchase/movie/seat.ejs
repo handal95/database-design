@@ -23,17 +23,16 @@
         // 좌석 클래스 구분해서 보여주기
 
         const screen_seat = [];
-
-        for (let row = 0; row < max_row_num; row++) {
+        for (let row = 0; row <= max_row_num; row++){
             screen_seat.push([]);
-            for (let col = 0; col < max_col_num; col++) {
+            for(let col = 0; col <= max_col_num; col++){
                 screen_seat[row].push(null);
             }
         }
 
         seat_list.forEach(seat => {
-            const { seat_row, seat_col } = seat;
-            screen_seat[seat_row][seat_col] = seat;
+            const { SEAT_ROW, SEAT_COL } = seat;
+            screen_seat[SEAT_ROW - 1][SEAT_COL - 1] = seat;
         });
 
         %>
@@ -43,7 +42,7 @@
                 <!-- 좌석의 열 인덱스 표시 -->
                 <tr></tr>
                     <th></th>
-                    <% for (let col = 0; col < max_col_num; col++) { %>
+                    <% for (let col = 1; col <= max_col_num; col++) { %>
                         <th><%= col %></th>
                     <% } %>
                 </tr>
@@ -54,7 +53,7 @@
                     <tr>
                     <% const alphabet = String.fromCharCode(65 + row); %>
                         <th><%= alphabet %></th>
-                        <% for (let col = 0; col < max_col_num; col++) { %>
+                        <% for (let col = 0; col <= max_col_num; col++) { %>
                             <td>
                                 <% if (screen_seat[row][col]) { %>
                                     <% const is_reserved = !screen_seat[row][col].reserve_status; %>
