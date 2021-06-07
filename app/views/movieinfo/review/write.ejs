@@ -2,64 +2,65 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '리뷰 작성'}) %>
 <body>
-    <h1>후기 작성</h1>
-    <table>
-        <tbody>
-            <tr>
-                <td>제목</td>
-                <td><input type="text" name="new_review_title" id="new_review_title"></td>
-            </tr>
-            <tr>
-                <td>점수</td>
-                <td><input type="range" value="0" min="0" max="10" step="0.5" name="review_score" id="review_score"onchange='range_change(this)'></td>
-                <td><span id='review_score_show'></span></td>
-            </tr>
-            <script>
-                function range_change(obj) {
-                  document.getElementById('review_score_show').innerHTML=obj.value;
-                }
-            </script>
-            <tr>
-                <td>리뷰</td>
-                <td><input type="text" name="new_review_text", id="new_review_text"></td>
-                <td><button id="btn_add_review">등록</button></td>
-            </tr>
-        </tbody>
-    </table>
-    <button id="btn_add_review">게시</button>
+    <h1><%= movie_title %></h1>
 
+    제목<br><input type="text" name="review_title" id="review_title">
+    리뷰<br>
+    <input type="text" name="comment", id="comment">
+    점수<br>
+    <input
+        type="range"
+        value="0"
+        min="0"
+        max="10"
+        step="0.5"
+        name="review_score"
+        id="review_score"
+        onchange='range_change(this)'>
+    <span id='score'></span>
+    <button id="btn_register">등록</button>
     <script>
-        const btn_add_review = $("#btn_add_review");
-        const movie_code = <%= movie.movie_code %>;
-        const account_id = "account_id";
-        const new_review_title = findId('new_review_title');
-        const new_comment = findId('new_review_text');
-        const score = findId('review_score_show');
+    const movie_code = <%= movie_code %>;
+    const review_title = findId("review_title");
+    const comment = findId("comment");
+    const score = findId("score");
+    const btn_register = findId("btn_register");
 
-        btn_add_review.addEventListener('click', function()
+    btn_register.addEventListener('click', register);
+
+    // 현재 리뷰 평점 스크롤 바의 점수를 보여주는 함수
+    function range_change(obj)
+    {
+        findId('score').innerHTML=obj.value;
+    }
+
+    // 리뷰 등록 버튼
+    function register()
+    {
+        const data = {
+            movie_code,
+            review_title,
+            comment,
+            score,
+        };
+        const response_data = await requestPostAPI('/movieinfo/movie/review/write/register', data);
+        
+        if (response_data.data.result == true)
         {
-            const data = {
-                movie_code: movie_code.value,
-                account_id: account_id.value,
-                new_review_title: new_review_title.value
-                new_comment: new_comment.value,
-                score: score.value,
+            alert('리뷰 등록 성공');
+            // 필요한 정보를 string으로 변환 후 다음 페이지 요청
+            const href = '/movieinfo/movie';
+            const queryParams = {
+                movie_code
             };
-            requestPostAPI('/movieinfo/movie', data)
-            .then(function (response)
-            {
-                if (response.data.result == true)
-                {
-                    alert('리뷰 등록 성공');
-                    window.location.href = '/movieinfo/movie';
-                }
-                else
-                {
-                    alert('리뷰 등록 실패');
-                }
-            });
-        });
+            const queryString = Object.entries(queryParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+            window.location.href = `${href}?${queryString}`;
+        }
+        else
+        {
+            alert('리뷰 등록 실패');
+        }
+    }
     </script>
-
 </body>
 </html>

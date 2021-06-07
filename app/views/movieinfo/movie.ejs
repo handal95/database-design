@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../_component/head.ejs', {titleName: '메인'}) %>
+<%- include('../_component/head.ejs', {titleName: movie.movie_title}) %>
 <body>
     <!--메인 화면-->
     <%- include('../_component/goto_main.ejs') %>
@@ -52,6 +52,7 @@
     </table>
 
     <!--후기 목록-->
+    <a href = '/movieinfo/review/write?movie_code=<%= movie.movie_code %>&movie_title=<%= movie.movie_title %>'>리뷰 작성하기</a>
     <table>
         <thead>
             <th>아이디</th>

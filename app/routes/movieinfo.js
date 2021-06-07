@@ -12,7 +12,7 @@ SELECT review_sq, account_id, review_title, score FROM review WHERE movie_code="
 // 영화 정보 페이지
 router.get('/movie', function(req, res)
 {
-    const crew_code = req.query.crew_code;
+    const movie_code = req.query.movie_code;
 
     /*
     // 영화 정보 검색
@@ -30,7 +30,7 @@ router.get('/movie', function(req, res)
     // 영화 장르 검색
     SELECT genre_name
     FROM genre
-    WHERE movie_code="search_movie_code";
+    WHERE movie_code="movie_code";
     */
 
     const movie = {
@@ -63,7 +63,7 @@ router.get('/movie', function(req, res)
     // 영화 참여자 검색
     SELECT crew_code, main_role, sub_role
     FROM contributor
-    WHERE movie_code="search_movie_code";
+    WHERE movie_code="movie_code";
     */
     const contributor_list = [
         {
@@ -125,76 +125,6 @@ router.get('/movie', function(req, res)
     res.render('movieinfo/movie', {movie, contributor_list, review_list});
 });
 
-// 영화 정보 리뷰목록
-router.post('/movie/review', function(req, res)
-{
-
-    const keyword = req.body.keyword;
-    
-    /*
-        SELECT movie_title
-        FROM movie
-        WHERE movie_title LIKE "(keyword)%"
-        OR movie_title_eng LIKE "(keyword)%"
-    */
-
-    const search_list = [
-        {
-            movie_title: "movie1",
-        },
-        {
-            movie_title: "movie2",
-        },
-    ]
-
-    res.json({
-        search_list,
-    });
-});
-
-// 영화 리뷰 작성 페이지
-router.get('/movie/review/write', function(req, res)
-{
-    // 회원 로그인한 상태에서만 리뷰 작성 가능
-    if (!isAccountSession(req))
-    {
-        alert("로그인해야 리뷰작성을 할 수 있습니다.");
-        res.redirect('/signin');
-        return;
-    }
-
-    res.render('movieinfo/movie/review/write', {movie_code,});
-});
-
-// 영화 리뷰 작성 페이지 리뷰 게시
-router.post('/movie/review/write', function(req, res)
-{
-    // 회원 로그인한 상태에서만 리뷰 작성 가능
-    if (!isAccountSession(req))
-    {
-        alert("로그인해야 리뷰작성을 할 수 있습니다.");
-        res.redirect('/signin');
-        return;
-    }
-    
-    const account_id = req.session.account_id;
-
-    /*
-    INSERT INTO review VALUES(
-        "movie_code",
-        "review_sq?",
-        "account_id",
-        "review_title",
-        "comment",
-        "score"
-    );
-    */
-
-    const movie_code = req.query.movie_code;
-
-    res.render('movieinfo/movie', {movie_code,});
-});
-
 // 영화인 정보 페이지
 router.get('/crew', function(req, res)
 {
@@ -243,8 +173,6 @@ router.get('/crew', function(req, res)
         filmography_list
     });
 });
-
-
 
 // 영화 정보 검색
 router.post('/movie/search', function(req, res)
