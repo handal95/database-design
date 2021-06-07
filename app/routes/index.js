@@ -3,11 +3,8 @@ import { destorySession, hasSession } from "../js/process/session.js"
 import { db_router } from "./db.js"
 import express from "express"
 import { router as movieinfo_router } from "./movieinfo.js"
-<<<<<<< HEAD
 import { router as review_router } from "./review.js"
 import { router as purchase_movie_router } from "./purchase_movie.js"
-=======
->>>>>>> 80ce53b2afc4a2a2c1b5adee0b776874e4679764
 import { router as purchase_item_router } from "./purchase_item.js"
 import { router as purchase_movie_router } from "./purchase_movie.js"
 import { user_router } from "./user.js"
