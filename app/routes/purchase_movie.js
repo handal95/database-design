@@ -60,9 +60,8 @@ router.get('/seat', async (req, res) => {
     const seat_amount = req.params.seat_amount
     const max_row_num = (seat_amount % 9 == 0) ? 9 : 5
     const max_col_num = seat_amount / max_row_num
-    const seat_list = req.params.seats
-    
-    console.log(seat_list)
+    const seat_list = req.params.seat_list
+
     res.render('purchase/movie/seat', {
         session_uid,
         screen_code,
@@ -72,43 +71,12 @@ router.get('/seat', async (req, res) => {
     });
 });
 
-// 영화예매(좌석 선택) 페이지
-router.post('/seat/get_seat', (req, res) => {
-    const screen_code = req.query.screen_code;
-
-    /*
-    SELECT S.seat_uid, S.seat_row, S.seat_col, S.seat_category, S.seat_status, R.reserve_status
-    FROM seat S, reserve R
-    WHERE S.seat_uid = R.seat_uid
-    AND screen_code = "screen_code";
-    */
-   
-    const seat_list = [
-        {
-            seat_uid: "222",
-            seat_row: 1,
-            seat_col: 2,
-            seat_category: "prime",
-            seat_status: true,
-            reserve_status: "예약 중"
-        },
-        {
-            seat_uid: "223",
-            seat_row: 0,
-            seat_col: 1,
-            seat_category: "prime",
-            seat_status: true,
-            reserve_status: null
-        },
-    ];
-
-    res.json({
-        seat_list,
-    });
-});
-
 // 영화예매 확인 페이지
 router.get('/check', (req, res) => {
+
+    console.log("BODY", req.body)
+    console.log("PARAMS", req.params)
+    console.log("QUERY", req.query)
     const session_uid = req.query.session_uid;
     const adult_no = req.query.adult_no;
     const child_no = req.query.child_no;

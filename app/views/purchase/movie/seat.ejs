@@ -31,8 +31,8 @@
         }
 
         seat_list.forEach(seat => {
-            const { SEAT_ROW, SEAT_COL } = seat;
-            screen_seat[SEAT_ROW - 1][SEAT_COL - 1] = seat;
+            const { seat_row, seat_col } = seat;
+            screen_seat[seat_row - 1][seat_col - 1] = seat;
         });
 
         %>
@@ -114,19 +114,6 @@
 
         clear_checkbox();
         show_num();
-
-        // TODO: edit
-        async function get_screen_shape()
-        {
-            const screen_col_index = $("#screen_col_index");
-
-            // 좌석 구조, 좌석 예약 정보 데이터 받기
-            const seat_data = {
-                screen_code
-            };
-            const seat_response_data = await requestPostAPI('/purchase/item/select/get_seat', seat_data);
-            const seat_list = response_data.data.seat_list;
-        }
 
         // 페이지 새로고침 후 모든 checkbox에 checked를 없애는 함수
         function clear_checkbox() {
@@ -219,5 +206,5 @@
         }
     });
     </script>
-</body>
+</body>`
 </html>
