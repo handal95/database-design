@@ -1,44 +1,45 @@
 import { doDBRelease, getDBConnect } from "../db/connect.js"
-import { get_sessioning_movie, get_sessioning_theater } from "../entities/movie_session.js"
 
-export async function fetch_disticnt_theater_info(req) {
+import { get_movie_title_by_code } from "../entities/movie.js"
+import { get_screen_info_by_code } from "../entities/screen.js"
+import { get_sessioning_movies } from "../entities/movie_session.js"
+import { get_theater_name } from "../entities/theater.js"
+
+export async function fetch_filter_movie_session(req) {
     let is_success = false
-
+    
     const conn = await getDBConnect()
+    let data = []
     try{
-        // 영화 상영 정보 호출
-        await get_distinct_theater_info(conn, req)
-        console.log("(session) : THEATER CHECK")
-        
-        is_success = true
-    }
-    catch(err) {
-        console.log("(session) : Process is failed by ", err)
-    } finally {
-        await doDBRelease(conn)
-    }
-
-    return is_success
-}
-
-
-export async function fetch_movie_session_info(req) {
-    let is_success = false
-
-    const conn = await getDBConnect()
-    try{
-        // 상영중인 영화관 정보 호출
-        const theaters = await get_sessioning_theater(conn, req)
-        console.log("(movie_session) : DISTINCT THEATER CHECK")
-        
+        req.params.theater_code = req.body.theater_code
         // 상영중인 영화 정보 호출
-        const movies = await get_sessioning_movie(conn, req)
+        let movie_sessions = await get_sessioning_movies(conn, req)
         console.log("(movie_session) : DISTINCT MOVIE CHECK")
-        
-        req.params = {
-            theaters: theaters,
-            movies: movies,
+
+        data = []
+        for(let i = 0; i < movie_sessions.length; i++){
+            req.params.screen_code = movie_sessions[i].SCREEN_CODE,
+            req.params.movie_code = movie_sessions[i].MOVIE_CODE
+            req.params.session_datetime = movie_sessions[i].SESSION_DATETIME
+            const screen_info = await get_screen_info_by_code(conn, req)
+            req.params.theater_code = screen_info[0].THEATER_CODE
+            req.params.screen_name = screen_info[0].SCREEN_NAME
+            const theater_info = await get_theater_name(conn, req)
+            req.params.theater_name = theater_info[0].THEATER_NAME
+            const movie_info = await get_movie_title_by_code(conn, req)
+            req.params.movie_title = movie_info[0].MOVIE_TITLE
+            
+            let session = {
+                theater_code: req.params.theater_code,
+                theater_name: req.params.theater_name,
+                screen_name: req.params.screen_name,
+                movie_title: req.params.movie_title,
+                session_datetime : req.params.session_datetime // < by direct
+            }
+            data.push(session)
         }
+
+        req.params.movie_sessions = data
 
         is_success = true
     }

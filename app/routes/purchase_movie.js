@@ -3,9 +3,9 @@
 import { isAccountSession, isCustomerSession } from "../utils/sessions.js";
 
 import express from "express";
-import { fetch_movie_session_info } from "../js/process/movie_session.js"
+import { fetch_filter_movie_session } from "../js/process/movie_session.js"
+import { fetch_sessioning_theater } from "../js/process/theater.js"
 import { hasSession } from "../js/process/session.js"
-import { theater_fetch_process } from "../js/process/ticket.js"
 
 const router = express.Router({ mergeParams: true });
 let theater_list = [
@@ -51,30 +51,21 @@ router.get(URL_SELECT, (req, res) => {
 
 // 상영일정 선택 페이지 영화관 리스트 초기화
 router.post(`${URL_SELECT}/init_movie_session`, async (req, res) => {
-    req.body.session_date = '2021-06-08'
-    console.log(req.body)
-    await theater_fetch_process(req)
+    await fetch_sessioning_theater(req)
     res.json({
-        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
-        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
+        theaters: req.params.theaters
     });
-    
 });
 
 // 상영일정 선택 페이지 상영일정 필터링
 // INIT_MOVIE_SESSION 과 동일함
 router.post(`${URL_SELECT}/filter_session`, async (req, res) => {
-    const session_date = req.body.session_date;
-    const theater_code = req.body.theater_code;
-    const movie_code = req.body.movie_code;
-
     // do something
-    await fetch_movie_session_info(req)
+    await fetch_filter_movie_session(req)
 
     res.json({
-        sessions: req.params.sessions,
+        sessions: req.params.movie_sessions,
     })
-    console.log(req.params)
 });
 
 
