@@ -2,8 +2,9 @@ import db_config from "../../configs/db_config.js"
 import oracle from "oracledb"
 
 export async function getDBConnect(){
+    var DB_CONNECT
     try { 
-        const DB_CONNECT = await oracle.getConnection(db_config)
+        DB_CONNECT = await oracle.getConnection(db_config)
         return DB_CONNECT
     } catch (err) {
         console.error("DB CONNECTION ERROR")
