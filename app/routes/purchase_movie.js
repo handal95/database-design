@@ -3,6 +3,7 @@
 import { isAccountSession, isCustomerSession } from "../utils/sessions.js";
 
 import express from "express";
+import { fetch_movie_session_info } from "../js/process/movie_session.js"
 import { hasSession } from "../js/process/session.js"
 import { theater_fetch_process } from "../js/process/ticket.js"
 
@@ -47,8 +48,11 @@ router.get(URL_SELECT, (req, res) => {
     }
 });
 
+
 // 상영일정 선택 페이지 영화관 리스트 초기화
 router.post(`${URL_SELECT}/init_theater`, async (req, res) => {
+    req.body.session_date = '2021-06-08'
+    console.log(req.body)
     await theater_fetch_process(req)
     res.json(req.params.theaters);
 });
@@ -85,13 +89,13 @@ router.post('/select/change_movie_list', (req, res) => {
 });
 
 // 상영일정 선택 페이지 상영일정 필터링
-router.post('/select/filter_session', (req, res) => {
+router.post('/select/filter_session', async (req, res) => {
     const session_date = req.body.session_date || null;
     const theater_code = req.body.theater_code || null;
     const movie_code = req.body.movie_code || null;
 
+    await fetch_movie_session_info(req)
     // SELECT FROM WHERE;
-
     const session_list = [
         {
             session_uid: "654654",
