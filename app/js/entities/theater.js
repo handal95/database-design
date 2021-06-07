@@ -20,3 +20,14 @@ export async function get_theater_info(conn, req){
 
     return data
 }
+
+
+export async function get_theater_name(conn, req){
+    let query_body = `WHERE theater_code = '${req.params.theater_code}'`
+    let columns = "theater_name"
+
+    let result = await select_data(conn, "THEATER", query_body, columns)
+    let data = result.data
+
+    return data
+}
