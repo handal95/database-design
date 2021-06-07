@@ -1,6 +1,19 @@
 import { fill_code } from "../../utils/string.js"
 import { insert_seed } from "../db/insert.js"
 import { select_data } from "../db/select.js"
+import { select_query } from "../db/select.js"
+
+export async function get_seats_by_screen_code(conn, req){
+    let query = (
+        `SELECT * FROM seat WHERE screen_code = '${req.params.screen_code}'`
+    )
+
+    let result = await select_query(conn, query)
+    let data = result.data
+
+    return data        
+}
+
 
 export async function get_seats(conn, req){
     let query_body = ''
@@ -32,7 +45,7 @@ export async function insert_screen_seat(conn, screen_info) {
     // 좌석의 유형은 위치에 의해서만 결정된다.
     // ECONOMY(앞에서 1~2번 줄) STANDARD(기본) PRIME(양 끝이 아닌 뒤에서 1~2번 줄) 
     // 초기 생성시, 상영관이 현재 영업중이라면 이용 가능, 그 외 이용 불가
-    const seat_status = (screen_info == "OPENED") ? "AVAILABLE" : "UNAVAILABLE"
+    const seat_status = (screen_info.SCREEN_BUSINESS_STATUS == "OPENED") ? "AVAILABLE" : "UNAVAILABLE"
     for(let r = 1; r <= rows_length; r++){
         let seat_category = "STANDARD"
         if( r <= 2 ) {

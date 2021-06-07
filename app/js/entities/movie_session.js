@@ -31,69 +31,27 @@ export async function get_sessioning_theaters(conn, req){
 
 export async function get_sessioning_movies(conn, req){
     let subquery = ''
-    console.log(req.params)
     if(req.params.theater_code != null){
-        console.log("BAMMM", req.params.theater_code)
         subquery = `AND MS.screen_code IN (SELECT S.screen_code FROM screen S WHERE S.theater_code = '${req.params.theater_code}')`
     }
     
     let query = (
-        `SELECT MS.screen_code, MS.movie_code, MS.session_datetime FROM movie_session MS ` +
+        `SELECT MS.session_uid, MS.screen_code, MS.movie_code, MS.session_datetime FROM movie_session MS ` +
             `WHERE TO_CHAR(session_datetime, 'YYYY-MM-DD') = '${req.body.session_date}' ${subquery}`
     )
-    console.log(query)
-
     let result = await select_query(conn, query)
     let data = result.data
 
     return data        
 }
 
-////////
-
-
-
-
-export async function get_sessioning_screen(conn, req){
+export async function get_screen_by_session_uid(conn, req){
     let query = (
-        `SELECT DISTINCT S.theater_code FROM screen S ` +
-            `WHERE S.screen_code IN (SELECT DISINCT MS.)`
-    )
-}
-
-export async function get_sessioning_theater(conn, req){
-    let query = (
-        `SELECT T.theater_code, T.theater_name, S.theater_code FROM theater T ` +
-        `WHERE T.theater_code IN (SELECT DISTINCT S.theater_code FROM screen S ` + 
-            `WHERE S.screen_code IN (SELECT DISTINCT MS.screen_code FROM movie_session MS ` + 
-                `WHERE TO_CHAR(session_datetime, 'YYYY-MM-DD') = '${req.body.session_date}') ` + 
-                    query_filter('theater_code', req.body.theater_code) +
-            `)`
-    )
-
-    let result = await select_query(conn, query)
-    console.log(result)
-    // let data = result.data
-
-    return data
-}
-
-export async function get_sessioning_movie(conn, req){
-    let subquery = ''
-    if(req.body.theater_code) {
-        subquery = `AND MS.screen_code IN (SELECT S.screen_code FROM screen S WHERE S.theater_code = '${req.body.theater_code}')`
-    }
-    let query = (
-        `SELECT M.movie_code, M.movie_title FROM movie M ` +
-        `WHERE M.movie_code IN (SELECT DISTINCT MS.movie_code FROM movie_session MS ` + 
-            `WHERE TO_CHAR(session_datetime, 'YYYY-MM-DD') = '${req.body.session_date}' ` +
-            subquery +
-        `)` 
+        `SELECT screen_code FROM movie_session WHERE session_uid = '${req.params.movie_session_uid}'`
     )
 
     let result = await select_query(conn, query)
     let data = result.data
 
-    // console.log(data)
     return data
 }

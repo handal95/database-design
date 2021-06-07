@@ -4,6 +4,7 @@ import { isAccountSession, isCustomerSession } from "../utils/sessions.js";
 
 import express from "express";
 import { fetch_filter_movie_session } from "../js/process/movie_session.js"
+import { fetch_seats_process } from "../js/process/seat.js"
 import { fetch_sessioning_theater } from "../js/process/theater.js"
 import { hasSession } from "../js/process/session.js"
 
@@ -70,71 +71,19 @@ router.post(`${URL_SELECT}/filter_session`, async (req, res) => {
 
 
 // 영화예매(좌석 선택) 페이지
-router.get('/seat', (req, res) => {
-    const session_uid = req.query.session_uid;
+router.get('/seat', async (req, res) => {
+    req.params.movie_session_uid = req.query.session_uid;
+    req.body.movie_session_uid = req.query.session_uid;
+    await fetch_seats_process(req)
+
+    const session_uid = req.body.movie_session_uid 
+    const screen_code = req.params.screen_code 
+    const seat_amount = req.params.seat_amount
+    const max_row_num = (seat_amount % 9 == 0) ? 9 : 5
+    const max_col_num = seat_amount / max_row_num
+    const seat_list = req.params.seats
     
-    /*
-    SELECT screen_code
-    FROM movie_session
-    WHERE session_uid = "session_uid";
-    */
-
-    // find max_row and max_col freom screen_code
-
-    const screen_code = "screen_code";
-    const max_row_num = 3;
-    const max_col_num = 3;
-    const reserve_status_enum = {
-        AVAILABLE: true,
-        NOTAVAILABLE: false,
-        PROCESSING: false,
-        RESERVED: false,
-    };
-
-    const seat_list = [
-        {
-            seat_uid: "222",
-            seat_row: 0,
-            seat_col: 1,
-            seat_category: "prime",
-            seat_status: true,
-            reserve_status: reserve_status_enum.PROCESSING
-        },
-        {
-            seat_uid: "223",
-            seat_row: 0,
-            seat_col: 2,
-            seat_category: "prime",
-            seat_status: false,
-            reserve_status: reserve_status_enum.NOTAVAILABLE
-        },
-        {
-            seat_uid: "224",
-            seat_row: 1,
-            seat_col: 0,
-            seat_category: "prime",
-            seat_status: true,
-            reserve_status: reserve_status_enum.AVAILABLE
-        },
-        {
-            seat_uid: "225",
-            seat_row: 1,
-            seat_col: 1,
-            seat_category: "prime",
-            seat_status: true,
-            reserve_status: reserve_status_enum.AVAILABLE
-        },
-        {
-            seat_uid: "226",
-            seat_row: 2,
-            seat_col: 2,
-            seat_category: "prime",
-            seat_status: true,
-            reserve_status: reserve_status_enum.AVAILABLE
-        },
-
-    ];
-
+    console.log(seat_list)
     res.render('purchase/movie/seat', {
         session_uid,
         screen_code,
