@@ -14,12 +14,12 @@
     <script>
         const btn_signin = findID('btn_admin_signin');
         const input_id = findID('input_admin_id');
-        const input_pw = findID('input_admin_pw');
+        const input_pwdkey = findID('input_admin_pw');
 
         btn_signin.addEventListener('click', function(){
             const data = {
-                id: input_id.value,
-                pw: input_pw.value,
+                account_id: input_id.value,
+                pwdkey: input_pwdkey.value,
             };
             requestPostAPI('/admin/signin', data)
             .then(function (response) {

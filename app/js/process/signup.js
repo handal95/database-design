@@ -13,7 +13,7 @@ export async function signup_process(req) {
         
         // 고객 정보 등록
         console.log(">> SUBPROCESS")
-        const raw_code = req.body.id
+        const raw_code = req.body.account_id
         const result = await signup_process_customer(req, raw_code)
         if(!result){
             await delete_customer(conn, req)
