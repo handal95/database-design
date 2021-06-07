@@ -3,9 +3,8 @@ session_uid NUMBER(16, 0) NOT NULL
 
 screen_code VARCHAR(16) NOT NULL,
 movie_code VARCHAR(16) NOT NULL,
-session_date DATE,
-session_round NUMBER(2, 0),
-session_datetime DATE,
+session_datetime TIMESTAMP,
+session_round NUMBER(2, 0) DEFAULT 1,
 
 CONSTRAINT MOVIE_SESSION_PK
     PRIMARY KEY(session_uid),
