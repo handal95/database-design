@@ -73,7 +73,7 @@
 
         // 페이지 초반 로드 시 영화관 선택 목록을 만들기 위한 함수
         async function init_theater_list() {
-            const response_data = await requestPostAPI('/purchase/movie/select/init_theater')
+            const response_data = await requestPostAPI('/purchase/movie/select/init_movie_session')
             const theater_list = response_data.data;
 
             // 리스트 값을 받아서 option 내용을 바꿈

@@ -50,7 +50,7 @@ router.get(URL_SELECT, (req, res) => {
 
 
 // 상영일정 선택 페이지 영화관 리스트 초기화
-router.post(`${URL_SELECT}/init_theater`, async (req, res) => {
+router.post(`${URL_SELECT}/init_movie_session`, async (req, res) => {
     req.body.session_date = '2021-06-08'
     console.log(req.body)
     await theater_fetch_process(req)
