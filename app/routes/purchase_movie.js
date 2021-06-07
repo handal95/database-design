@@ -59,66 +59,45 @@ router.post(`${URL_SELECT}/init_movie_session`, async (req, res) => {
     
 });
 
+// 상영일정 선택 페이지 상영일정 필터링
+// INIT_MOVIE_SESSION 과 동일함
+router.post(`${URL_SELECT}/filter_session`, async (req, res) => {
+    req.body.session_date = (req.body.session_date == null) ? '2021-06-08' : req.body.session_date
+    await fetch_movie_session_info(req)
+
+    console.log(req.params)
+    res.json({
+        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
+        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
+    });
+});
+
 // 상영일정 선택 페이지 날짜 변경
-router.post('/select/change_theater_list', (req, res) => {
-    const session_date = req.body.session_date;
+// INIT_MOVIE_SESSION 과 동일함
+router.post(`${URL_SELECT}/change_theater_list`, async (req, res) => {
+    req.body.session_date = (req.body.session_date == null) ? '2021-06-08' : req.body.session_date
+    await fetch_movie_session_info(req)
 
-    /*
-        SELECT M.movie_title, S.movie_code
-        FROM movie M, movie_session S
-        WHERE M.movie_code = S.movie_code
-        AND session_date = "session_date";
-    */
-
-    res.json({ theater_list: theater_list });
+    console.log(req.params)
+    res.json({
+        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
+        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
+    });
 });
 
 
 // 상영일정 선택 페이지 영화를 기준으로 영화관 목록 바꾸기
-router.post('/select/change_movie_list', (req, res) => {
-    const date = req.body.session_date;
-    const theater_code = req.body.movie_code;
-
-    /*
-    쿼리문 망할
-        SELECT theater_code FROM theater_code WHERE 
-        SELECT screen_code FROM screen WHERE screen_code = (
-            SELECT screen_code FROM movie_session WHERE movie_code = "movie_code";
-    )
-    */ 
-
-    res.json({ movie_list });
-});
-
-// 상영일정 선택 페이지 상영일정 필터링
-router.post('/select/filter_session', async (req, res) => {
-    const session_date = req.body.session_date || null;
-    const theater_code = req.body.theater_code || null;
-    const movie_code = req.body.movie_code || null;
-
+router.post(`${URL_SELECT}/change_movie_list`, async (req, res) => {
+    req.body.session_date = (req.body.session_date == null) ? '2021-06-08' : req.body.session_date
     await fetch_movie_session_info(req)
-    // SELECT FROM WHERE;
-    const session_list = [
-        {
-            session_uid: "654654",
-            theater_name: "청량리 롯데시네마",
-            screen_name: "session1",
-            movie_title: "분노의 질주",
-            session_datetime: "12:35",
-        },
-        {
-            session_uid: "654654",
-            theater_name: "청량리 롯데시네마",
-            screen_name: "session2",
-            movie_title: "귀멸의 칼날",
-            session_datetime: "14:50",
-        }
-    ]
 
+    console.log(req.params)
     res.json({
-        session_list,
+        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
+        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
     });
 });
+
 
 // 영화예매(좌석 선택) 페이지
 router.get('/seat', (req, res) => {

@@ -150,7 +150,7 @@
 
             // do request
             const response_data = await requestPostAPI('/purchase/movie/select/init_movie_session', data)
-            const theater_list = response_data.data.theater_list;
+            const theater_list = response_data.data.theaters;
 
             // 영화관 선택 목록 변경
             clear_theater_select();
@@ -172,7 +172,7 @@
 
             // do request
             const response_data = await requestPostAPI('/purchase/movie/select/init_movie_session', data)
-            const movie_list = response_data.data.movie_list;
+            const movie_list = response_data.data.movies;
 
             // 영화 선택 목록 변경
             clear_movie_select();

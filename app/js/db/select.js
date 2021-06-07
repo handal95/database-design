@@ -116,15 +116,8 @@ export async function select_query(conn, query){
             return data
         }
         
-        // 결과가 여러 개 있을 때
-        if(force && result.rows.length > 1){
-            console.log(`Query(${query}) RESULT IS NOT ONLY ONE`)
-
-            return data
-        }
-
         data = {
-            data: result.rows[0],
+            data: result.rows,
             length: result.rows.length,
             existence: result.rows.length > 0,
             uniqueness: (result.rows.length == 0)
