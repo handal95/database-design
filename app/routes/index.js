@@ -2,15 +2,17 @@ import { db_router } from "./db.js"
 import express from "express"
 import { user_router } from "./user.js"
 import { router as movieinfo_router } from "./movieinfo.js"
-import { router as purchase_router } from "./purchase.js"
+import { router as purchase_movie_router } from "./purchase_movie.js"
+import { router as purchase_item_router } from "./purchase_item.js"
 
 import { hasSession, destorySession } from "../utils/sessions.js"
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true });
 
 router.use("/db", db_router)
 router.use("/movieinfo", movieinfo_router)
-router.use("/purchase", purchase_router)
+router.use("/purchase/movie", purchase_movie_router)
+router.use("/purchase/item", purchase_item_router)
 router.use("/", user_router)
 
 // link page
@@ -51,12 +53,12 @@ router.get(URL_HOME + "logout", (req, res) => {
 
 // TODO : CHECK
 router.post(URL_HOME, function(req, res) {
-    const search_keyword = req.body.search_keyword;
+    const keyword = req.body.keyword;
     // query(search)
     res.json({
         message:'success'
     });
-    console.log(`search : ${search_keyword}`);
+    console.log(`search : ${keyword}`);
 });
 
 export { router };

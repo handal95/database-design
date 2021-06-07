@@ -2,7 +2,7 @@
 
 import express from "express";
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true });
 
 /*
 SELECT review_sq, account_id, review_title, score FROM review WHERE movie_code="search_movie_code";
@@ -25,7 +25,7 @@ INSERT INTO review VALUES(
     "score"
 );
 */
-router.post('/movie', function(req, res)
+router.post('/movie/post_review', function(req, res)
 {
     const review = req.body.data;
     
@@ -42,11 +42,63 @@ router.post('/movie', function(req, res)
     console.log(`search : ${keyword}`);
 })
 
+// 영화 정보 검색
+router.post('/movie/search', function(req, res)
+{
+    const keyword = req.body.keyword;
+    
+    /*
+        SELECT movie_title
+        FROM movie
+        WHERE movie_title LIKE "(keyword)%"
+        OR movie_title_eng LIKE "(keyword)%"
+    */
+
+    const search_list = [
+        {
+            movie_title: "movie1",
+        },
+        {
+            movie_title: "movie2",
+        },
+    ]
+
+    res.json({
+        search_list,
+    });
+})
+
 // 영화인 정보 페이지
 router.get('/crew', function(req, res)
 {
     res.render('movieinfo/crew');
 });
+
+// 영화인 정보 검색
+router.post('/crew/search', function(req, res)
+{
+    const keyword = req.body.keyword;
+    
+    /*
+        SELECT crew_name, nationality, crew_birth_date
+        FROM crew
+        WHERE crew_name LIKE "(keyword)%"
+        OR crew_name_eng LIKE "(keyword)%"
+    */
+
+    const search_list = [
+        {
+            movie_title: "movie1",
+        },
+        {
+            movie_title: "movie2",
+        },
+    ]
+
+    res.json({
+        search_list,
+    });
+})
 
 router.post('/crew', function(req, res)
 {

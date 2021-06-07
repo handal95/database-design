@@ -3,6 +3,16 @@ export function hasSession(req) {
     return !!req.session.views;
 }
 
+export function isAccountSession(req) {
+    // not not을 통해 bool 형으로 형변환
+    return !!(req.session.signin_category == "account");
+}
+
+export function isCustomerSession(req) {
+    // not not을 통해 bool 형으로 형변환
+    return !!(req.session.signin_category == "customer");
+}
+
 export function initAccountSession(req, sign_id, nickname, email) {
     req.session.views = 1;
     req.session.signin_category = "account";

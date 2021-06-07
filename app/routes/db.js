@@ -5,7 +5,7 @@ import oracle from "oracledb";
 import path from 'path';
 import { query_schema } from "../utils/queries.js"
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true });
 oracle.outFormat = oracle.OBJECT;
 oracle.autoCommit = true;
 

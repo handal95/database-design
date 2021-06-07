@@ -20,11 +20,12 @@
     <a href="/">메인 화면</a><br>
 
     <script>
-        const payment_uid = "6546546546"
         $(document).ready(() => {
             // 여기에 결제고유번호를 받아옴
+            const payment_uid = "6546546546";
             // 각 id값을 받아와 변수에 저장
-            const purchase_result = $('#purchase_result');
+            const payment_result = $('#payment_result');
+            const order_item_list = $('#order_item_list');
 
             show_result();
 

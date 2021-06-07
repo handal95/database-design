@@ -4,7 +4,7 @@ import { hasSession, initAccountSession, initCustomerSession } from "../utils/se
 
 import express from "express";
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true });
 
 // link page
 const HOME = ""
@@ -214,7 +214,7 @@ router.post(URL_MYPAGE + "/points", (req, res) => {
 
 router.get(URL_MYPAGE, (req, res) => {
     if (hasSession(req) == true) {
-        const session_account_id = req.session.signin_id;
+        const session_account_id = req.session.sign_id;
         res.render(MYPAGE, {account_id: session_account_id});
     }
     else {
