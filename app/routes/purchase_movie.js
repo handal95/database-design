@@ -5,6 +5,7 @@ import { isAccountSession, isCustomerSession } from "../utils/sessions.js";
 import express from "express";
 import { fetch_movie_session_info } from "../js/process/movie_session.js"
 import { hasSession } from "../js/process/session.js"
+import { theater_fetch_process } from "../js/process/ticket.js"
 
 const router = express.Router({ mergeParams: true });
 let theater_list = [
@@ -40,23 +41,22 @@ const points_ratio = 0.1;
 // 영화예매(장소, 일정 선택) 페이지
 router.get(URL_SELECT, (req, res) => {
     // 로그인 되어있지 않다면 로그인 페이지로 이동
-    if (!hasSession(req)) {
-        res.redirect('/signin');
-    } else {
+    //if (!hasSession(req)) {
+    //   res.redirect('/signin');
+    //} else {
         res.render('purchase/movie/select');
-    }
+    //}
 });
 
 
 // 상영일정 선택 페이지 영화관 리스트 초기화
 router.post(`${URL_SELECT}/init_movie_session`, async (req, res) => {
+    req.body.session_date = '2021-06-08'
+    console.log(req.body)
+    await theater_fetch_process(req)
+    res.json(req.params.theaters);
+    //{theater_list, movie_list}
     
-    req.body.session_date = (req.body.session_date == null) ? '2021-06-08' : req.body.session_date
-    await fetch_movie_session_info(req)
-    res.json({
-        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
-        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
-    });
 });
 
 // 상영일정 선택 페이지 날짜 변경

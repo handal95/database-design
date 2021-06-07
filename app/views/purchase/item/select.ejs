@@ -68,6 +68,10 @@
 
         function clear_item_table()
         {
+            for (let key in basket)
+            {
+                delete basket[key];
+            }
             item_table.html('');
         }
 
@@ -126,7 +130,7 @@
             // 리스트 값을 받아서 테이블 내용을 바꿈
             clear_item_table();
 
-            for (const item of item_list)
+            for (const item in item_list)
             {
                 item_table.append(
                     `<tr id="${item.item_code}">
@@ -152,6 +156,10 @@
 
         function clear_basket_table()
         {
+            for (let key of basket)
+            {
+                delete basket[key];
+            }
             basket_table.html('');
         }
 
