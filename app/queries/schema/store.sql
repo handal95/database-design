@@ -1,6 +1,7 @@
 store_code VARCHAR(16) NOT NULL,
 
 theater_code VARCHAR(16) NOT NULL,
+store_business_status VARCHAR(16) NOT NULL,
 store_name VARCHAR(32) NOT NULL,
 
 CONSTRAINT STORE_PK

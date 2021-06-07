@@ -3,6 +3,7 @@ screen_code VARCHAR(16) NOT NULL,
 theater_code VARCHAR(16) NOT NULL,
 screen_name VARCHAR(32),
 screen_category VARCHAR(16),
+screen_business_status VARCHAR(16) NOT NULL,
 seat_amount NUMBER(4, 0)
     CONSTRAINT SCREEN_SEAT_AMOUNT_CK CHECK(seat_amount >= 0),
 

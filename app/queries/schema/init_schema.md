@@ -1,23 +1,23 @@
-1. CREW
-2. MOVIE    
-    1. GENRE
-    2. POSTER
-    3. CONTRIBUTOR
-3. FACILITY_CODE
-    1. THEATER
-        1. STORE v
-            1. ITEM v
-        2. SCREEN
-            1. SEAT
-            2. MOVIE_SESSION
-4. CUSTOMER
-    1. ACCOUNT 
-        1. REVIEW
-        2. POINTS
-    2. PAYMENT
-        1. PAYMENT_HISTORY
-        2. TICKET
+1. CREW             V
+2. MOVIE            V
+    1. GENRE        V
+    2. POSTER       V
+    3. CONTRIBUTOR  V
+1. THEATER      V
+    1. STORE    V
+        1. ITEM V
+    2. SCREEN   V
+        1. SEAT V
+        2. MOVIE_SESSION  V
+4. CUSTOMER         V
+    1. ACCOUNT      V
+        1. REVIEW   V
+        2. POINTS   V
+    2. PAYMENT      V
+        1. PAYMENT_HISTORY  V 
+        2. TICKET   V
             1. BASKET v
+            2. RESERVE
 
 CREW
 MOVIE
@@ -36,6 +36,7 @@ CUSTOMER
         PAYMENT_HISTORY
         TICKET
         BASKET
+            RESERVE
             ITEM
             SEAT
             MOVIE_SESSION    
