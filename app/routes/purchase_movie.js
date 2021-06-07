@@ -85,20 +85,6 @@ router.post(`${URL_SELECT}/change_theater_list`, async (req, res) => {
     });
 });
 
-
-// 상영일정 선택 페이지 영화를 기준으로 영화관 목록 바꾸기
-router.post(`${URL_SELECT}/change_movie_list`, async (req, res) => {
-    req.body.session_date = (req.body.session_date == null) ? '2021-06-08' : req.body.session_date
-    await fetch_movie_session_info(req)
-
-    console.log(req.params)
-    res.json({
-        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
-        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
-    });
-});
-
-
 // 영화예매(좌석 선택) 페이지
 router.get('/seat', (req, res) => {
     const session_uid = req.query.session_uid;
