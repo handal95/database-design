@@ -33,26 +33,27 @@ router.post(`${URL_SELECT}/init_movie_session`, async (req, res) => {
     req.body.session_date = '2021-06-08'
     console.log(req.body)
     await theater_fetch_process(req)
-    res.json(req.params.theaters);
-    //{theater_list, movie_list}
+    res.json({
+        theaters : req.params.theaters, // {theater_code : '' , theater_name : '' }
+        movies : req.params.movies      // {movie_code   : '' , movie_name : '' }
+    });
     
 });
 
-// 이하 3개 INIT_MOVIE_SESSION 과 동일함
 // 상영일정 선택 페이지 상영일정 필터링
+// INIT_MOVIE_SESSION 과 동일함
 router.post(`${URL_SELECT}/filter_session`, async (req, res) => {
-    res.redirect(`${URL_SELECT}/init_movie_session`)
-});
+    const session_date = req.body.session_date;
+    const theater_code = req.body.theater_code;
+    const movie_code = req.body.movie_code;
 
-// 상영일정 선택 페이지 날짜 변경
-router.post(`${URL_SELECT}/change_theater_list`, async (req, res) => {
-    res.redirect(`${URL_SELECT}/init_movie_session`)
-});
+    // do something
+    await fetch_movie_session_info(req)
 
-
-// 상영일정 선택 페이지 영화를 기준으로 영화관 목록 바꾸기
-router.post(`${URL_SELECT}/change_movie_list`, async (req, res) => {
-    res.redirect(`${URL_SELECT}/init_movie_session`)
+    res.json({
+        sessions: req.params.sessions,
+    })
+    console.log(req.params)
 });
 
 
