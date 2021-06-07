@@ -2,7 +2,7 @@ import { doDBRelease, getDBConnect } from "../db/connect.js"
 
 import { get_account_info } from "../entities/account.js"
 import { get_customer_info } from "../entities/customer.js"
-import { initAccountSession } from "../../utils/sessions.js"
+import { initAccountSession, initCustomerSession } from "../../utils/sessions.js"
 import { issue_customer_code } from "../entities/customer.js"
 import { signup_process_customer } from "./signup.js"
 

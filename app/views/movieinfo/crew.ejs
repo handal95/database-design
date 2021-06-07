@@ -2,66 +2,47 @@
 <html lang="en">
 <%- include('../_component/head.ejs', {titleName: '메인'})%>
 <body>
-    <!--메인 화면-->
-    <%- include('../_component/goto_main.ejs')%>
+    <div class="container">
+        <!--메인 화면-->
+        <%- include('../_component/goto_main.ejs')%>
 
-    <input type="text" name="keyword", id="keyword">
-    <button id="btn_search">검색</button>
+        <form id="search_form" class="mb-3">
+            <div class="row g-3">
+                <div class="col">
+                    <input type="text" name="keyword" id="keyword" class="form-control" required>
+                </div>
+                <div class="col col-auto">
+                    <button type="submit" id="btn_search" class="btn btn-primary">검색</button>
+                </div>
+            </div>
+        </form>
 
-    <%
-    // SELECT * FROM crew WHERE crew_code="search_crew_code";
-    const crew = {
-        crew_code: "2342",
-        crew_name: "존 시나",
-        crew_name_eng: "John Cena",
-        nationality: "미국",
-        crew_birth_date: "1977.04.23",
-        sex: "남",
-        profile_image: "image_path",
-    }
+        <h1><%= crew.crew_name %></h1>
+        <p><%= crew.crew_name_eng %></p>
+        <img src="<%= crew.profile_image %>" alt="profile_image">
 
-    // SELECT * FROM contributor WHERE crew_code="search_crew_code";
-    const filmography = [
-        {
-            movie_code: "4654",
-            movie_title: "분노의 질주",
-            main_role: "배우",
-            sub_role: "주연",
-        },
-        {
-            movie_code: "96857",
-            movie_title: "범블비",
-            main_role: "배우",
-            sub_role: "주연",
-        },
-    ]
-    %>
+        <h2>상세 설명</h2>
+        <p>생일 : <%= crew.crew_birth_date %></p>
+        <p>국적 : <%= crew.nationality %></p>
+        <p>성별 : <%= crew.sex %></p>
 
-    <h1><%= crew.crew_name %></h1>
-    <p><%= crew.crew_name_eng %></p>
-    <img src="<%= crew.profile_image %>" alt="profile_image">
-
-    <h2>상세 설명</h2>
-    <p>생일 : <%= crew.crew_birth_date %></p>
-    <p>국적 : <%= crew.nationality %></p>
-    <p>성별 : <%= crew.sex %></p>
-
-    <h2>필모그래피</h2>
-    <table>
-        <thead>
-            <th>영화 제목</th>
-            <th>주역할</th>
-            <th>부역할</th>
-        </thead>
-        <tbody>
-            <% for (const movie of filmography) { %>
-            <tr>
-                <td><%= movie.movie_title %></td>
-                <td><%= movie.main_role %></td>
-                <td><%= movie.sub_role %></td>
-            </tr>
-            <% } %>
-        </tbody>
-    </table>
+        <h2>필모그래피</h2>
+        <table class="table">
+            <thead>
+                <th scope="col">영화 제목</th>
+                <th scope="col">주역할</th>
+                <th scope="col">부역할</th>
+            </thead>
+            <tbody id="filmography">
+                <% for (const movie of filmography_list) { %>
+                    <tr id="<%= movie.movie_code %>">
+                        <td><%= movie.movie_title %></td>
+                        <td><%= movie.main_role %></td>
+                        <td><%= movie.sub_role %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

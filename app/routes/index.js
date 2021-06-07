@@ -2,6 +2,7 @@ import { db_router } from "./db.js"
 import express from "express"
 import { user_router } from "./user.js"
 import { router as movieinfo_router } from "./movieinfo.js"
+import { router as review_router } from "./review.js"
 import { router as purchase_movie_router } from "./purchase_movie.js"
 import { router as purchase_item_router } from "./purchase_item.js"
 

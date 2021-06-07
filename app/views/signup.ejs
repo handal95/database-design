@@ -19,17 +19,19 @@
                 <label for="input_name" class="form-label">이름</label>
                 <input type="text" class="form-control" id="input_name" required>
             </div>
-            <!-- default : 오늘 날짜-->
+            <div class="mb-3">
                 <%
-                    const today = new Date();
-                    const year = today.getFullYear();
-                    const month = ("0" + (today.getMonth() + 1)).slice(-2);
-                    const date = ("0" + today.getDate()).slice(-2);
-                    // YYYY-MM-DD
-                    const today_text = `${year}-${month}-${date}`;
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = ("0" + (today.getMonth() + 1)).slice(-2);
+                const date = ("0" + today.getDate()).slice(-2);
+                // YYYY-MM-DD
+                const today_text = `${year}-${month}-${date}`;
                 %>
-                <label for="customer_birth_date" class="form-label">생년월일</label>
-                <input type="date" class="form-control" id="customer_birth_date" value="<%= today_text %>" required>
+                <!-- default : 오늘 날짜-->
+                <label for="input_birth" class="form-label">생년월일</label>
+                <input type="date" class="form-control" id="input_birth" value="<%= today_text %>" required>
+            </div>
             <div class="mb-3">
                 <label for="input_phone" class="form-label">연락처</label>
                 <input type="tel" class="form-control" id="input_phone" required>

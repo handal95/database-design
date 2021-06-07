@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../_component/head.ejs', {titleName: '리뷰 작성'}) %>
+<body>
+    <h1>후기 작성</h1>
+    <table>
+        <tbody>
+            <tr>
+                <td>제목</td>
+                <td><input type="text" name="new_review_title" id="new_review_title"></td>
+            </tr>
+            <tr>
+                <td>점수</td>
+                <td><input type="range" value="0" min="0" max="10" step="0.5" name="review_score" id="review_score"onchange='range_change(this)'></td>
+                <td><span id='review_score_show'></span></td>
+            </tr>
+            <script>
+                function range_change(obj) {
+                  document.getElementById('review_score_show').innerHTML=obj.value;
+                }
+            </script>
+            <tr>
+                <td>리뷰</td>
+                <td><input type="text" name="new_review_text", id="new_review_text"></td>
+                <td><button id="btn_add_review">등록</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="btn_add_review">게시</button>
+
+    <script>
+        const btn_add_review = $("#btn_add_review");
+        const movie_code = <%= movie.movie_code %>;
+        const account_id = "account_id";
+        const new_review_title = findId('new_review_title');
+        const new_comment = findId('new_review_text');
+        const score = findId('review_score_show');
+
+        btn_add_review.addEventListener('click', function()
+        {
+            const data = {
+                movie_code: movie_code.value,
+                account_id: account_id.value,
+                new_review_title: new_review_title.value
+                new_comment: new_comment.value,
+                score: score.value,
+            };
+            requestPostAPI('/movieinfo/movie', data)
+            .then(function (response)
+            {
+                if (response.data.result == true)
+                {
+                    alert('리뷰 등록 성공');
+                    window.location.href = '/movieinfo/movie';
+                }
+                else
+                {
+                    alert('리뷰 등록 실패');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

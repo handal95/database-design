@@ -2,9 +2,8 @@
 <html lang="en">
 <%- include('_component/head.ejs', {titleName: '메인'})%>
 <body>
-<!--*****-->
-<h1>영화 예매 온라인 시스템</h1>
     <div class="container m-auto">
+        <h1 class="mb-5">영화 예매 온라인 시스템</h1>
         <% if (account_id == null) { %>
         <p>
             <strong>안녕하세요!</strong>
@@ -15,15 +14,17 @@
         </p>
         <% } %>
 
-        <% if (account_id == null) { %>
-        <a href="/signin" class="btn btn-sm btn-primary">로그인</a>
-        <a href="/signup" class="btn btn-sm btn-secondary">회원가입</a>
-        <% } else { %>
-        <a href="/mypage" class="btn btn-sm btn-info">마이페이지</a>
-        <a href="/logout" class="btn btn-sm btn-danger">로그아웃</a>
-        <% } %>
-        <a href="/purchase/movie/select" class="btn btn-sm btn-light">영화예매</a>
-        <a href="/purchase/item/select" class="btn btn-sm btn-light">상품구매</a>
+        <div class="mb-3">
+            <% if (account_id == null) { %>
+            <a href="/signin" class="btn btn-sm btn-primary">로그인</a>
+            <a href="/signup" class="btn btn-sm btn-secondary">회원가입</a>
+            <% } else { %>
+            <a href="/mypage" class="btn btn-sm btn-info">마이페이지</a>
+            <a href="/logout" class="btn btn-sm btn-danger">로그아웃</a>
+            <a href="/purchase/movie/select" class="btn btn-sm btn-light">영화예매</a>
+            <a href="/purchase/item/select" class="btn btn-sm btn-light">상품구매</a>
+            <% } %>
+        </div>
 
         <form id="search_form" class="mb-3">
             <div class="row g-3">
