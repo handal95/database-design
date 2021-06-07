@@ -2,7 +2,7 @@ import { check_duplicate_account, insert_account } from "../entities/account.js"
 import { doDBRelease, getDBConnect } from "../db/connect.js"
 import { insert_customer, issue_customer_code } from "../entities/customer.js"
 
-export async function signup_process(req, res) {
+export async function signup_process(req) {
     let is_success = false
     
     const conn = await getDBConnect()
@@ -11,14 +11,12 @@ export async function signup_process(req, res) {
         await check_duplicate_account(conn, req)
         console.log("(signup) : UNIQUE CHECK OK")
         
-        // 고객 코드 발급
-        await issue_customer_code(conn, "account", req.body.id, req)
-        console.log("(signup) : CODE ISSUE OK")
-
         // 고객 정보 등록
-        await insert_customer(conn, req)
-        console.log("(signup) : INSERT CUSTOMER INFO OK")
+        console.log(">> SUBPROCESS")
+        await signup_process_customer(req)
+        console.log("<< SUBPROCESS")
 
+        // 계정 정보 등록
         await insert_account(conn, req)
         console.log("(signup) : INSERT ACCOUNT INFO OK")
         
@@ -35,7 +33,7 @@ export async function signup_process(req, res) {
     return is_success
 }
 
-export async function signup_process_customer(req, res) {
+export async function signup_process_customer(req) {
     let is_success = false
 
     const conn = await getDBConnect()
@@ -46,7 +44,7 @@ export async function signup_process_customer(req, res) {
 
         // 고객 정보 등록
         await insert_customer(conn, req)
-        console.log("(signup) : INSERT CUSTOMER INFO OK")          
+        console.log("(signup) : INSERT CUSTOMER INFO OK")    
     }
     catch(err) {
         console.log("(SIGNUP) : Process is failed by ", err)

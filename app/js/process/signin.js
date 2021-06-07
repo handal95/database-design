@@ -6,7 +6,7 @@ import { initAccountSession } from "../../utils/sessions.js"
 import { issue_customer_code } from "../entities/customer.js"
 import { signup_process_customer } from "./signup.js"
 
-export async function signin_account_process(req, res) {
+export async function signin_account_process(req) {
     let is_success = false
 
     const conn = await getDBConnect()
@@ -33,7 +33,7 @@ export async function signin_account_process(req, res) {
 }
 
 
-export async function signin_customer_process(req, res) {
+export async function signin_customer_process(req) {
     let is_success = false
 
     const conn = getDBConnect()
@@ -46,7 +46,7 @@ export async function signin_customer_process(req, res) {
         } catch (err) {
             console.log("(signin) : customer info is not exists -> do subprocess")
             // 비회원 계정 등록 절차 진행
-            await signup_process_customer(req, res)
+            await signup_process_customer(req)
             console.log("(signin) : CREATE CUSTOMER INFO")
             data = await get_customer_info(conn, req)
             console.log("(signin) : VALID CUSTOMER CHECK")
@@ -64,8 +64,6 @@ export async function signin_customer_process(req, res) {
     } finally {
         await doDBRelease(conn)
     }
-
-    console.log(issue_customer_code)
 
     return is_success
 }
