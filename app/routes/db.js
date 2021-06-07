@@ -1,82 +1,39 @@
+import { connect_test, create_table, drop_table } from "../js/process/schema.js"
+
 import db_config from "../configs/db_config.js"
 import express from "express"
-import oracle from "oracledb"
 import { query_schema } from "../utils/queries.js"
 
 const router = express.Router()
-oracle.outFormat = oracle.OBJECT
-oracle.autoCommit = true
 
-const schema_list = [
-    "crew",  "movie", "facility_code", "customer", "genre",
-    "poster", "contributor", "theater", "account", "payment",
-    "screen", "store", "review", "points", "ticket",
-    "payment_history", "item", "seat", "movie_session", "basket",
+const schema_list = [ 
+    "customer", "facility_code", "movie", "crew", "payment",
+    "account", "theater", "genre", "poster", "contributor",
+    "payment_history",  "review", "store", "screen", "points",
+    "ticket", "item",  "movie_session", "seat", "basket",
 ]
 
 router.get("/", (req, res) => {
-    oracle.getConnection(db_config, (err, conn) => {
-        if(err) throw err
-        res.send("connect test success")
-    })
-})
-
-router.get("/create/all", (req, res) => {
-    oracle.getConnection(db_config, (err, conn) => {
-        if(err) throw err
-        
-        for(let i = 0; i <schema_list.length; i++){
-            query_schema(conn, "CREATE", schema_list[i])
-        }
-    })
-    res.send("DONE")
+    if(!connect_test(req, res)){
+        console.log("DB CONNECT FAIL")
+        res.send("DB is not connected")
+    }
+    console.log("DB CONNECT OK")
+    res.send("DB Connected")
 })
 
 router.get("/create/:table", (req, res) => {
-    let table = req.params.table
-    oracle.getConnection(db_config, (err, conn) => {
-        if(err) throw err
-
-        if(query_schema(conn, "CREATE", table)){
-            res.send("Query Success")
-        } else {
-            res.send("Query Fail")
-        }
-    })
-})
-
-router.get("/drop/all", (req, res) => {
-    oracle.getConnection(db_config, (err, conn) => {
-        if(err) throw err
-
-        for(let i = schema_list.length - 1; i >= 0; i--){
-            query_schema(conn, "DROP", schema_list[i])
-        }
-        
-        res.send("DONE")
-    })
+    if(!create_table(req, res, req.params.table)){
+        res.send("Query Fail")
+    }
+    res.send("Query Success")
 })
 
 router.get("/drop/:table", (req, res) => {
-    let table = req.params.table
-    oracle.getConnection(db_config, (err, conn) => {
-        if(err) throw err
-        
-        if(query_schema(conn, "DROP", table)){
-            res.send("Query Success")
-        } else {
-            res.send("Query Fail")
-        }
-    })
-})
-
-router.get("/show/", (req, res) => {
-    oracle.getConnection(db_config, (err, conn) => {
-        if(err) throw err
-        
-        query_schema(conn, "SHOW", db_config.user)
-        res.send(`drop table (${table})`)
-    })
+    if(!drop_table(req, res, req.params.table)){
+        res.send("Query Fail")
+    }
+    res.send("Query Success")
 })
 
 const db_router = router
