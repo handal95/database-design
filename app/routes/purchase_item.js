@@ -19,7 +19,7 @@ router.get('/select', function(req, res)
 });
 
 // 상품 선택 페이지 영화관 리스트 불러오기
-router.post('/select/init_theater', function(req, res)
+router.post('/select/init_movie_session', function(req, res)
 {
     // SELECT theater_code, theater_name FROM theater;
 
@@ -191,7 +191,7 @@ router.post('/check/check_payment', function(req, res)
 router.post('/check/process_payment', function(req, res)
 {
     
-}
+})
 
 // 상품구매 결제 완료 페이지 데이터 불러오기
 router.post('/complete/load_data', function(req, res)
