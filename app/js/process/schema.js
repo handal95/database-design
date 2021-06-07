@@ -5,10 +5,10 @@ import fs from "fs"
 
 const BASE_PATH = "./queries/schema/"
 const SCHEMA_LIST = [ 
-    "customer", "facility_code", "movie", "crew", "payment",
-    "account", "theater", "genre", "poster", "contributor",
-    "payment_history",  "review", "store", "screen", "points",
-    "ticket", "item",  "movie_session", "seat", "basket",
+    "customer", "movie", "crew", "payment", "account",
+    "theater", "genre", "poster", "contributor", "payment_history",
+    "review", "store", "screen", "points", "ticket",
+    "item",  "movie_session", "seat", "basket", "reserve"
 ]
 
 export async function connect_test(req, res) {
