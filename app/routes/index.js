@@ -3,9 +3,9 @@ import { destorySession, hasSession } from "../js/process/session.js"
 import { db_router } from "./db.js"
 import express from "express"
 import { router as movieinfo_router } from "./movieinfo.js"
-import { router as review_router } from "./review.js"
-import { router as purchase_movie_router } from "./purchase_movie.js"
 import { router as purchase_item_router } from "./purchase_item.js"
+import { router as purchase_movie_router } from "./purchase_movie.js"
+import { router as review_router } from "./review.js"
 import { user_router } from "./user.js"
 
 const router = express.Router({ mergeParams: true });
@@ -26,6 +26,7 @@ const URL_HOME = "/"
 router.get(URL_HOME, (req, res) => {
     let params = { account_id: null }
 
+    console.log(req.session)
     if (hasSession(req)) {
         // 접속 세션 유형
         const SESSION_CATEGORY = req.session.signin_category
@@ -34,14 +35,17 @@ router.get(URL_HOME, (req, res) => {
         // 로그인 되어있는 경우
         if(SESSION_CATEGORY == "account") {
             // 회원의 경우 아이디를 전달
-            params.account_id = req.session.sign_id
+            params.account_id = req.session.account_id
             
         } else if(SESSION_CATEGORY == "customer") {
             // 비회원의 경우 이름을 전달
             params.account_id = req.session.name
+        } else {
+            console.log ("SOMETHING WRONG", SESSION_CATEGORY)
         }
     }
 
+    console.log("PARAMS", params)
     // INDEX PAGE rendering
     res.render(INDEX, params)
 })

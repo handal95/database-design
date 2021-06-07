@@ -20,24 +20,19 @@ const URL_SIGNUP = "/" + SIGNUP
 const URL_MYPAGE = "/" + MYPAGE
 
 // account sign-in
-router.post(URL_SIGNIN + "/account", (req, res) => {
-    if(!signin_account_process(req, res)){
-        console.log("SIGNIN FAILUARE")
-        res.json({ result: false })
-    }
-    console.log("SIGNIN SUCCESS")
-    res.json({ result: true });
+router.post(URL_SIGNIN + "/account", async (req, res) => {
+    const process_result = await signin_account_process(req, res)
+    console.log("SIGNIN PROCESS ", process_result)
+
+    res.json({ result: process_result });
 })
 
 // customer sign-in
-router.post(URL_SIGNIN + "/customer", (req, res) => {
-    if(!signin_customer_process(req, res)){
-        console.log("SIGNIN FAILUARE")
-        res.json({ result: false })
-    }
-    console.log("SIGNIN SUCCESS")
-    res.json({ result: true });
+router.post(URL_SIGNIN + "/customer", async (req, res) => {
+    const process_result = await signin_customer_process(req, res)
+    console.log("SIGNIN PROCESS ", process_result)
 
+    res.json({ result: process_result });
 })
 
 router.get(URL_SIGNIN, (req, res) => {
@@ -175,7 +170,7 @@ router.post(URL_MYPAGE + "/points", (req, res) => {
 
 router.get(URL_MYPAGE, (req, res) => {
     if (hasSession(req) == true) {
-        const session_account_id = req.session.sign_id;
+        const session_account_id = req.session.account_id;
         res.render(MYPAGE, {account_id: session_account_id});
     }
     else {

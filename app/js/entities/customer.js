@@ -1,5 +1,6 @@
 import { select_exists, select_one } from "../db/select.js"
 
+import { delete_record } from "../db/delete.js"
 import { fill_code } from "../../utils/string.js"
 import { insert_record } from "../db/insert.js"
 
@@ -31,6 +32,7 @@ export async function insert_customer(conn, req){
         req.body.birth_date, // customer_birth_date
         req.body.phone       // customer_phone
     ]
+    console.log(values)
 
     const result = await insert_record(conn, "CUSTOMER", query_body, values)
     if(!result.response){
