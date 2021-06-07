@@ -1,5 +1,0 @@
-export default {
-    user : process.env.NODE_ORACLEDB_USER || "ID",
-    password : process.env.NODE_ORACLEDB_PASSWOR || "PW",
-    connectString : process.env.NODE_ORACLEDB_CONNECTIONSTRING || "localhost/xe"
-}
