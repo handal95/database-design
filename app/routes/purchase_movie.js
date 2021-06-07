@@ -9,28 +9,6 @@ import { fetch_sessioning_theater } from "../js/process/theater.js"
 import { hasSession } from "../js/process/session.js"
 
 const router = express.Router({ mergeParams: true });
-let theater_list = [
-    {
-        theater_code: "theater_code",
-        theater_name: "theater_name",
-    },
-    {
-        theater_code: "theater_code1",
-        theater_name: "theater_name2",
-    },
-]
-
-let movie_list = [
-    {
-        movie_code: "movie_code",
-        movie_title: "movie_title",
-    },
-    {
-        movie_code: "movie_code1",
-        movie_title: "movie_title1",
-    },
-]
-
 const URL_SELECT = "/select"
 
 // 인당 티켓 가격
@@ -54,7 +32,8 @@ router.get(URL_SELECT, (req, res) => {
 router.post(`${URL_SELECT}/init_movie_session`, async (req, res) => {
     await fetch_sessioning_theater(req)
     res.json({
-        theaters: req.params.theaters
+        theaters: req.params.theaters,
+        movies: req.params.movies
     });
 });
 
