@@ -1,5 +1,5 @@
 import { doDBRelease, getDBConnect } from "../db/connect.js"
-import { get_sessioning_movies, select_no_filter_list } from "../entities/movie_session.js"
+import { get_sessioning_movies } from "../entities/movie_session.js"
 
 import { get_movie_title_by_code } from "../entities/movie.js"
 import { get_screen_info_by_code } from "../entities/screen.js"

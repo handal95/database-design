@@ -2,22 +2,24 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '결제 완료'})%>
 <body>
-    <!--메인 화면-->
-    <%- include('../../_component/goto_main.ejs')%>
-    <!--이 페이지 보여주기 전 결제 창 하나 대충 띄워주기-->
-    <h1>결제 완료</h1>
-    <!--결제 정보-->
-    <div id="payment_result"></div>
-    <table>
-        <thead>
-            <th>상품</th>
-            <th>상품가격</th>
-            <th>주문수량</th>
-        </thead>
-        <tbody id="order_item_list">
-        </tbody>
-    </table>
-    <a href="/">메인 화면</a><br>
+    <div class="container my-3">
+        <!--메인 화면-->
+        <%- include('../../_component/goto_main.ejs')%>
+        <!--이 페이지 보여주기 전 결제 창 하나 대충 띄워주기-->
+        <h1>결제 완료</h1>
+        <!--결제 정보-->
+        <div id="payment_result"></div>
+        <table class="table">
+            <thead>
+                <th>상품</th>
+                <th>상품가격</th>
+                <th>주문수량</th>
+            </thead>
+            <tbody id="order_item_list">
+            </tbody>
+        </table>
+        <a href="/" class="btn btn-link mx-auto">메인 화면</a>
+    </div>
 
     <script>
         $(document).ready(() => {
@@ -34,7 +36,7 @@
             {
                 const data = {payment_uid: payment_uid};
 
-                const response_data = await requestPostAPI('/purchase/complete/load_data', data);
+                const response_data = await requestPostAPI('/purchase/item/complete', data);
                 const theater_name = response_data.data.theater_name;
                 const store_name = response_data.data.store_name;
                 const basket_list = response_data.data.basket_list;

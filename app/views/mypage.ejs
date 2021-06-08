@@ -2,18 +2,60 @@
 <html lang="en">
 <%- include('_component/head.ejs', {titleName: '마이 페이지'})%>
 <body>
-    <!--메인 화면-->
-    <%- include('_component/goto_main.ejs')%>
-    <h1>마이 페이지</h1>
-    <h2>내 계정 정보</h2>
-    ID : <%= account_id %><br>
-    비밀번호
-    <input type="password" name="signin_pw" id="input_pwdkey">
-    별명 : <%= nickname %>
-    <input type="text", name="nickname", id="input_nickname">
-    이메일 : <%= email %>
-    <input type="email", name="email", id="input_email">
-    <button id="btn_modify">정보수정</button>
+    <div class="container my-3">
+        <!--메인 화면-->
+        <%- include('_component/goto_main.ejs')%>
+        <h1>마이 페이지</h1>
+        <h2>내 계정 정보</h2>
+        ID : <%= account_id %><br>
+        비밀번호
+        <input type="password" name="signin_pw" id="input_pwdkey">
+        별명 : <%= nickname %>
+        <input type="text" name="nickname" id="input_nickname">
+        이메일 : <%= email %>
+        <input type="email" name="email" id="input_email">
+        <button id="btn_modify">정보수정</button>
+
+        <!--티켓 예약 정보-->
+        <h2>예약기록</h2>
+        <table class="table">
+            <thead>
+                <th>티켓번호</th>
+                <th>날짜</th>
+                <th>시각</th>
+                <th>영화</th>
+                <th>가격</th>
+                <th>상태</th>
+            </thead>
+            <tbody id="ticket_purchase_history"></tbody>
+        </table>
+
+        <!--상품 구매 정보-->
+        <h2>상품구매기록</h2>
+        <table class="table">
+            <thead>
+                <th>상점</th>
+                <th>상품</th>
+                <th>수량</th>
+                <th>주문상태</th>
+            </thead>
+            <tbody id="item_purchase_history"></tbody>
+        </table>
+
+
+        <!--포인트 사용, 적립 정보-->
+        <h2>포인트</h2>
+        <div id="cur_points"></div>
+        <table class="table">
+            <thead>
+                <th>순차번호</th>
+                <th>적립/사용</th>
+                <th>변동값</th>
+                <th>내용</th>
+            </thead>
+            <tbody id="points_history"></tbody>
+        </table>
+    </div>
 
     <script>
         const btn_modify = findId('btn_modify');
@@ -29,49 +71,7 @@
             };
             requestPostAPI('/mypage', data);
         });
-    </script>
 
-    <!--티켓 예약 정보-->
-    <h2>예약기록</h2>
-    <table>
-        <thead>
-            <th>티켓번호</th>
-            <th>날짜</th>
-            <th>시각</th>
-            <th>영화</th>
-            <th>가격</th>
-            <th>상태</th>
-        </thead>
-        <tbody id="ticket_purchase_history"></tbody>
-    </table>
-
-    <!--상품 구매 정보-->
-    <h2>상품구매기록</h2>
-    <table>
-        <thead>
-            <th>상점</th>
-            <th>상품</th>
-            <th>수량</th>
-            <th>주문상태</th>
-        </thead>
-        <tbody id="item_purchase_history"></tbody>
-    </table>
-
-
-    <!--포인트 사용, 적립 정보-->
-    <h2>포인트</h2>
-    <div id="cur_points"></div>
-    <table>
-        <thead>
-            <th>순차번호</th>
-            <th>적립/사용</th>
-            <th>변동값</th>
-            <th>내용</th>
-        </thead>
-        <tbody id="points_history"></tbody>
-    </table>
-
-    <script>
         $(document).ready(() => {
             fill_ticket_purchase_history();
             fill_item_purchase_history();

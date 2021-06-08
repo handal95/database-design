@@ -1,7 +1,7 @@
 /* 영화 예매, 상품 구매 페이지*/
 
 import express from "express";
-import { hasSession } from "../utils/sessions.js";
+import { isCustomerSession, isAccountSession } from "../utils/sessions.js";
 
 const router = express.Router({ mergeParams: true });
 
@@ -25,11 +25,11 @@ router.post('/select/init_movie_session', function(req, res)
 
     const theater_list = [
         {
-            theater_code: "theater_code",
-            theater_name: "theater_name",
+            theater_code: "theater_code1",
+            theater_name: "theater_name1",
         },
         {
-            theater_code: "theater_code1",
+            theater_code: "theater_code2",
             theater_name: "theater_name2",
         },
     ]
@@ -79,7 +79,7 @@ router.post('/select/filter_item', function(req, res)
             item_code: "213232",
             item_name: "콜라",
             item_category: "스낵",
-            item_price: Math.random(),
+            item_price: 1500,
         },
         {
             item_code: "213233",
@@ -123,43 +123,44 @@ router.get('/check', function(req, res)
 // 상품구매 확인 페이지 현재 로그인 중인 세션의 유저 customer_code를 얻음
 router.post('/check/customer_code', function(req, res)
 {
-    // 회원 로그인인 경우
-    if (isAccountSession(req))
-    {
-        const signin_type = "account";
-        const session_account_id = req.session.account_id;
-        /*
-        // account의 customer_code를 검색
-        SELECT customer_code
-        FROM account
-        WHERE account_id = "session_account_id";
-        */
+    
+    // // 회원 로그인인 경우
+    // if (isAccountSession(req))
+    // {
+    //     const signin_type = "account";
+    //     const session_account_id = req.session.account_id;
+    //     /*
+    //     // account의 customer_code를 검색
+    //     SELECT customer_code
+    //     FROM account
+    //     WHERE account_id = "session_account_id";
+    //     */
         const customer_code = "account_customer_code";
         res.json({customer_code,});
-    }
-    // 비회원 로그인인 경우
-    else if (isCustomerSession(req))
-    {
-        const signin_type = "customer";
-        const session_customer_name = req.session.name;
-        const session_birth_date = req.session.birth_date;
-        const session_phone = req.session.phone;
-        /*
-        // customer_code 얻어옴
-        SELECT customer_code
-        FROM customer
-        WHERE customer_name = "session_customer_name"
-        AND customer_birth_date = "session_birth_date"
-        AND phone = "session_phone";
-        */
-        const customer_code = "customer_code";
-        res.json({customer_code,});
-    }
-    // 세션이 없다면 null 반환
-    else
-    {
-        res.json({customer_code: null});
-    }
+    // }
+    // // 비회원 로그인인 경우
+    // else if (isCustomerSession(req))
+    // {
+    //     const signin_type = "customer";
+    //     const session_customer_name = req.session.name;
+    //     const session_birth_date = req.session.birth_date;
+    //     const session_phone = req.session.phone;
+    //     /*
+    //     // customer_code 얻어옴
+    //     SELECT customer_code
+    //     FROM customer
+    //     WHERE customer_name = "session_customer_name"
+    //     AND customer_birth_date = "session_birth_date"
+    //     AND phone = "session_phone";
+    //     */
+    //     const customer_code = "customer_code";
+    //     res.json({customer_code,});
+    // }
+    // // 세션이 없다면 null 반환
+    // else
+    // {
+    //     res.json({customer_code: null});
+    // }
 });
 
 // 상품구매 확인 페이지 결제 가능 여부 확인(purchase_movie.js에서 동일한 내용 존재)
@@ -294,20 +295,17 @@ router.post('/check/process_payment', function(req, res)
     }
     res.json({
         payment_uid,
-        ticket_uid,
-        session_uid,
         result: true
     });
 });
 
-// 상품구매 결제 완료 페이지 데이터 불러오기
-router.post('/complete/load_data', function(req, res)
+router.get('/complete', function(req, res)
 {
-    
+    res.render('purchase/item/complete');
 });
 
 // 상품 결제완료 페이지
-router.get('/complete', function(req, res)
+router.post('/complete', function(req, res)
 {
     const payment_uid = req.body.payment_uid;
 
@@ -335,15 +333,15 @@ router.get('/complete', function(req, res)
         },
     ];
     const payment_data = {
-        payment_price: "payment_price",
-        payment_method: "payment_method",
+        payment_price: 15000,
+        payment_method: "신용카드",
     };
 
-    res.render('purchase/item/complete', {
-        theater_name: theater_name,
-        store_name: store_name,
-        basket_list: basket_list,
-        payment_data: payment_data
+    res.json({
+        theater_name,
+        store_name,
+        basket_list,
+        payment_data,
     });
 });
 

@@ -2,87 +2,80 @@
 <html lang="en">
 <%- include('../_component/head.ejs', {titleName: movie.movie_title}) %>
 <body>
-    <!--메인 화면-->
-    <%- include('../_component/goto_main.ejs') %>
+    <div class="container my-3">
+        <!--메인 화면-->
+        <%- include('../_component/goto_main.ejs') %>
 
-    <form id="search_form" class="mb-3" action="../search">
-        <div class="row g-3">
-            <div class="col">
-                <input type="text" name="keyword" id="keyword" class="form-control" required>
-            </div>
-            <div class="col col-auto">
-                <button type="submit" class="btn btn-primary">검색</button>
-            </div>
-        </div>
-    </form>
+        <%- include('../_component/search.ejs') %>
 
-    <!--영화 정보-->
-    <h1><%= movie.movie_title %></h1>
-    <p><%= movie.movie_title_eng %></p>
-    <p>평점 : <%= movie.avg_score %></p>
-    <img src="<%= movie.poster %>" alt="poster">
+        <!--영화 정보-->
+        <h1><%= movie.movie_title %></h1>
+        <p><%= movie.movie_title_eng %></p>
+        <p>평점 : <%= movie.avg_score %></p>
+        <img src="<%= movie.poster %>" alt="poster">
 
-    <h2>상세 내용</h2>
-    <p>
-        장르 : 
-        <% for (const element of movie.genre) { %>
-        <%= element %> | 
-        <% } %>
-    </p>
-    <p>영상물 등급 : <%= movie.media_rating %></p>
-    <p>상영시간 : <%= movie.running_time %></p>
-    <p>개봉일자 : <%= movie.release_date %></p>
-    <p>제작국가 : <%= movie.production_country %></p>
-    <p>제작사 : <%= movie.productor %></p>
-    <p>배급사 : <%= movie.distributor %></p>
-    <p>제작상태 : <%= movie.production_status %></p>
-
-    <h2>시놉시스</h2>
-    <pre><%= movie.synopsis %></pre>
-
-    <!--영화 참여자-->
-    <h2>참여자</h2>
-    <table>
-        <thead>
-            <th>이름</th>
-            <th>주역할</th>
-            <th>부역할</th>
-        </thead>
-        <tbody>
-            <% for (const crew of contributor_list) { %>
-            <tr>
-                <td><a href="/movieinfo/crew?crew_code=<%= crew.crew_code %>"><%= crew.crew_code %></a></td>
-                <td><%= crew.main_role %></td>
-                <td><%= crew.sub_role %></td>
-            </tr>
+        <h2>상세 내용</h2>
+        <p>
+            장르 : 
+            <% for (const element of movie.genre) { %>
+            <%= element %> | 
             <% } %>
-        </tbody>
-    </table>
+        </p>
+        <p>영상물 등급 : <%= movie.media_rating %></p>
+        <p>상영시간 : <%= movie.running_time %></p>
+        <p>개봉일자 : <%= movie.release_date %></p>
+        <p>제작국가 : <%= movie.production_country %></p>
+        <p>제작사 : <%= movie.productor %></p>
+        <p>배급사 : <%= movie.distributor %></p>
+        <p>제작상태 : <%= movie.production_status %></p>
 
-    <!--후기 작성 페이지로 가기-->
-    <a href="/movieinfo/review/write?movie_code=<%= movie.movie_code %>&movie_title=<%= movie.movie_title %>">리뷰 작성하기</a>
-    
-    <!--후기 목록-->
-    <table>
-        <thead>
-            <th>아이디</th>
-            <th>후기제목</th>
-            <th>평점</th>
-            <th></th>
-        </thead>
-        <tbody>
-        <% for (const review of review_list) { %>
-            <tr>
-                <td><%= review.account_id %></td>
-                <td>
-                    <a href="/movieinfo/review/read?movie_code=<%= movie.movie_code %>&movie_title=<% movie.movie_title %>&review_sq=<%= review.review_sq %>"><%= review.review_title %></a>
-                    </a>
-                </td>
-                <td><%= review.score %></td>
-                <td></td>
-            </tr>
-        <% } %>
-        </tbody>
-    </table>
+        <h2>시놉시스</h2>
+        <pre><%= movie.synopsis %></pre>
+
+        <!--영화 참여자-->
+        <h2>참여자</h2>
+        <table class="table">
+            <thead>
+                <th>이름</th>
+                <th>주역할</th>
+                <th>부역할</th>
+            </thead>
+            <tbody>
+                <% for (const crew of contributor_list) { %>
+                <tr>
+                    <td><a href="/movieinfo/crew?crew_code=<%= crew.crew_code %>"><%= crew.crew_code %></a></td>
+                    <td><%= crew.main_role %></td>
+                    <td><%= crew.sub_role %></td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+
+        <!--후기 작성 페이지로 가기-->
+        <a href="/movieinfo/review/write?movie_code=<%= movie.movie_code %>&movie_title=<%= movie.movie_title %>">리뷰 작성하기</a>
+        
+        <!--후기 목록-->
+        <table class="table">
+            <thead>
+                <th>아이디</th>
+                <th>후기제목</th>
+                <th>평점</th>
+                <th></th>
+            </thead>
+            <tbody>
+            <% for (const review of review_list) { %>
+                <tr>
+                    <td><%= review.account_id %></td>
+                    <td>
+                        <a href="/movieinfo/review/read?movie_code=<%= movie.movie_code %>&movie_title=<% movie.movie_title %>&review_sq=<%= review.review_sq %>"><%= review.review_title %></a>
+                        </a>
+                    </td>
+                    <td><%= review.score %></td>
+                    <td></td>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

@@ -2,43 +2,45 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '상품 주문'})%>
 <body>
-    <!--메인 화면-->
-    <%- include('../../_component/goto_main.ejs')%>
-    <h1>상품 주문 페이지</h1>
-    <h2>상품 주문</h2>
+    <div class="container my-3">
+        <!--메인 화면-->
+        <%- include('../../_component/goto_main.ejs')%>
+        <h1>상품 주문 페이지</h1>
+        <h2>상품 주문</h2>
 
-    <h3>영화관목록</h3>
-    <select name="theater_select" id="theater_select"></select>
-    <br>
+        <h3>영화관목록</h3>
+        <div class="mb-3">
+            <select id="theater_select" class="form-control"></select>
+        </div>
 
-    <h3>상점목록</h3>
-    <select name="store_select" id="store_select"></select>
-    <br>
+        <h3>상점목록</h3>
+        <div class="mb-3">
+            <select id="store_select" class="form-control"></select>
+        </div>
 
-    <h3>상품목록</h3>
-    <table>
-        <thead>
-            <th>상품 이름</th>
-            <th>상품 유형</th>
-            <th>상품 가격</th>
-            <th></th>
-        </thead>
-        <tbody id="item_table"></tbody>
-    </table>
+        <h3>상품목록</h3>
+        <table class="table">
+            <thead>
+                <th>상품 이름</th>
+                <th>상품 유형</th>
+                <th>상품 가격</th>
+                <th></th>
+            </thead>
+            <tbody id="item_table"></tbody>
+        </table>
 
-    <h3>장바구니</h3>
-    <table>
-        <thead>
-            <th>상품 이름</th>
-            <th>상품 가격</th>
-            <th></th>
-            <th>주문 수량</th>
-            <th></th>
-        </thead>
-        <tbody id="basket_table"></tbody>
-    </table>
+        <h3>장바구니</h3>
+        <table class="table">
+            <thead>
+                <th>상품 이름</th>
+                <th>상품 가격</th>
+                <th>주문 수량</th>
+            </thead>
+            <tbody id="basket_table"></tbody>
+        </table>
 
-    <button id="btn_goto_check">주문 확인</button>
+        <button id="btn_goto_check" class="btn btn-primary">주문 확인</button>
+    </div>
 
     <script>
     const item_info = {}; // key: item_code, value: item
@@ -230,9 +232,7 @@
                         <td>${item_price}</td>
                         <td>
                             <button class="btn btn-sm btn-primary btn_sub_item">-</button>
-                        </td>
-                        <td class="order_quantity">${basket_quantity[item_code]}</td>
-                        <td>
+                            <span class="order_quantity mx-3">${basket_quantity[item_code]}</span>
                             <button class="btn btn-sm btn-primary btn_add_item">+</button>
                         </td>
                     </tr>`
