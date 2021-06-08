@@ -28,7 +28,7 @@ export async function fetch_sessioning_theater(req) {
 
         req.params.theaters = theater_data
         req.params.movies = movie_data
-        console.log(movie_data)
+
         is_success = true
     }
     catch(err) {

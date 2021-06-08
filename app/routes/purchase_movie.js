@@ -7,6 +7,7 @@ import { fetch_filter_movie_session } from "../js/process/movie_session.js"
 import { fetch_seats_process } from "../js/process/seat.js"
 import { fetch_sessioning_theater } from "../js/process/theater.js"
 import { hasSession } from "../js/process/session.js"
+import { reserve_seat_process } from "../js/process/reserve.js"
 
 const router = express.Router({ mergeParams: true });
 const URL_SELECT = "/select"
@@ -72,11 +73,10 @@ router.get('/seat', async (req, res) => {
 });
 
 // 영화예매 확인 페이지
-router.get('/check', (req, res) => {
-
-    console.log("BODY", req.body)
-    console.log("PARAMS", req.params)
+router.get('/check', async (req, res) => {
     console.log("QUERY", req.query)
+    await reserve_seat_process(req)
+
     const session_uid = req.query.session_uid;
     const adult_no = req.query.adult_no;
     const child_no = req.query.child_no;
@@ -84,8 +84,6 @@ router.get('/check', (req, res) => {
     // 티켓 가격 계산
     const payment_price = ticket_adult_price * adult_no + ticket_child_price * child_no;
 
-    console.log('reserved_seat_list');
-    console.log(reserved_seat_list);
     /*
     SELECT T.theater_name, S.screen_name, M.movie_title
     FROM theater T, screen S, movie_session M
