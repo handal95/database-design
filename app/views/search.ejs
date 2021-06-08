@@ -5,6 +5,17 @@
     <!--메인 화면-->
     <%- include('_component/goto_main.ejs')%>
 
+    <form id="search_form" class="mb-3">
+        <div class="row g-3">
+            <div class="col">
+                <input type="text" name="keyword" id="keyword" class="form-control" required>
+            </div>
+            <div class="col col-auto">
+                <button type="submit" id="btn_search" class="btn btn-primary">검색</button>
+            </div>
+        </div>
+    </form>
+
     <h1><%= keyword %> 검색 결과</h1>
     <!--영화 검색 결과-->
     <h2>영화</h2>

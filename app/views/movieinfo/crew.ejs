@@ -6,17 +6,6 @@
         <!--메인 화면-->
         <%- include('../_component/goto_main.ejs')%>
 
-        <form id="search_form" class="mb-3">
-            <div class="row g-3">
-                <div class="col">
-                    <input type="text" name="keyword" id="keyword" class="form-control" required>
-                </div>
-                <div class="col col-auto">
-                    <button type="submit" id="btn_search" class="btn btn-primary">검색</button>
-                </div>
-            </div>
-        </form>
-
         <h1><%= crew.crew_name %></h1>
         <p><%= crew.crew_name_eng %></p>
         <img src="<%= crew.profile_image %>" alt="profile_image">
