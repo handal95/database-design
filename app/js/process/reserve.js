@@ -1,6 +1,10 @@
 import { doDBRelease, getDBConnect } from "../db/connect.js"
+import { get_movie_by_session_uid, get_screen_by_session_uid } from "../entities/movie_session.js"
 import { get_ticket_max_uid, insert_ticket_info } from "../entities/ticket.js"
 
+import { get_movie_title_by_code } from "../entities/movie.js"
+import { get_screen_info_by_code } from "../entities/screen.js"
+import { get_theater_name } from "../entities/theater.js"
 import { reserve_session_seat } from "../entities/reserve.js"
 
 export async function reserve_seat_process(req) {
@@ -9,6 +13,24 @@ export async function reserve_seat_process(req) {
     const conn = await getDBConnect()
     try{
         req.params.movie_session_uid = req.query.session_uid
+
+        const screen_code_info = await get_screen_by_session_uid(conn, req)
+        const movie_code_info = await get_movie_by_session_uid(conn, req)
+        req.params.screen_code = screen_code_info[0].SCREEN_CODE
+        req.params.movie_code = movie_code_info[0].MOVIE_CODE
+
+        const screen_info = await get_screen_info_by_code(conn, req)
+        const movie_title = await get_movie_title_by_code(conn, req)
+        req.params.theater_code = screen_info[0].THEATER_CODE
+        req.params.movie_title = movie_title[0].MOVIE_TITLE
+
+        const theater_info = await get_theater_name(conn, req)
+        req.params.theater_name = theater_info[0].THEATER_NAME
+
+        console.log(req.params)
+        console.log("SCREEN_CODE", req.params.screen_code)
+        // const next_ticket_uid = await get_ticket_max_uid(conn, req)
+
         const next_ticket_uid = await get_ticket_max_uid(conn, req)
         req.params.ticket_uid = next_ticket_uid
 
@@ -16,29 +38,12 @@ export async function reserve_seat_process(req) {
 
         const reserve_session_seat_list = req.query.reserved_seat_list
         for(let i = 0; i < reserve_session_seat_list.length; i++){
-            let xxxxx = reserve_session_seat_list[i]
+            let reserved_seat = reserve_session_seat_list[i]
 
-            console.log("reserved_seat", xxxxx)
-            // req.params.seat_uid = reserved_seat.seat_uid
+            req.params.seat_uid = reserved_seat.seat_uid
             
-            // await reserve_session_seat(conn, req)
+            await reserve_session_seat(conn, req)
         }
-        //     req.params.seat_row = reserved_seat.seat_uid
-        //     req.params.seat_col = reserved_seat.seat_col
-        //     req.params.seat_category = reserved_seat.seat_category
-
-        //     await reserve_session_seat(conn, req)
-        // }
-        // console.log(req.query.)
-        // // 계정 정보 호출
-        // console.log("(signin) : VALID ACCOUNT CHECK")
-        
-        // // 계정 세션 등록
-        // await initSession(req, "account", data);
-        // console.log("(signin) : ACCOUNT SESSION ON")
-
-        // console.log("(signin) : ACCOUNT SIGN IN PROCESS IS OK")
-        // is_success = true
     }
     catch(err) {
         console.log("(signin) : Process is failed by ", err)

@@ -76,3 +76,15 @@ export async function get_screen_by_session_uid(conn, req){
 
     return data
 }
+
+export async function get_movie_by_session_uid(conn, req){
+    let query = (
+        `SELECT movie_code FROM movie_session WHERE session_uid = '${req.params.movie_session_uid}'`
+    )
+
+    let result = await select_query(conn, query)
+    let data = result.data
+
+    return data
+}
+

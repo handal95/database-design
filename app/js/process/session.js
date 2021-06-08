@@ -28,3 +28,13 @@ export async function initSession(req, session_category, params) {
 export function destorySession(req) {
     req.session.destroy()
 }
+
+export function isAccountSession(req) {
+    // not not을 통해 bool 형으로 형변환
+    return !!(req.session.signin_category == "account");
+}
+
+export function isCustomerSession(req) {
+    // not not을 통해 bool 형으로 형변환
+    return !!(req.session.signin_category == "customer");
+}

@@ -74,32 +74,29 @@ router.get('/seat', async (req, res) => {
 
 // 영화예매 확인 페이지
 router.get('/check', async (req, res) => {
-    console.log("QUERY", req.query)
-    await reserve_seat_process(req)
-
+    
     const session_uid = req.query.session_uid;
     const adult_no = req.query.adult_no;
     const child_no = req.query.child_no;
     const reserved_seat_list = JSON.parse(decodeURIComponent(req.query.reserved_seat_list));
+    req.query.reserved_seat_list = reserved_seat_list
+    await reserve_seat_process(req)
+
     // 티켓 가격 계산
-    const payment_price = ticket_adult_price * adult_no + ticket_child_price * child_no;
+    const payment_price = req.params.ticket_price;
+    const theater_name = req.params.theater_name;
+    const screen_name = req.params.screen_name;
+    const movie_title = req.params.movie_title;
 
-    /*
-    SELECT T.theater_name, S.screen_name, M.movie_title
-    FROM theater T, screen S, movie_session M
-    WHERE T.theater_code = S.theater_code
-    AND S.screen_code = M.screen_code
-    AND S.session_uid = "session_uid"
-    ;
-    */
-    
-    // 성인, 청소년 수에 맞춰 티켓의 가격 책정
-
-    const theater_name = "theater1";
-    const screen_name = "3관";
-    const movie_title = "인디펜던스 데이";
-
-
+    console.log(
+        "1", theater_name,
+        ", 2", screen_name,
+        ", 3", movie_title,
+        ", 4", reserved_seat_list,
+        ", 5", adult_no,
+        ", 6", child_no,
+        ", 7", payment_price
+    )
     res.render('purchase/movie/check', {
         theater_name,
         screen_name,
@@ -158,8 +155,7 @@ router.post('/check/check_payment', (req, res) => {
     const payment_method = req.body.payment_method;
 
     // 결제방법으로 결제 가능 여부 확인
-    switch (payment_method)
-    {
+    switch (payment_method){
     case "신용카드":
     case "무통장입금":
     case "카카오페이":
@@ -169,8 +165,7 @@ router.post('/check/check_payment', (req, res) => {
         break;
     case "포인트":
         // 회원 로그인일 경우
-        if (isAccountSession(req))
-        {
+        if (isAccountSession(req)){
             // 현재 계정의 포인트 값을 확인
             // SELECT points FROM account WHERE account_id;
             const cur_points = 300;
