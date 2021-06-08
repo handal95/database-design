@@ -18,9 +18,20 @@ export async function get_ticket_max_uid(conn, req){
 export async function insert_ticket_info(conn, req){
     let ticket_price = (ADULT_PRICE * req.query.adult_no) + (ADULT_PRICE * req.query.child_no)
     req.params.ticket_price = ticket_price
-    let query = `INSERT INTO TICKET VALUES(${req.params.ticket_uid}, '', ${ticket_price}, ${req.query.adult_no}, ${req.query.child_no}, 'PROCESSING')`
+    let query = `INSERT INTO TICKET VALUES(${req.params.ticket_uid}, '${req.params.payment_uid}', ${ticket_price}, ${req.query.adult_no}, ${req.query.child_no}, 'PROCESSING')`
 
     let result = await insert_query(conn, query)
+    let data = result.data
+
+    return data
+}
+
+export async function get_ticket_info(conn, req){
+    let ticket_price = (ADULT_PRICE * req.query.adult_no) + (ADULT_PRICE * req.query.child_no)
+    req.params.ticket_price = ticket_price
+    let query = `SELECT * FROM TICKET WHERE payment_uid = '${req.params.payment_uid}'`
+
+    let result = await select_query(conn, query)
     let data = result.data
 
     return data

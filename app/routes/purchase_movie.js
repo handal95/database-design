@@ -1,5 +1,6 @@
 /* 영화 예매, 상품 구매 페이지*/
 
+import { fetch_grand_process, update_payment_process } from "../js/process/payment.js"
 import { isAccountSession, isCustomerSession } from "../utils/sessions.js"
 
 import express from "express";
@@ -9,8 +10,8 @@ import { fetch_customer_code_by_info } from "../js/process/customer.js"
 import { fetch_filter_movie_session } from "../js/process/movie_session.js"
 import { fetch_seats_process } from "../js/process/seat.js"
 import { fetch_sessioning_theater } from "../js/process/theater.js"
-import { input_payment_process } from "../js/process/payment.js"
 import { reserve_seat_process } from "../js/process/reserve.js"
+import { update_points_process } from "../js/process/account.js"
 
 const router = express.Router({ mergeParams: true });
 const URL_SELECT = "/select"
@@ -168,81 +169,49 @@ router.post('/check/process_payment', async (req, res) => {
     const ticket_price = req.body.payment_price;    // payment_price와 동일
     const adult_no = req.body.adult_no;
     const child_no = req.body.child_no;
-    const reserve_status = req.body.reserve_status;    
-
-    await input_payment_process(req)
-    const payment_uid = req.params.payment_uid;
+    const reserve_status = req.body.reserve_status;   
     
-    /*
-    // ticket 데이터 생성
-    INSERT INTO ticket VALUES(
-        "payment_uid",
-        "ticket_price",
-        "adult_no",
-        "child_no",
-        "reserve_status"
-    );
-    */
-    const ticket_uid = "ticket_uid";
-    /*
-    // 해당 티켓으로 예약한 상영일정의 좌석 예약 상태 추가
-    // session_uid 값 읽어오기
-    SELECT session_uid
-    FROM reserve
-    WHERE ticket_uid="ticket_uid";
-    */
-    const session_uid = "session_uid";
-    /*
-    INSERT INTO reserve VALUES(
-        "session_uid",
-        "seat_uid",
-        "ticket_uid",
-        "RESERVED" // reserve.reserve_status
-    );
-
-    // payment_history 데이터 생성
-    SELECT payment_uid
-    FROM payment
-    WHERE customer_code;
-    INSERT INTO payment_history VALUES(
-        "payment_history_sq", 
-        "payment_uid",
-        "결제" // payment_status
-    );
-    */
+    let payment_uid = req.params.payment_uid;
+    await update_payment_process(req)
+    
+    // 최후의 작업....
+    await fetch_grand_process(req)
+    console.log("FINAL.... ", req.params)
+    payment_uid = req.params.payment_uid;
+    const ticket_uid = req.params.ticket_uid
+    const session_uid = req.params.session_uid
 
     // 회원 로그인 중이라면 포인트 데이터 생성
-    if (isAccountSession(req))
-    {
+    if (isAccountSession(req)) {
         // 포인트로 결제했다면 포인트 사용
-        if (payment_method == "포인트")
-        {
-        const session_account_id = req.session.account_id;
-        const points_value = payment_price;
-        /*
-        INSERT INTO account_points VALUES(
-            "session_account_id",
-            "points_sq..?",
-            "사용",
-            points_value,
-            "영화 티켓 예약 결제"
-        );
-        */
+        if (payment_method == "포인트") {
+            const session_account_id = req.session.account_id;
+            req.params.points_value = payment_price / 20;
+            await update_points_process(req)
+            /*
+            INSERT INTO account_points VALUES(
+                "session_account_id",
+                "points_sq..?",
+                "사용",
+                points_value,
+                "영화 티켓 예약 결제"
+            );
+            */
         }
         // 포인트 이외의 방법으로 결제했다면 포인트 적립
         else
         {
         const session_account_id = req.session.account_id;
         const points_value = payment_price * points_ratio;
-        /*
-        INSERT INTO account_points VALUES(
-            "session_account_id",
-            "points_sq..?",
-            "적립",
-            points_value,
-            "영화 티켓 예약 결제"
-        );
-        */
+            /*
+            INSERT INTO account_points VALUES(
+                "session_account_id",
+                "points_sq..?",
+                "적립",
+                points_value,
+                "영화 티켓 예약 결제"
+            );
+            */
         }
     }
     res.json({
@@ -256,9 +225,11 @@ router.post('/check/process_payment', async (req, res) => {
 // 상품 결제완료 페이지
 router.get('/complete', (req, res) => {
     const payment_uid = req.body.payment_uid;
-    const ticket_uid = req.body.ticket_uid;    
+    const ticket_uid = req.body.ticket_uid;      
     const session_uid = req.body.session_uid;
-
+    
+    console.log("PLEASE....")
+    console.log(req.body)
     /*
     // 영화관 이름, 상영관 이름, 상영날짜, 상영시각, 상영영화제목
     SELECT T.theater_name, S.screen_name, M.session_date, M.session_datetime, M.movie_title
