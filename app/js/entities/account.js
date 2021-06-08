@@ -2,6 +2,7 @@ import { select_exists, select_one } from "../db/select.js"
 
 import { delete_customer } from "./customer.js"
 import { insert_record } from "../db/insert.js"
+import { update_query } from "../db/update.js"
 
 export async function get_account_info(conn, req){
     let query_body = `WHERE account_id = '${req.body.account_id}' AND PWDKEY = '${req.body.pwdkey}'`
@@ -56,5 +57,40 @@ export async function insert_account(conn, req){
     if(!result.response){
         delete_customer(conn, req)
         throw "INSERT ACCOUNT FAIL"
+    }
+}
+
+
+export async function update_pwdkey(conn, req){
+    let query = (
+        `UPDATE ACCOUNT SET PWDKEY = ${req.params.pwdkey} WHERE account_id = '${req.params.account_id}'`
+    )
+
+    const result = await update_query(conn, query)
+    if(!result.response){
+        throw "UPDATE PWDKEY FAIL"
+    }
+} 
+
+export async function update_nickname(conn, req){
+    let query = (
+        `UPDATE ACCOUNT SET NICKNAME = ${req.params.nickname} WHERE account_id = '${req.params.account_id}'`
+    )
+
+    const result = await update_query(conn, query)
+    if(!result.response){
+        throw "UPDATE PWDKEY FAIL"
+    }
+} 
+
+export async function update_email(conn, req){
+    let query = (
+        `UPDATE ACCOUNT SET EMAIL = ${req.params.email} WHERE account_id = '${req.params.account_id}'`
+    )
+
+    const result = await update_query(conn, query)
+    if(!result.response){
+        delete_customer(conn, req)
+        throw "UPDATE PWDKEY FAIL"
     }
 } 

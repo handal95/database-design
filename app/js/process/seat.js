@@ -11,7 +11,6 @@ export async function fetch_seats_process(req) {
     const conn = await getDBConnect()
     let data = []
     try{
-        console.log(req.params)
         req.params.movie_session_uid = req.body.movie_session_uid
         // 상영중인 영화 정보 호출
         const screen_code = await get_screen_by_session_uid(conn, req)
