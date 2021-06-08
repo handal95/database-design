@@ -3,7 +3,7 @@ payment_uid NUMBER(16, 0) NOT NULL
 
 customer_code VARCHAR(16) NOT NULL,
 payment_price NUMBER(8, 0) NOT NULL,
-payment_method VARCHAR(16) NOT NULL,
+payment_method VARCHAR(16),
 
 CONSTRAINT PAYMENT_PK
     PRIMARY KEY(payment_uid),

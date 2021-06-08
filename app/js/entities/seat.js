@@ -15,6 +15,18 @@ export async function get_seats_by_screen_code(conn, req){
 }
 
 
+export async function get_seats_by_seat_id(conn, req){
+    let query = (
+        `SELECT * FROM seat WHERE seat_uid = '${req.params.seat_uid}'`
+    )
+
+    let result = await select_query(conn, query)
+    let data = result.data
+
+    return data        
+}
+
+
 export async function get_seats(conn, req){
     let query_body = ''
     let columns = "seat_amount"
