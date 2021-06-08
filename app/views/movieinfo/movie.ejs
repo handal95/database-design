@@ -4,7 +4,7 @@
 <body>
     <!--메인 화면-->
     <%- include('../_component/goto_main.ejs') %>
-    
+
     <input type="text" name="keyword" id="keyword">
     <button id="btn_search">검색</button>
 
@@ -43,7 +43,7 @@
         <tbody>
             <% for (const crew of contributor_list) { %>
             <tr>
-                <td><%= crew.crew_code %></td>
+                <td><a href="/movieinfo/crew?crew_code=<%= crew.crew_code %>"><%= crew.crew_code %></a></td>
                 <td><%= crew.main_role %></td>
                 <td><%= crew.sub_role %></td>
             </tr>

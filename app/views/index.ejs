@@ -26,51 +26,16 @@
             <% } %>
         </div>
 
-        <form id="search_form" class="mb-3">
+        <form id="search_form" class="mb-3" action="search">
             <div class="row g-3">
                 <div class="col">
-                    <input type="text" name="search" id="search" class="form-control" required>
+                    <input type="text" name="keyword" id="keyword" class="form-control" required>
                 </div>
                 <div class="col col-auto">
                     <button type="submit" class="btn btn-primary">검색</button>
                 </div>
             </div>
         </form>
-        <ul id="movie_search">
-            <li>
-                
-            </li>
-        </ul>
-        <ul id="crew_search">
-            <li>
-
-            </li>
-        </ul>
-
     </div>
-
-    <script>
-    $(document).ready(() => {
-        
-        
-        function search()
-        {
-            $("#search_form").on('submit', async e => {
-                e.preventDefault();
-                const data = {
-                    keyword: $("#search_form").val(),
-                };
-            });
-
-            const movie_search_response = await requestPostAPI('/movieinfo/movie/search', data);
-            const crew_search_response = await requestPostAPI('/movieinfo/crew/search', data);
-        
-            
-        }
-        // do something
-        console.log(results);
-
-    });
-    </script>
 </body>
 </html>

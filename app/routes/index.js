@@ -2,6 +2,7 @@ import { destorySession, hasSession } from "../js/process/session.js"
 
 import { db_router } from "./db.js"
 import express from "express"
+import { router as search_router } from "./search.js"
 import { router as movieinfo_router } from "./movieinfo.js"
 import { router as purchase_movie_router } from "./purchase_movie.js"
 import { router as purchase_item_router } from "./purchase_item.js"
@@ -11,6 +12,7 @@ import { user_router } from "./user.js"
 const router = express.Router({ mergeParams: true });
 
 router.use("/db", db_router)
+router.use("/search", search_router)
 router.use("/movieinfo", movieinfo_router)
 router.use("/movieinfo/review", review_router)
 router.use("/purchase/movie", purchase_movie_router)

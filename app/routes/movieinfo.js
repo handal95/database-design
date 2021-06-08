@@ -1,13 +1,8 @@
 /* 영화, 영화인 검색 결과 페이지 */
 
 import express from "express";
-import { hasSession, isAccountSession } from "../utils/sessions.js";
 
 const router = express.Router({ mergeParams: true });
-
-/*
-SELECT review_sq, account_id, review_title, score FROM review WHERE movie_code="search_movie_code";
-*/
 
 // 영화 정보 페이지
 router.get('/movie', function(req, res)
@@ -173,64 +168,5 @@ router.get('/crew', function(req, res)
         filmography_list
     });
 });
-
-// 영화 정보 검색
-router.post('/movie/search', function(req, res)
-{
-    const keyword = req.body.keyword;
-    
-    /*
-        SELECT movie_title
-        FROM movie
-        WHERE movie_title LIKE "(keyword)%"
-        OR movie_title_eng LIKE "(keyword)%"
-    */
-
-    const search_list = [
-        {
-            movie_title: "movie1",
-        },
-        {
-            movie_title: "movie2",
-        },
-    ]
-
-    res.json({
-        search_list,
-    });
-});
-
-
-
-
-// 영화인 정보 검색
-router.post('/crew/search', function(req, res)
-{
-    const keyword = req.body.keyword;
-    
-    /*
-        SELECT crew_name, nationality, crew_birth_date
-        FROM crew
-        WHERE crew_name LIKE "(keyword)%"
-        OR crew_name_eng LIKE "(keyword)%"
-    */
-
-    const search_list = [
-        {
-            movie_title: "movie1",
-        },
-        {
-            movie_title: "movie2",
-        },
-    ]
-
-    res.json({
-        search_list,
-    });
-})
-
-
-
-
 
 export { router };
