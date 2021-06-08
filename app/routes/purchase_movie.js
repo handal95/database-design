@@ -253,8 +253,7 @@ router.post('/check/process_payment', async (req, res) => {
     });
 });
 
-// 상품 결제완료 페이지
-router.get('/complete', (req, res) => {
+router.post('/complete', (req, res) => {
     const payment_uid = req.body.payment_uid;
     const ticket_uid = req.body.ticket_uid;    
     const session_uid = req.body.session_uid;
@@ -311,6 +310,11 @@ router.get('/complete', (req, res) => {
         payment_price,
         payment_method
     });
+});
+
+router.get('/complete', function(req, res)
+{
+    res.render('purchase/movie/complete');
 });
 
 export { router };
