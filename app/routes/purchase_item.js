@@ -339,14 +339,12 @@ router.get('/complete', function(req, res)
         payment_method: "payment_method",
     };
 
-    res.json({
+    res.render('purchase/item/complete', {
         theater_name: theater_name,
         store_name: store_name,
         basket_list: basket_list,
         payment_data: payment_data
     });
-
-    res.render('purchase/item/complete');
 });
 
 export { router };
