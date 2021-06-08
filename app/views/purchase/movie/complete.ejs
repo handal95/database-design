@@ -2,37 +2,39 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '결제 완료'})%>
 <body>
-    <!--메인 화면-->
-    <%- include('../../_component/goto_main.ejs')%>
-    <h1>결제 완료</h1>
-    <p>영화관 : <%= theater_name %></p>
-    <p>상영관 : <%= screen_name %></p>
-    <p>영화 : <%= movie_title %></p>
-    <p>날짜 : <%= session_date %></p>
-    <p>시작시각 : <%= session_datetime %></p>
+    <div class="container my-3">
+        <!--메인 화면-->
+        <%- include('../../_component/goto_main.ejs')%>
+        <h1>결제 완료</h1>
+        <p>영화관 : <%= theater_name %></p>
+        <p>상영관 : <%= screen_name %></p>
+        <p>영화 : <%= movie_title %></p>
+        <p>날짜 : <%= session_date %></p>
+        <p>시작시각 : <%= session_datetime %></p>
 
-    <table>
-        <thead>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>행</th>
+                    <th>열</th>
+                    <th>등급</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% for (const seat of seat_list) { %>
             <tr>
-                <th>행</th>
-                <th>열</th>
-                <th>등급</th>
+                <td><%= seat.seat_row %></td>
+                <td><%= seat.seat_col %></td>
+                <td><%= seat.seat_category %></td>
             </tr>
-        </thead>
-        <tbody>
-        <% for (const seat of seat_list) { %>
-        <tr>
-            <td><%= seat.seat_row %></td>
-            <td><%= seat.seat_col %></td>
-            <td><%= seat.seat_category %></td>
-        </tr>
-        <% } %>
-        </tbody>
-    </table>
-    
-    <p>가격 : <%= payment_price %></p>
-    <p>결제방법 : <%= payment_method %></p>
+            <% } %>
+            </tbody>
+        </table>
+        
+        <p>가격 : <%= payment_price %></p>
+        <p>결제방법 : <%= payment_method %></p>
 
-    <a href = "/">메인 화면</a>
+        <a href="/" class="btn btn-link mx-auto">메인 화면</a>
+    </div>
 </body>
 </html>

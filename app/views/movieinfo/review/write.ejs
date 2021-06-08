@@ -2,66 +2,82 @@
 <html lang="en">
 <%- include('../../_component/head.ejs', {titleName: '리뷰 작성'}) %>
 <body>
-    <h1><%= movie_title %></h1>
-
-    제목<br><input type="text" name="review_title" id="review_title">
-    리뷰<br>
-    <input type="text" name="comment", id="comment">
-    점수<br>
-    <input
-        type="range"
-        value="0"
-        min="0"
-        max="10"
-        step="0.5"
-        name="review_score"
-        id="review_score"
-        onchange='range_change(this)'>
-    <span id='score'></span>
-    <button id="btn_register">등록</button>
+    <div class="container my-3">
+        <h1><%= movie_title %></h1>
+        <form id="form_register">
+            <div class="mb-3">
+                <label for="review_title" class="form-label">제목</label>
+                <input type="text" class="form-control" id="review_title" required>
+            </div>
+            <div class="mb-3">
+                <label for="comment" class="form-label">리뷰</label>
+                <input type="text" class="form-control" id="comment" required>
+            </div>
+            <div class="mb-3">
+                <label for="review_title" class="form-label" id="score">점수</label>
+                <input
+                    type="range"
+                    value="0"
+                    min="0"
+                    max="10"
+                    step="0.5"
+                    name="review_score"
+                    id="review_score"
+                    class="form-range"
+                >
+            </div>
+            <button type="submit" class="btn btn-primary">등록</button>
+        </form>
+    </div>
 
     <script>
-    const movie_code = <%= movie_code %>;
-    const review_title = findId("review_title");
-    const comment = findId("comment");
-    const score = findId("score");
-    const btn_register = findId("btn_register");
+        $(document).ready(() => {
+            const movie_code = <%= movie_code %>;
+            const review_title = $("#review_title");
+            const comment = $("#comment");
+            const review_score = $("#review_score");
+            const score = $("#score");
+            const btn_register = $("#form_register");
 
-    btn_register.addEventListener('click', register);
+            review_score.on('change', range_change);
+            btn_register.on('submit', register);
+            range_change();
 
-    // 현재 리뷰 평점 스크롤 바의 점수를 보여주는 함수
-    function range_change(obj)
-    {
-        findId('score').innerHTML=obj.value;
-    }
+            // 현재 리뷰 평점 스크롤 바의 점수를 보여주는 함수
+            function range_change()
+            {
+                score.text(`점수: ${review_score.val()}`);
+            }
 
-    // 리뷰 등록 버튼
-    async function register()
-    {
-        const data = {
-            movie_code,
-            review_title,
-            comment,
-            score,
-        };
-        const response_data = await requestPostAPI('/movieinfo/review/write/register', data);
-        
-        if (response_data.data.result == true)
-        {
-            alert('리뷰 등록 성공');
-            // 필요한 정보를 string으로 변환 후 다음 페이지 요청
-            const href = '/movieinfo/movie';
-            const queryParams = {
-                movie_code
-            };
-            const queryString = Object.entries(queryParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
-            window.location.href = `${href}?${queryString}`;
-        }
-        else
-        {
-            alert('리뷰 등록 실패');
-        }
-    }
+            // 리뷰 등록 버튼
+            async function register(e)
+            {
+                e.preventDefault();
+                const data = {
+                    movie_code,
+                    review_title: review_title.val(),
+                    comment: comment.val(),
+                    score: parseInt(review_score.val()),
+                };
+                const response_data = await requestPostAPI('/movieinfo/review/write/register', data);
+                
+                if (response_data.data.result == true)
+                {
+                    alert('리뷰 등록 성공');
+                    // 필요한 정보를 string으로 변환 후 다음 페이지 요청
+                    const href = '/movieinfo/movie';
+                    const queryParams = {
+                        movie_code
+                    };
+                    const queryString = Object.entries(queryParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+                    window.location.href = `${href}?${queryString}`;
+                }
+                else
+                {
+                    alert('리뷰 등록 실패');
+                }
+            }
+        })
     </script>
 </body>
 </html>

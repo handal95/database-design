@@ -2,59 +2,51 @@
 <html lang="en">
 <%- include('_component/head.ejs', {titleName: '검색결과'})%>
 <body>
-    <!--메인 화면-->
-    <%- include('_component/goto_main.ejs')%>
+    <div class="container my-3">
+        <!--메인 화면-->
+        <%- include('_component/goto_main.ejs')%>
+        <%- include('_component/search.ejs') %>
 
-    <form id="search_form" class="mb-3">
-        <div class="row g-3">
-            <div class="col">
-                <input type="text" name="keyword" id="keyword" class="form-control" required>
-            </div>
-            <div class="col col-auto">
-                <button type="submit" id="btn_search" class="btn btn-primary">검색</button>
-            </div>
-        </div>
-    </form>
+        <h1><%= keyword %> 검색 결과</h1>
+        <!--영화 검색 결과-->
+        <h2>영화</h2>
+        <table class="table">
+            <thead>
+                <th>포스터</th>
+                <th>영화제목</th>
+                <th>영화영문제목</th>
+                <th>평점</th>
+            </thead>
+            <tbody>
+                <% for (const movie of movie_search_list) { %>
+                <tr id="<%= movie.movie_code %>">
+                    <td><%= movie.poster_image %></td>
+                    <td><a href="/movieinfo/movie?movie_code=<%= movie.movie_code %>"><%= movie.movie_title %></a></td>
+                    <td><%= movie.movie_title_eng %></td>
+                    <td><%= movie.avg_score %></td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
 
-    <h1><%= keyword %> 검색 결과</h1>
-    <!--영화 검색 결과-->
-    <h2>영화</h2>
-    <table>
-        <thead>
-            <th>포스터</th>
-            <th>영화제목</th>
-            <th>영화영문제목</th>
-            <th>평점</th>
-        </thead>
-        <tbody>
-            <% for (const movie of movie_search_list) { %>
-            <tr id="<%= movie.movie_code %>">
-                <td><%= movie.poster_image %></td>
-                <td><a href="/movieinfo/movie?movie_code=<%= movie.movie_code %>"><%= movie.movie_title %></a></td>
-                <td><%= movie.movie_title_eng %></td>
-                <td><%= movie.avg_score %></td>
-            </tr>
-            <% } %>
-        </tbody>
-    </table>
-
-    <!--영화인 검색 결과-->
-    <h2>영화인</h2>
-    <table>
-        <thead>
-            <th>프로필 이미지</th>
-            <th>이름</th>
-            <th>영문이름</th>
-        </thead>
-        <tbody>
-            <% for (const crew of crew_search_list) { %>
-            <tr id="<%= crew.crew_code %>">
-                <td><%= crew.profile_image %></td>
-                <td><a href="/movieinfo/crew?crew_code=<%= crew.crew_code %>"><%= crew.crew_name %></a></td>
-                <td><%= crew.crew_name_eng %></td>
-            </tr>
-            <% } %>
-        </tbody>
-    </table>
+        <!--영화인 검색 결과-->
+        <h2>영화인</h2>
+        <table class="table">
+            <thead>
+                <th>프로필 이미지</th>
+                <th>이름</th>
+                <th>영문이름</th>
+            </thead>
+            <tbody>
+                <% for (const crew of crew_search_list) { %>
+                <tr id="<%= crew.crew_code %>">
+                    <td><%= crew.profile_image %></td>
+                    <td><a href="/movieinfo/crew?crew_code=<%= crew.crew_code %>"><%= crew.crew_name %></a></td>
+                    <td><%= crew.crew_name_eng %></td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
