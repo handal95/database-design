@@ -3,6 +3,7 @@ import { get_sessioning_movies } from "../entities/movie_session.js"
 
 import { get_movie_title_by_code } from "../entities/movie.js"
 import { get_screen_info_by_code } from "../entities/screen.js"
+import { get_sessioning_movies } from "../entities/movie_session.js"
 import { get_theater_name } from "../entities/theater.js"
 
 export async function fetch_filter_movie_session(req) {

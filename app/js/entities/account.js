@@ -115,3 +115,17 @@ export async function select_customer_code(conn, req){
 
     return data
 }
+
+
+export async function update_points(conn, req){
+    
+    let update_points = current_points + req.params.points_value
+    let query = (
+        `UPDATE ACCOUNT SET points = ${req.params.update_points} WHERE account_id = '${req.params.account_id}'`
+    )
+
+    let result = await select_query(conn, query)
+    let data = result.data
+
+    return data
+}

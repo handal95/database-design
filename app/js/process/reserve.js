@@ -1,11 +1,13 @@
 import { doDBRelease, getDBConnect } from "../db/connect.js"
 import { get_movie_by_session_uid, get_screen_by_session_uid } from "../entities/movie_session.js"
+import { get_payment_max_uid, insert_payment_process } from "../entities/payment.js"
 import { get_ticket_max_uid, insert_ticket_info } from "../entities/ticket.js"
 
 import { get_movie_title_by_code } from "../entities/movie.js"
 import { get_screen_info_by_code } from "../entities/screen.js"
 import { get_theater_name } from "../entities/theater.js"
 import { reserve_session_seat } from "../entities/reserve.js"
+import { select_customer_code } from "../entities/account.js"
 
 export async function reserve_seat_process(req) {
     let is_success = false
@@ -29,6 +31,12 @@ export async function reserve_seat_process(req) {
         req.params.theater_name = theater_info[0].THEATER_NAME
 
         // const next_ticket_uid = await get_ticket_max_uid(conn, req)
+        const customer_code_info = await select_customer_code(conn, req)
+        req.session.customer_code = customer_code_info[0].CUSTOMER_CODE
+
+        const next_payment_uid = await get_payment_max_uid(conn, req)
+        req.params.payment_uid = next_payment_uid
+        await insert_payment_process(conn, req)
 
         const next_ticket_uid = await get_ticket_max_uid(conn, req)
         req.params.ticket_uid = next_ticket_uid
