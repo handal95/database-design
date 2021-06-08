@@ -169,9 +169,15 @@ router.post(URL_MYPAGE + "/points", (req, res) => {
 });
 
 router.get(URL_MYPAGE, (req, res) => {
-    if (hasSession(req) == true) {
+    if (isAccountSession(req)) {
         const session_account_id = req.session.account_id;
-        res.render(MYPAGE, {account_id: session_account_id});
+        const session_nickname = req.session.nickname;
+        const session_email = req.session.email;
+        res.render(MYPAGE, {
+            account_id: session_account_id,
+            nickname: session_nickname,
+            email: session_email,
+        });
     }
     else {
         res.redirect(URL_SIGNIN);
