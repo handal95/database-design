@@ -5,8 +5,16 @@
     <!--메인 화면-->
     <%- include('../_component/goto_main.ejs') %>
 
-    <input type="text" name="keyword" id="keyword">
-    <button id="btn_search">검색</button>
+    <form id="search_form" class="mb-3" action="../search">
+        <div class="row g-3">
+            <div class="col">
+                <input type="text" name="keyword" id="keyword" class="form-control" required>
+            </div>
+            <div class="col col-auto">
+                <button type="submit" class="btn btn-primary">검색</button>
+            </div>
+        </div>
+    </form>
 
     <!--영화 정보-->
     <h1><%= movie.movie_title %></h1>
