@@ -1,13 +1,15 @@
 /* 영화 예매, 상품 구매 페이지*/
 
-import { isAccountSession, isCustomerSession } from "../utils/sessions.js";
+import { isAccountSession, isCustomerSession } from "../utils/sessions.js"
 
 import express from "express";
 import { fetch_account_points } from "../js/process/account.js"
+import { fetch_customer_code_by_account } from "../js/process/account.js"
+import { fetch_customer_code_by_info } from "../js/process/customer.js"
 import { fetch_filter_movie_session } from "../js/process/movie_session.js"
 import { fetch_seats_process } from "../js/process/seat.js"
 import { fetch_sessioning_theater } from "../js/process/theater.js"
-import { hasSession } from "../js/process/session.js"
+import { input_payment_process } from "../js/process/payment.js"
 import { reserve_seat_process } from "../js/process/reserve.js"
 
 const router = express.Router({ mergeParams: true });
@@ -101,42 +103,22 @@ router.get('/check', async (req, res) => {
 });
 
 // 영화예매 확인 페이지 현재 로그인 중인 세션의 유저 customer_code를 얻음
-router.post('/check/customer_code', (req, res) => {
+router.post('/check/customer_code', async (req, res) => {
     // 회원 로그인인 경우
-    if (isAccountSession(req))
-    {
-        const signin_type = "account";
-        const session_account_id = req.session.account_id;
-        /*
-        // account의 customer_code를 검색
-        SELECT customer_code
-        FROM account
-        WHERE account_id = "session_account_id";
-        */
-        const customer_code = "account_customer_code";
+    if (isAccountSession(req)) {
+        const customer_code = await fetch_customer_code_by_account(req);
+        console.log("CUSTOMER_CODE", customer_code)
         res.json({customer_code,});
     }
     // 비회원 로그인인 경우
-    else if (isCustomerSession(req))
-    {
-        const signin_type = "customer";
-        const session_customer_name = req.session.name;
-        const session_birth_date = req.session.birth_date;
-        const session_phone = req.session.phone;
-        /*
+    else if (isCustomerSession(req)) {
         // customer_code 얻어옴
-        SELECT customer_code
-        FROM customer
-        WHERE customer_name = "session_customer_name"
-        AND customer_birth_date = "session_birth_date"
-        AND phone = "session_phone";
-        */
-        const customer_code = "customer_code";
+        const customer_code = await fetch_customer_code_by_info(req);
+        console.log("CUSTOMER CODE", customer_code)
         res.json({customer_code,});
     }
     // 세션이 없다면 null 반환
-    else
-    {
+    else {
         res.json({customer_code: null});
     }
 });
@@ -164,15 +146,12 @@ router.post('/check/check_payment', async (req, res) => {
             // 현재 포인트 값보다 결제금액이 크거나 같으면 true
             if (payment_price <= cur_points) {        
                 res.json({result: true});
-            }
-            else
-            {        
+            } else {        
                 res.json({result: false});
             }
         }
         // 비회원 로그인의 경우 포인트 결제 불가능
-        else
-        {        
+        else {        
             res.json({result: false});
         }
         break;
@@ -182,7 +161,7 @@ router.post('/check/check_payment', async (req, res) => {
 });
 
 // 영화예매 확인 페이지 결제 진행
-router.post('/check/process_payment', (req, res) => {
+router.post('/check/process_payment', async (req, res) => {
     const customer_code = req.body.customer_code;
     const payment_price = req.body.payment_price;   // ticket_price와 동일
     const payment_method = req.body.payment_method;
@@ -191,17 +170,8 @@ router.post('/check/process_payment', (req, res) => {
     const child_no = req.body.child_no;
     const reserve_status = req.body.reserve_status;    
 
-    /*
-    // payment 데이터 생성
-    INSERT INTO payment VALUES(
-        "customer_code", 
-        "payment_price",
-        "payment_method"
-    );
-    */
-
-    // payment_uid 받아서 저장
-    const payment_uid = "payment_uid";
+    await input_payment_process(req)
+    const payment_uid = req.params.payment_uid;
     
     /*
     // ticket 데이터 생성

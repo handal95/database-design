@@ -3,6 +3,7 @@ import { select_exists, select_one } from "../db/select.js"
 import { delete_record } from "../db/delete.js"
 import { fill_code } from "../../utils/string.js"
 import { insert_record } from "../db/insert.js"
+import { select_query } from "../db/select.js"
 
 // TEMP
 export async function issue_customer_code(conn, category, raw_code, req){
@@ -70,5 +71,19 @@ export async function get_customer_info(conn, req){
         email: result.data.EMAIL
     }
     
+    return data
+}
+
+export async function select_customer_code_by_info(conn, req){
+    let query = (
+        `SELECT customer_code FROM customer ` +
+        `WHERE customer_name = '${req.session.name}' ` +
+        `AND TO_CHAR(customer_birth_date, 'YYYY-MM-DD') = '${req.session.birth_date}' ` +
+        `AND phone = '${req.session.phone}' `
+    )
+
+    let result = await select_query(conn, query)
+    let data = result.data
+
     return data
 }

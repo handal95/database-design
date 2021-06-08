@@ -97,14 +97,20 @@ export async function update_email(conn, req){
 } 
 
 export async function fetch_points(conn, req){
-    console.log("B", req.body)
-    console.log("p", req.params)
-    console.log("q", req.query)
     let query = (
-        `SELECT ACCOUNT_POINTS FROM ACCOUNT WHERE account_id = '${req.params.account_id}'`
+        `SELECT ACCOUNT_POINTS FROM ACCOUNT WHERE account_id = '${req.session.account_id}'`
     )
 
     const result = await select_query(conn, query)
+    let data = result.data
+
+    return data
+}
+
+export async function select_customer_code(conn, req){
+    let query = `SELECT customer_code FROM account WHERE account_id = '${req.session.account_id}'`
+
+    let result = await select_query(conn, query)
     let data = result.data
 
     return data
