@@ -22,13 +22,12 @@ export async function reserve_seat_process(req) {
         const screen_info = await get_screen_info_by_code(conn, req)
         const movie_title = await get_movie_title_by_code(conn, req)
         req.params.theater_code = screen_info[0].THEATER_CODE
+        req.params.screen_name = screen_info[0].SCREEN_NAME
         req.params.movie_title = movie_title[0].MOVIE_TITLE
 
         const theater_info = await get_theater_name(conn, req)
         req.params.theater_name = theater_info[0].THEATER_NAME
 
-        console.log(req.params)
-        console.log("SCREEN_CODE", req.params.screen_code)
         // const next_ticket_uid = await get_ticket_max_uid(conn, req)
 
         const next_ticket_uid = await get_ticket_max_uid(conn, req)

@@ -3,6 +3,7 @@
 import { isAccountSession, isCustomerSession } from "../utils/sessions.js";
 
 import express from "express";
+import { fetch_account_points } from "../js/process/account.js"
 import { fetch_filter_movie_session } from "../js/process/movie_session.js"
 import { fetch_seats_process } from "../js/process/seat.js"
 import { fetch_sessioning_theater } from "../js/process/theater.js"
@@ -88,15 +89,6 @@ router.get('/check', async (req, res) => {
     const screen_name = req.params.screen_name;
     const movie_title = req.params.movie_title;
 
-    console.log(
-        "1", theater_name,
-        ", 2", screen_name,
-        ", 3", movie_title,
-        ", 4", reserved_seat_list,
-        ", 5", adult_no,
-        ", 6", child_no,
-        ", 7", payment_price
-    )
     res.render('purchase/movie/check', {
         theater_name,
         screen_name,
@@ -150,7 +142,7 @@ router.post('/check/customer_code', (req, res) => {
 });
 
 // 영화예매 확인 페이지 결제 가능 여부 확인
-router.post('/check/check_payment', (req, res) => {
+router.post('/check/check_payment', async (req, res) => {
     const payment_price = req.body.payment_price;
     const payment_method = req.body.payment_method;
 
@@ -168,10 +160,9 @@ router.post('/check/check_payment', (req, res) => {
         if (isAccountSession(req)){
             // 현재 계정의 포인트 값을 확인
             // SELECT points FROM account WHERE account_id;
-            const cur_points = 300;
+            const cur_points = await fetch_account_points(req);
             // 현재 포인트 값보다 결제금액이 크거나 같으면 true
-            if (payment_price <= cur_points)
-            {        
+            if (payment_price <= cur_points) {        
                 res.json({result: true});
             }
             else

@@ -2,6 +2,7 @@ import { select_exists, select_one } from "../db/select.js"
 
 import { delete_customer } from "./customer.js"
 import { insert_record } from "../db/insert.js"
+import { select_query } from "../db/select.js"
 import { update_query } from "../db/update.js"
 
 export async function get_account_info(conn, req){
@@ -94,3 +95,17 @@ export async function update_email(conn, req){
         throw "UPDATE PWDKEY FAIL"
     }
 } 
+
+export async function fetch_points(conn, req){
+    console.log("B", req.body)
+    console.log("p", req.params)
+    console.log("q", req.query)
+    let query = (
+        `SELECT ACCOUNT_POINTS FROM ACCOUNT WHERE account_id = '${req.params.account_id}'`
+    )
+
+    const result = await select_query(conn, query)
+    let data = result.data
+
+    return data
+}
